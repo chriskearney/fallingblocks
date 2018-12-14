@@ -61,8 +61,7 @@ public class GameBoard extends JComponent implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         if (!wasDrop) {
             insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
-            wasDrop = true;
-            return;
+            repaint();
         }
         wasDrop = processAllDrops();
         repaint();
