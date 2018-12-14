@@ -137,7 +137,6 @@ public class GameBoard extends JComponent implements ActionListener {
                 return nextRow.toArray(new CellEntity[0]);
             }
         };
-
     }
 
     private List<CellEntity> getAndRemoveLastRow(CellEntity[][] arrays) {
