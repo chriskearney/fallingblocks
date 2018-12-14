@@ -13,24 +13,19 @@ import static java.awt.Color.cyan;
 
 public class GameBoard extends JComponent implements ActionListener {
 
-    private final static int BOARD_SIZE = 20;
+    private final static int BOARD_SIZE = 30;
     private final static Color[] COLORS = {darkGray, green, blue, red, yellow, magenta, pink, cyan};
 
     private final int[][] a;
-    private final int width;
-    private final int height;
     private final Timer timer;
     boolean wasDrop = false;
 
     private CellEntity[][] cellEntities;
-    private Optional<BlockPair> falling;
 
     private final Random random = new Random();
 
     public GameBoard(int[][] a) {
         this.a = a;
-        width = a.length;
-        height = a[0].length;
         this.cellEntities = new CellEntity[a.length][a[0].length];
         resetBoard();
         timer = new Timer(1000, this);
@@ -48,7 +43,7 @@ public class GameBoard extends JComponent implements ActionListener {
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(width * BOARD_SIZE, height * BOARD_SIZE);
+        return new Dimension(a.length * BOARD_SIZE, a[0].length * BOARD_SIZE);
     }
 
     private void resetBoard() {
@@ -66,6 +61,8 @@ public class GameBoard extends JComponent implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         if (!wasDrop) {
             insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
+            wasDrop = true;
+            return;
         }
         wasDrop = processAllDrops();
         repaint();
@@ -87,7 +84,6 @@ public class GameBoard extends JComponent implements ActionListener {
         int insertNewBlockCell = cellEntities.length / 2;
         cellEntities[insertNewBlockCell][1] = new CellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getCoords(), blockPair.getBlockA());
         cellEntities[insertNewBlockCell][0] = new CellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getCoords(), blockPair.getBlockB());
-        falling = Optional.of(blockPair);
     }
 
     private boolean processRowForDrop(CellEntity[] row) {
