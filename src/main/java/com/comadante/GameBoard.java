@@ -32,7 +32,7 @@ public class GameBoard extends JComponent implements ActionListener {
         height = a[0].length;
         this.cellEntities = new CellEntity[a.length][a[0].length];
         resetBoard();
-        timer = new Timer(500, this);
+        timer = new Timer(1000, this);
         timer.start();
         insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
     }
@@ -79,24 +79,22 @@ public class GameBoard extends JComponent implements ActionListener {
         falling = Optional.of(blockPair);
     }
 
-    private boolean processRowForDrop(CellEntity[] row) {
-        boolean wasDrop = false;
+    private void processRowForDrop(CellEntity[] row) {
         for (int i = 0; i < row.length; i++) {
             CellEntity cellEntity = row[i];
             if (cellEntity.isOccupied()) {
                 if (isCellEntityBelowIsEmptyOrNotBorder(cellEntity.getCoords())) {
                     moveCellEntityDownOne(cellEntity, cellEntity.getCoords());
-                    wasDrop = true;
                 }
             }
         }
-        return wasDrop;
     }
 
     private boolean isCellEntityBelowIsEmptyOrNotBorder(Coords coords) {
         int i = coords.i;
         int j = coords.j;
-        if (j == (cellEntities[0].length)) {
+        if (j == (cellEntities[0].length - 1)) {
+            //Bottom Reached
             return false;
         }
         if (!cellEntities[i][j + 1].isOccupied()) {
@@ -105,17 +103,6 @@ public class GameBoard extends JComponent implements ActionListener {
         return false;
     }
 
-//    private Coords getCoordsForCell(CellEntity cellEntity) {
-//        for (int i = 0; i < cellEntities.length; i++) {
-//            for (int j = 0; j < cellEntities[0].length; j++) {
-//                if (cellEntities[i][j].getId() == cellEntity.getId()) {
-//                    return new Coords(i, j);
-//                }
-//            }
-//        }
-//        throw new RuntimeException("Unable to find coords for cell entity with id: " + cellEntity.getId());
-//    }
-
     private void moveCellEntityDownOne(CellEntity cellEntity, Coords coords) {
         int i = coords.i;
         int j = coords.j;
@@ -123,7 +110,7 @@ public class GameBoard extends JComponent implements ActionListener {
         cellEntities[i][j] = new CellEntity(cellEntities[i][j].getId(), new Coords(i, j));
     }
 
-    public Iterator<CellEntity[]> getIteratorOfRowsFromBottom(CellEntity[][] cellEntities) {
+    private Iterator<CellEntity[]> getIteratorOfRowsFromBottom(CellEntity[][] cellEntities) {
         CellEntity[][] mutabableCellEntriesCopy = Arrays.copyOf(cellEntities, cellEntities.length);
         return new Iterator<CellEntity[]>() {
             private List<CellEntity> nextRow = new ArrayList<>();
@@ -145,19 +132,19 @@ public class GameBoard extends JComponent implements ActionListener {
 
     }
 
-    public List<CellEntity> getAndRemoveLastRow(CellEntity[][] arrays) {
-        List<CellEntity> stringArray = new ArrayList<>();
+    private List<CellEntity> getAndRemoveLastRow(CellEntity[][] arrays) {
+        List<CellEntity> cellEntitiesArray = new ArrayList<>();
         for (int i = 0; i < arrays.length; i++) {
             CellEntity[] row = arrays[i];
             if (row.length - 1 < 0) {
                 continue;
             }
             CellEntity lastElement = row[row.length -1];
-            stringArray.add(lastElement);
-            CellEntity[] strings1 = Arrays.copyOf(row, row.length - 1);
-            arrays[i] = strings1;
+            cellEntitiesArray.add(lastElement);
+            CellEntity[] cellEntiesWithRemoved = Arrays.copyOf(row, row.length - 1);
+            arrays[i] = cellEntiesWithRemoved;
         }
-        return stringArray;
+        return cellEntitiesArray;
     }
 
     public static class Coords {
