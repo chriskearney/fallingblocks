@@ -1,60 +1,60 @@
 package com.comadante;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Iterator;
+import java.util.Optional;
 
-import static java.awt.Color.*;
-import static java.awt.Color.cyan;
-
-public class GameBoard extends JComponent implements ActionListener {
+public class GameBoard extends JComponent implements ActionListener, KeyListener {
 
     private final static int BOARD_SIZE = 30;
-    private final static Color[] COLORS = {darkGray, green, blue, red, yellow, magenta, pink, cyan};
 
-    private final int[][] a;
     private final Timer timer;
-    boolean wasDrop = false;
+    private final CellEntity[][] cellEntities;
 
-    private CellEntity[][] cellEntities;
-
-    private final Random random = new Random();
+    //Some State
+    private Optional<BlockPair> blockPairActive;
+    private boolean wasDrop = false;
 
     public GameBoard(int[][] a) {
-        this.a = a;
         this.cellEntities = new CellEntity[a.length][a[0].length];
         resetBoard();
         timer = new Timer(1000, this);
         timer.start();
+        addKeyListener(this);
+    }
+
+    public void addNotify() {
+        super.addNotify();
+        requestFocus();
     }
 
     public void paintComponent(Graphics g) {
-        int size = BOARD_SIZE;
-        for (int i = 0; i < cellEntities.length; i++) {
-            for (int j = 0; j < cellEntities[0].length; j++) {
-                g.setColor(cellEntities[i][j].getColor());
-                g.fill3DRect(i * size, j * size, size, size, true);
-            }
-        }
+        runOnEveryCellEntity((invocationNumber, currentCords) -> {
+            CellEntity cellEntity = getCellEntity(currentCords);
+            g.setColor(cellEntity.getColor());
+            g.fill3DRect(currentCords.i * BOARD_SIZE, currentCords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE, true);
+        });
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(a.length * BOARD_SIZE, a[0].length * BOARD_SIZE);
+        return new Dimension(cellEntities.length * BOARD_SIZE, cellEntities[0].length * BOARD_SIZE);
     }
 
     private void resetBoard() {
-        random.nextInt(COLORS.length);
-        int cellId = 0;
-        for (int i = 0; i < cellEntities.length; i++) {
-            for (int j = 0; j < cellEntities[0].length; j++) {
-                cellId++;
-                cellEntities[i][j] = new CellEntity(cellId, new Coords(i, j));
-            }
-        }
+        runOnEveryCellEntity((invocationNumber, currentCords) -> setCellEntity(currentCords, new CellEntity(invocationNumber, currentCords)));
+    }
+
+    private CellEntity getCellEntity(Coords coords) {
+        return cellEntities[coords.i][coords.j];
+    }
+
+    private void setCellEntity(Coords coords, CellEntity cellEntity) {
+        cellEntities[coords.i][coords.j] = cellEntity;
     }
 
     @Override
@@ -67,9 +67,26 @@ public class GameBoard extends JComponent implements ActionListener {
         repaint();
     }
 
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == KeyEvent.VK_CONTROL) {
+            rotateRight();
+        }
+    }
+
+    private void runOnEveryCellEntity(CellRun cellRun) {
+        int invocationNumber = 0;
+        for (int i = 0; i < cellEntities.length; i++) {
+            for (int j = 0; j < cellEntities[0].length; j++) {
+                invocationNumber++;
+                cellRun.run(invocationNumber, new Coords(i, j));
+            }
+        }
+    }
+
     private boolean processAllDrops() {
         boolean wasDrop = false;
-        Iterator<CellEntity[]> iteratorOfRowsFromBottom = getIteratorOfRowsFromBottom(cellEntities);
+        Iterator<CellEntity[]> iteratorOfRowsFromBottom = GameBoardUtil.getIteratorOfRowsFromBottom(cellEntities);
         while (iteratorOfRowsFromBottom.hasNext()) {
             CellEntity[] nextRow = iteratorOfRowsFromBottom.next();
             if (processRowForDrop(nextRow)) {
@@ -83,6 +100,7 @@ public class GameBoard extends JComponent implements ActionListener {
         int insertNewBlockCell = cellEntities.length / 2;
         cellEntities[insertNewBlockCell][1] = new CellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getCoords(), blockPair.getBlockA());
         cellEntities[insertNewBlockCell][0] = new CellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getCoords(), blockPair.getBlockB());
+        blockPairActive = Optional.of(blockPair);
     }
 
     private boolean processRowForDrop(CellEntity[] row) {
@@ -90,8 +108,8 @@ public class GameBoard extends JComponent implements ActionListener {
         for (int i = 0; i < row.length; i++) {
             CellEntity cellEntity = row[i];
             if (cellEntity.isOccupied()) {
-                if (isCellEntityBelowIsEmptyOrNotBorder(cellEntity.getCoords())) {
-                    moveCellEntityDownOne(cellEntity, cellEntity.getCoords());
+                if (isCellEntityBelowIsEmptyOrNotBorder(cellEntity)) {
+                    moveCellEntityDownOne(cellEntity);
                     wasDrop = true;
                 }
             }
@@ -99,10 +117,15 @@ public class GameBoard extends JComponent implements ActionListener {
         return wasDrop;
     }
 
-    private boolean isCellEntityBelowIsEmptyOrNotBorder(Coords coords) {
-        int i = coords.i;
-        int j = coords.j;
+    private boolean isCellEntityBelowIsEmptyOrNotBorder(CellEntity cellEntity) {
+        int i = cellEntity.getCoords().i;
+        int j = cellEntity.getCoords().j;
         if (j == (cellEntities[0].length - 1)) {
+            if (blockPairActive.isPresent()) {
+                if (cellEntity.getGameBlock().equals(blockPairActive.get())) {
+                    blockPairActive = Optional.empty();
+                }
+            }
             return false;
         }
         if (!cellEntities[i][j + 1].isOccupied()) {
@@ -111,47 +134,19 @@ public class GameBoard extends JComponent implements ActionListener {
         return false;
     }
 
-    private void moveCellEntityDownOne(CellEntity cellEntity, Coords coords) {
-        int i = coords.i;
-        int j = coords.j;
+    private void moveCellEntityDownOne(CellEntity cellEntity) {
+        int i = cellEntity.getCoords().i;
+        int j = cellEntity.getCoords().j;
         cellEntities[i][j + 1] = new CellEntity(cellEntity, new Coords(i, j + 1));
         cellEntities[i][j] = new CellEntity(cellEntities[i][j].getId(), new Coords(i, j));
     }
 
-    private Iterator<CellEntity[]> getIteratorOfRowsFromBottom(CellEntity[][] cellEntities) {
-        CellEntity[][] mutabableCellEntriesCopy = Arrays.copyOf(cellEntities, cellEntities.length);
-        return new Iterator<CellEntity[]>() {
-            private List<CellEntity> nextRow = new ArrayList<>();
 
-            @Override
-            public boolean hasNext() {
-                nextRow = getAndRemoveLastRow(mutabableCellEntriesCopy);
-                return !nextRow.isEmpty();
-            }
-
-            @Override
-            public CellEntity[] next() {
-                if (nextRow.isEmpty()) {
-                    throw new RuntimeException("Need to call hasNext first!");
-                }
-                return nextRow.toArray(new CellEntity[0]);
-            }
-        };
-    }
-
-    private List<CellEntity> getAndRemoveLastRow(CellEntity[][] arrays) {
-        List<CellEntity> cellEntitiesArray = new ArrayList<>();
-        for (int i = 0; i < arrays.length; i++) {
-            CellEntity[] row = arrays[i];
-            if (row.length - 1 < 0) {
-                continue;
-            }
-            CellEntity lastElement = row[row.length -1];
-            cellEntitiesArray.add(lastElement);
-            CellEntity[] cellEntiesWithRemoved = Arrays.copyOf(row, row.length - 1);
-            arrays[i] = cellEntiesWithRemoved;
+    private void rotateRight() {
+        if (!blockPairActive.isPresent()) {
+            System.out.println("Its not active!");
+            return;
         }
-        return cellEntitiesArray;
     }
 
     public static class Coords {
@@ -163,4 +158,19 @@ public class GameBoard extends JComponent implements ActionListener {
             this.j = j;
         }
     }
+
+    interface CellRun {
+        void run(int invocationNumber, Coords currentCords);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
 }
