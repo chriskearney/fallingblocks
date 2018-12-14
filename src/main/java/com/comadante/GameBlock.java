@@ -11,7 +11,7 @@ public class GameBlock {
     private final Color color;
     private final boolean magic;
     private final static Random random = new Random();
-    private final static Color[] COLORS = {darkGray, green, blue, red, yellow, magenta, pink, cyan};
+    private final static Color[] COLORS = {darkGray, green, blue, red, yellow};
 
 
     public GameBlock(Color color, boolean magic) {
