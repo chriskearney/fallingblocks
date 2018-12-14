@@ -20,6 +20,7 @@ public class GameBoard extends JComponent implements ActionListener {
     private final int width;
     private final int height;
     private final Timer timer;
+    boolean wasDrop = false;
 
     private CellEntity[][] cellEntities;
     private Optional<BlockPair> falling;
@@ -34,7 +35,6 @@ public class GameBoard extends JComponent implements ActionListener {
         resetBoard();
         timer = new Timer(1000, this);
         timer.start();
-        insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
     }
 
     public void paintComponent(Graphics g) {
@@ -64,12 +64,23 @@ public class GameBoard extends JComponent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        if (!wasDrop) {
+            insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
+        }
+        wasDrop = processAllDrops();
+        repaint();
+    }
+
+    private boolean processAllDrops() {
+        boolean wasDrop = false;
         Iterator<CellEntity[]> iteratorOfRowsFromBottom = getIteratorOfRowsFromBottom(cellEntities);
         while (iteratorOfRowsFromBottom.hasNext()) {
             CellEntity[] nextRow = iteratorOfRowsFromBottom.next();
-            processRowForDrop(nextRow);
+            if (processRowForDrop(nextRow)) {
+                wasDrop = true;
+            }
         }
-        repaint();
+        return wasDrop;
     }
 
     private void insertNewBlockPair(BlockPair blockPair) {
@@ -79,22 +90,24 @@ public class GameBoard extends JComponent implements ActionListener {
         falling = Optional.of(blockPair);
     }
 
-    private void processRowForDrop(CellEntity[] row) {
+    private boolean processRowForDrop(CellEntity[] row) {
+        boolean wasDrop = false;
         for (int i = 0; i < row.length; i++) {
             CellEntity cellEntity = row[i];
             if (cellEntity.isOccupied()) {
                 if (isCellEntityBelowIsEmptyOrNotBorder(cellEntity.getCoords())) {
                     moveCellEntityDownOne(cellEntity, cellEntity.getCoords());
+                    wasDrop = true;
                 }
             }
         }
+        return wasDrop;
     }
 
     private boolean isCellEntityBelowIsEmptyOrNotBorder(Coords coords) {
         int i = coords.i;
         int j = coords.j;
         if (j == (cellEntities[0].length - 1)) {
-            //Bottom Reached
             return false;
         }
         if (!cellEntities[i][j + 1].isOccupied()) {
