@@ -21,4 +21,8 @@ public class CellEntity
         }
         return Color.black;
     }
+
+    public boolean isOccupied() {
+        return gameBlockOptional.isPresent();
+    }
 }

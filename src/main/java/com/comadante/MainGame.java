@@ -9,7 +9,8 @@ public class MainGame extends JFrame implements ActionListener {
     private JPanel gamePanel = new JPanel();
 
     public MainGame() {
-        gamePanel.add(new GameBoard(new int[10][20]));
+        GameBoard gameBoard = new GameBoard(new int[10][20]);
+        gamePanel.add(gameBoard);
         add(gamePanel);
         setSize(400,500);
         setVisible(true);

@@ -1,11 +1,11 @@
 package com.comadante;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import static java.awt.Color.*;
 import static java.awt.Color.cyan;
@@ -21,6 +21,7 @@ public class GameBoard extends JComponent implements ActionListener {
     private final Timer timer;
 
     private CellEntity[][] cellEntities;
+    private Optional<BlockPair> falling;
 
     private final Random random = new Random();
 
@@ -32,6 +33,7 @@ public class GameBoard extends JComponent implements ActionListener {
         resetBoard();
         timer = new Timer(500, this);
         timer.start();
+        insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
     }
 
     public void paintComponent(Graphics g) {
@@ -59,7 +61,54 @@ public class GameBoard extends JComponent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        cellEntities[random.nextInt(cellEntities.length)][random.nextInt(cellEntities[0].length)] = new CellEntity(GameBlock.random());
+        boolean wasDrop;
+        do {
+            wasDrop = processBlocksThatNeedToFall();
+        } while (wasDrop);
         repaint();
+    }
+
+    private void insertNewBlockPair(BlockPair blockPair) {
+        int insertNewBlockCell = cellEntities.length / 2;
+        cellEntities[insertNewBlockCell][1] = new CellEntity(blockPair.getBlockA());
+        cellEntities[insertNewBlockCell][0] = new CellEntity(blockPair.getBlockB());
+        falling = Optional.of(blockPair);
+    }
+
+    private boolean processBlocksThatNeedToFall() {
+        boolean wasDrop = false;
+        for (int i = cellEntities.length - 1; i > 0; i--) {
+           if (processRowForDrop(i)) {
+               wasDrop = true;
+           }
+        }
+        return wasDrop;
+    }
+
+    private boolean processRowForDrop(int i) {
+        boolean wasDrop = false;
+        for (int j = 0; j < cellEntities.length; j++) {
+            CellEntity cellEntity = cellEntities[i][j];
+            if (isCellEntityBelowIsEmptyOrNotBorder(i, j)) {
+                moveCellEntityDownOne(cellEntity, i, j);
+                wasDrop = true;
+            }
+        }
+        return wasDrop;
+    }
+
+    private boolean isCellEntityBelowIsEmptyOrNotBorder(int i, int j) {
+        if (j == (cellEntities[0].length - 1)) {
+            return false;
+        }
+        if (!cellEntities[i][j + 1].isOccupied()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void moveCellEntityDownOne(CellEntity cellEntity, int i, int j) {
+        cellEntities[i][j + 1] = cellEntity;
+        cellEntities[i][j] = new CellEntity();
     }
 }
