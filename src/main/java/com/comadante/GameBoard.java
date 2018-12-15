@@ -18,17 +18,19 @@ import static com.comadante.GameBlockPair.BlockBOrientation.TOP_OF;
 
 public class GameBoard extends JComponent implements ActionListener, KeyListener {
 
-    private final static int BOARD_SIZE = 30;
+    public final static int BOARD_SIZE = 50;
 
     private final Timer timer;
     private final CellEntity[][] cellEntities;
+    private final BlockRenderFactory blockRenderFactory;
 
     //Some State
     private Optional<GameBlockPair> blockPairActive;
     private boolean wasDrop = false;
 
-    public GameBoard(int[][] a) {
+    public GameBoard(int[][] a, BlockRenderFactory blockRenderFactory) {
         this.cellEntities = new CellEntity[a.length][a[0].length];
+        this.blockRenderFactory = blockRenderFactory;
         resetBoard();
         timer = new Timer(500, this);
         timer.start();
@@ -53,8 +55,11 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public void paintComponent(Graphics g) {
         runOnEveryCellEntity((invocationNumber, currentCords) -> {
             CellEntity cellEntity = getCellEntity(currentCords).get();
-            g.setColor(cellEntity.getColor());
-            g.fillRoundRect(currentCords.i * BOARD_SIZE, currentCords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE, 1,2);
+            if (!cellEntity.isOccupied()) {
+                blockRenderFactory.render(GameBlock.Type.EMPTY, g, currentCords);
+                return;
+            }
+            blockRenderFactory.render(cellEntity.getGameBlock().get().getType(), g, currentCords);
         });
     }
 

@@ -1,37 +1,46 @@
 package com.comadante;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
-
-import static java.awt.Color.*;
-import static java.awt.Color.cyan;
 
 public class GameBlock {
 
-    private final Color color;
-    private final boolean magic;
-    private final static Random random = new Random();
-    private final static Color[] COLORS = {darkGray, green, blue, red, yellow};
+    enum Type {
+        BLUE,
+        GREEN,
+        RED,
+        YELLOW,
+        MAGIC_BLUE,
+        MAGIC_GREEN,
+        MAGIC_RED,
+        MAGIC_YELLOW,
+        EMPTY;
 
+        public static Type[] getRandomPool() {
+            ArrayList<Type> types = new ArrayList<>(Arrays.asList(values()));
+            types.remove(EMPTY);
+            return types.toArray(new Type[types.size()]);
+        }
+    }
+    private final static Random RANDOM = new Random();
+    private final static List<Type> VALUES = Collections.unmodifiableList(Arrays.asList(Type.getRandomPool()));
+    private final static int SIZE = VALUES.size();
 
-    public GameBlock(Color color, boolean magic) {
-        this.color = color;
-        this.magic = magic;
+    private final Type type;
+
+    public GameBlock(Type type) {
+        this.type = type;
     }
 
-    public GameBlock(Color color) {
-        this(color, false);
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public boolean isMagic() {
-        return magic;
+    public Type getType() {
+        return type;
     }
 
     public static GameBlock random() {
-        return new GameBlock(COLORS[random.nextInt(COLORS.length)]);
+        Type randomType = VALUES.get(RANDOM.nextInt(SIZE));
+        return new GameBlock(randomType);
     }
 }

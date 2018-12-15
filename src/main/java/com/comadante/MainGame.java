@@ -6,12 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 public class MainGame extends JFrame implements ActionListener {
     private JPanel gamePanel = new JPanel();
 
-    public MainGame() {
-        GameBoard gameBoard = new GameBoard(new int[10][20]);
+    public MainGame() throws IOException {
+        StandardBlockRenderFactory standardBlockRenderFactory = new StandardBlockRenderFactory();
+        GameBoard gameBoard = new GameBoard(new int[10][20], standardBlockRenderFactory);
         gamePanel.add(gameBoard);
         add(gamePanel);
         setSize(800,650);
@@ -25,7 +27,7 @@ public class MainGame extends JFrame implements ActionListener {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         MainGame mainGame = new MainGame();
         mainGame.repaint();
     }

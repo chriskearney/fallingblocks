@@ -3,6 +3,8 @@ package com.comadante;
 import java.awt.*;
 import java.util.Optional;
 
+import static com.comadante.GameBoard.BOARD_SIZE;
+
 public class CellEntity
 {
     private final int id;
@@ -21,13 +23,6 @@ public class CellEntity
         gameBlockOptional = Optional.empty();
     }
 
-    public Color getColor() {
-        if (gameBlockOptional.isPresent()) {
-            return gameBlockOptional.get().getColor();
-        }
-        return Color.black;
-    }
-
     public boolean isOccupied() {
         return gameBlockOptional.isPresent();
     }
@@ -43,6 +38,5 @@ public class CellEntity
     public Optional<GameBlock> getGameBlock() {
         return gameBlockOptional;
     }
-
 
 }
