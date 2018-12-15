@@ -56,11 +56,11 @@ public class GameBlockPair {
     }
 
     public CellEntity getBlockBEntity() {
-        return gameBoard.getCellEntity(gameBoard.getCoords(blockB));
+        return gameBoard.getCellEntity(gameBoard.getCoords(blockB)).get();
     }
 
     public CellEntity getBlockAEntity() {
-        return gameBoard.getCellEntity(gameBoard.getCoords(blockA));
+        return gameBoard.getCellEntity(gameBoard.getCoords(blockA)).get();
     }
 
 }

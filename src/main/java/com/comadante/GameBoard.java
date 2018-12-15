@@ -52,7 +52,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     public void paintComponent(Graphics g) {
         runOnEveryCellEntity((invocationNumber, currentCords) -> {
-            CellEntity cellEntity = getCellEntity(currentCords);
+            CellEntity cellEntity = getCellEntity(currentCords).get();
             g.setColor(cellEntity.getColor());
             g.fill3DRect(currentCords.i * BOARD_SIZE, currentCords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE, true);
         });
@@ -66,8 +66,13 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         runOnEveryCellEntity((invocationNumber, currentCords) -> setCellEntity(currentCords, new CellEntity(invocationNumber, currentCords)));
     }
 
-    public CellEntity getCellEntity(GameBoardCoords gameBoardCoords) {
-        return cellEntities[gameBoardCoords.i][gameBoardCoords.j];
+    public Optional<CellEntity> getCellEntity(GameBoardCoords gameBoardCoords) {
+        try {
+            CellEntity entity = cellEntities[gameBoardCoords.i][gameBoardCoords.j];
+            return Optional.of(entity);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
+        return Optional.empty();
     }
 
     private void setCellEntity(GameBoardCoords gameBoardCoords, CellEntity cellEntity) {
@@ -79,10 +84,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         int keyCode = keyEvent.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_UP:
-               //
+                //
                 break;
             case KeyEvent.VK_DOWN:
-                // handle down
+                moveActiveBlockPair(MoveDirection.DOWN);
                 break;
             case KeyEvent.VK_LEFT:
                 moveActiveBlockPair(MoveDirection.LEFT);
@@ -159,11 +164,11 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private void moveCellEntity(MoveDirection moveDirection, CellEntity cellEntity, boolean repaint) {
         int i = cellEntity.getGameBoardCoords().i;
         int j = cellEntity.getGameBoardCoords().j;
-        CellEntity existingCellEntityInDestintation = cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j];
-        if (existingCellEntityInDestintation.isOccupied()) {
+        CellEntity existingCellEntityInDestination = cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j];
+        if (existingCellEntityInDestination.isOccupied()) {
             return;
         }
-        cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new CellEntity(existingCellEntityInDestintation.getId(), existingCellEntityInDestintation.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
+        cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new CellEntity(existingCellEntityInDestination.getId(), existingCellEntityInDestination.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
         cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
         if (repaint) {
             repaint();
@@ -187,7 +192,22 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
             GameBlockPair.BlockBOrientation blockBOrientation = blockBOrientationOptional.get();
 
-            if (blockBOrientation.equals(BOTTOM_OF) || blockBOrientation.equals(TOP_OF)) {
+            if ((blockBOrientation.equals(BOTTOM_OF) || blockBOrientation.equals(TOP_OF)) && (!direction.equals(MoveDirection.DOWN))) {
+                moveCellEntity(direction, gameBlockPair.getBlockAEntity(), false);
+                moveCellEntity(direction, gameBlockPair.getBlockBEntity(), true);
+            }
+
+            if (blockBOrientation.equals(BOTTOM_OF) && direction.equals(MoveDirection.DOWN)) {
+                moveCellEntity(direction, gameBlockPair.getBlockBEntity(), false);
+                moveCellEntity(direction, gameBlockPair.getBlockAEntity(), true);
+            }
+
+            if (blockBOrientation.equals(TOP_OF) && direction.equals(MoveDirection.DOWN)) {
+                moveCellEntity(direction, gameBlockPair.getBlockAEntity(), false);
+                moveCellEntity(direction, gameBlockPair.getBlockBEntity(), true);
+            }
+
+            if ((blockBOrientation.equals(RIGHT_OF) || blockBOrientation.equals(LEFT_OF)) && direction.equals(MoveDirection.DOWN)) {
                 moveCellEntity(direction, gameBlockPair.getBlockAEntity(), false);
                 moveCellEntity(direction, gameBlockPair.getBlockBEntity(), true);
             }
@@ -211,12 +231,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 moveCellEntity(direction, gameBlockPair.getBlockBEntity(), false);
                 moveCellEntity(direction, gameBlockPair.getBlockAEntity(), true);
             }
-
         }
     }
 
     private boolean isSpaceAvailable(MoveDirection direction, CellEntity cellEntity) {
-        CellEntity destinationEntity = cellEntities[cellEntity.getGameBoardCoords().i + direction.getDirectionApplyCoords().i][cellEntity.getGameBoardCoords().j + direction.getDirectionApplyCoords().j];
+        Optional<CellEntity> destinationEntityOptional = getCellEntity(new GameBoardCoords(cellEntity.getGameBoardCoords().i + direction.getDirectionApplyCoords().i, cellEntity.getGameBoardCoords().j + direction.getDirectionApplyCoords().j));
+        if (!destinationEntityOptional.isPresent()) {
+            return false;
+        }
+        CellEntity destinationEntity = destinationEntityOptional.get();
         if (destinationEntity.getGameBlock().isPresent()) {
             GameBlock gameBlock = destinationEntity.getGameBlock().get();
             if (blockPairActive.isPresent()) {
