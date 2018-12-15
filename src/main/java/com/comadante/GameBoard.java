@@ -168,11 +168,11 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private void moveCellEntity(MoveDirection moveDirection, CellEntity cellEntity, boolean repaint) {
         int i = cellEntity.getGameBoardCoords().i;
         int j = cellEntity.getGameBoardCoords().j;
-        CellEntity existingCellEntityInDestination = cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j];
-        if (existingCellEntityInDestination.isOccupied()) {
+        Optional<CellEntity> cellEntityOptional = getCellEntity(new GameBoardCoords(i + moveDirection.getDirectionApplyCoords().i, j + moveDirection.getDirectionApplyCoords().j));
+        if (!cellEntityOptional.isPresent() || cellEntityOptional.get().isOccupied()) {
             return;
         }
-        cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new CellEntity(existingCellEntityInDestination.getId(), existingCellEntityInDestination.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
+        cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new CellEntity(cellEntityOptional.get().getId(), cellEntityOptional.get().getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
         cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
         if (repaint) {
             repaint();
