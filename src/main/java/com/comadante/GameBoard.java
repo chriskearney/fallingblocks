@@ -30,7 +30,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public GameBoard(int[][] a) {
         this.cellEntities = new CellEntity[a.length][a[0].length];
         resetBoard();
-        timer = new Timer(1000, this);
+        timer = new Timer(500, this);
         timer.start();
         addKeyListener(this);
     }
