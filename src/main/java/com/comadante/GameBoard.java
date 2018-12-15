@@ -148,8 +148,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         int i = cellEntity.getGameBoardCoords().i;
         int j = cellEntity.getGameBoardCoords().j;
         if (j == (cellEntities[0].length - 1)) {
-            if (blockPairActive.isPresent()) {
-                if (cellEntity.getGameBlock().equals(blockPairActive.get())) {
+            if (blockPairActive.isPresent() && cellEntity.getGameBlock().isPresent()) {
+                if (cellEntity.getGameBlock().get().equals(blockPairActive.get().getBlockAEntity()) || cellEntity.getGameBlock().get().equals(blockPairActive.get().getBlockBEntity())) {
                     blockPairActive = Optional.empty();
                 }
             }

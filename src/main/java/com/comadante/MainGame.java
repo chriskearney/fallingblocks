@@ -14,7 +14,7 @@ public class MainGame extends JFrame implements ActionListener {
         GameBoard gameBoard = new GameBoard(new int[10][20]);
         gamePanel.add(gameBoard);
         add(gamePanel);
-        setSize(350,700);
+        setSize(1920,1080);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
