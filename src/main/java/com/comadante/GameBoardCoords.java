@@ -25,6 +25,20 @@ public class GameBoardCoords {
         return Objects.hash(i, j);
     }
 
-    public static GameBoardCoords MOVE_TO_THE_LEFT = new GameBoardCoords(-1, 0);
-    public static GameBoardCoords MOVE_TO_THE_RIGHT = new GameBoardCoords()
+    enum MoveDirection {
+        LEFT(new GameBoardCoords(-1, 0)),
+        RIGHT(new GameBoardCoords(1, 0)),
+        UP(new GameBoardCoords(0, -1)),
+        DOWN(new GameBoardCoords(0, 1));
+
+        private final GameBoardCoords directionApplyCoords;
+
+        MoveDirection(GameBoardCoords gameBoardCoords) {
+            directionApplyCoords = gameBoardCoords;
+        }
+
+        public GameBoardCoords getDirectionApplyCoords() {
+            return directionApplyCoords;
+        }
+    }
 }

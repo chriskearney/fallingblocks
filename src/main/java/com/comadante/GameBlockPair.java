@@ -4,12 +4,12 @@ import java.util.Optional;
 
 import static com.comadante.GameBoardUtil.subtractCoords;
 
-public class BlockPair {
+public class GameBlockPair {
     private final GameBlock blockA;
     private final GameBlock blockB;
     private final GameBoard gameBoard;
 
-    public BlockPair(GameBlock blockA, GameBlock blockB, GameBoard gameBoard) {
+    public GameBlockPair(GameBlock blockA, GameBlock blockB, GameBoard gameBoard) {
         this.blockA = blockA;
         this.blockB = blockB;
         this.gameBoard = gameBoard;
@@ -60,7 +60,7 @@ public class BlockPair {
     }
 
     public CellEntity getBlockAEntity() {
-        return gameBoard.getCellEntity(gameBoard.getCoords(blockB));
+        return gameBoard.getCellEntity(gameBoard.getCoords(blockA));
     }
 
 }

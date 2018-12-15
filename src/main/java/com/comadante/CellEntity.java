@@ -43,4 +43,6 @@ public class CellEntity
     public Optional<GameBlock> getGameBlock() {
         return gameBlockOptional;
     }
+
+
 }
