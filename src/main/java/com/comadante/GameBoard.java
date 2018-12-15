@@ -54,7 +54,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         runOnEveryCellEntity((invocationNumber, currentCords) -> {
             CellEntity cellEntity = getCellEntity(currentCords).get();
             g.setColor(cellEntity.getColor());
-            g.fill3DRect(currentCords.i * BOARD_SIZE, currentCords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE, true);
+            g.fillRoundRect(currentCords.i * BOARD_SIZE, currentCords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE, 1,2);
         });
     }
 
