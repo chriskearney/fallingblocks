@@ -147,6 +147,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private boolean isCellEntityBelowIsEmptyOrNotBorder(CellEntity cellEntity) {
         int i = cellEntity.getGameBoardCoords().i;
         int j = cellEntity.getGameBoardCoords().j;
+        // Because I will forget:
+        // I am detecting if a cellentity that contains a block that belongs to an active falling blockpair.
+        // because the following if statement means, we have reached the bottom border
+        // i will mark the blockpair as inactive / or optional.empty
         if (j == (cellEntities[0].length - 1)) {
             if (blockPairActive.isPresent() && cellEntity.getGameBlock().isPresent()) {
                 if (cellEntity.getGameBlock().get().equals(blockPairActive.get().getBlockAEntity()) || cellEntity.getGameBlock().get().equals(blockPairActive.get().getBlockBEntity())) {
