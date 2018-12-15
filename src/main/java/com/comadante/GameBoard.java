@@ -33,6 +33,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         requestFocus();
     }
 
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (!wasDrop) {
+            insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random(), this));
+            repaint();
+        }
+        wasDrop = processAllDrops();
+        repaint();
+    }
+
     public void paintComponent(Graphics g) {
         runOnEveryCellEntity((invocationNumber, currentCords) -> {
             CellEntity cellEntity = getCellEntity(currentCords);
@@ -49,28 +59,18 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         runOnEveryCellEntity((invocationNumber, currentCords) -> setCellEntity(currentCords, new CellEntity(invocationNumber, currentCords)));
     }
 
-    private CellEntity getCellEntity(Coords coords) {
-        return cellEntities[coords.i][coords.j];
+    public CellEntity getCellEntity(GameBoardCoords gameBoardCoords) {
+        return cellEntities[gameBoardCoords.i][gameBoardCoords.j];
     }
 
-    private void setCellEntity(Coords coords, CellEntity cellEntity) {
-        cellEntities[coords.i][coords.j] = cellEntity;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        if (!wasDrop) {
-            insertNewBlockPair(new BlockPair(GameBlock.random(), GameBlock.random()));
-            repaint();
-        }
-        wasDrop = processAllDrops();
-        repaint();
+    private void setCellEntity(GameBoardCoords gameBoardCoords, CellEntity cellEntity) {
+        cellEntities[gameBoardCoords.i][gameBoardCoords.j] = cellEntity;
     }
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == KeyEvent.VK_CONTROL) {
-            rotateRight();
+            rotate();
         }
     }
 
@@ -79,7 +79,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         for (int i = 0; i < cellEntities.length; i++) {
             for (int j = 0; j < cellEntities[0].length; j++) {
                 invocationNumber++;
-                cellRun.run(invocationNumber, new Coords(i, j));
+                cellRun.run(invocationNumber, new GameBoardCoords(i, j));
             }
         }
     }
@@ -98,8 +98,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     private void insertNewBlockPair(BlockPair blockPair) {
         int insertNewBlockCell = cellEntities.length / 2;
-        cellEntities[insertNewBlockCell][1] = new CellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getCoords(), blockPair.getBlockA());
-        cellEntities[insertNewBlockCell][0] = new CellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getCoords(), blockPair.getBlockB());
+        cellEntities[insertNewBlockCell][0] = new CellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getGameBoardCoords(), blockPair.getBlockA());
+        cellEntities[insertNewBlockCell][1] = new CellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getGameBoardCoords(), blockPair.getBlockB());
         blockPairActive = Optional.of(blockPair);
     }
 
@@ -118,8 +118,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     private boolean isCellEntityBelowIsEmptyOrNotBorder(CellEntity cellEntity) {
-        int i = cellEntity.getCoords().i;
-        int j = cellEntity.getCoords().j;
+        int i = cellEntity.getGameBoardCoords().i;
+        int j = cellEntity.getGameBoardCoords().j;
         if (j == (cellEntities[0].length - 1)) {
             if (blockPairActive.isPresent()) {
                 if (cellEntity.getGameBlock().equals(blockPairActive.get())) {
@@ -135,32 +135,108 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     private void moveCellEntityDownOne(CellEntity cellEntity) {
-        int i = cellEntity.getCoords().i;
-        int j = cellEntity.getCoords().j;
-        cellEntities[i][j + 1] = new CellEntity(cellEntity, new Coords(i, j + 1));
-        cellEntities[i][j] = new CellEntity(cellEntities[i][j].getId(), new Coords(i, j));
+        int i = cellEntity.getGameBoardCoords().i;
+        int j = cellEntity.getGameBoardCoords().j;
+        CellEntity existingCellEntityInDestintation = cellEntities[i][j + 1];
+        if (existingCellEntityInDestintation.isOccupied()) {
+            return;
+        }
+        cellEntities[i][j + 1] = new CellEntity(existingCellEntityInDestintation.getId(), existingCellEntityInDestintation.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
+        cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
+    }
+
+    private void moveCellEntityRightOne(CellEntity cellEntity) {
+        int i = cellEntity.getGameBoardCoords().i;
+        int j = cellEntity.getGameBoardCoords().j;
+        CellEntity existingCellEntityInDestintation = cellEntities[i + 1][j];
+        if (existingCellEntityInDestintation.isOccupied()) {
+            return;
+        }
+        cellEntities[i + 1][j] = new CellEntity(existingCellEntityInDestintation.getId(), existingCellEntityInDestintation.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
+        cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
+    }
+
+    private void moveCellEntityLeftOne(CellEntity cellEntity) {
+        int i = cellEntity.getGameBoardCoords().i;
+        int j = cellEntity.getGameBoardCoords().j;
+        CellEntity existingCellEntityInDestintation = cellEntities[i - 1][j];
+        if (existingCellEntityInDestintation.isOccupied()) {
+            return;
+        }
+        cellEntities[i - 1][j] = new CellEntity(existingCellEntityInDestintation.getId(), existingCellEntityInDestintation.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
+        cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
+    }
+
+    private void moveCellEntityUpOne(CellEntity cellEntity) {
+        int i = cellEntity.getGameBoardCoords().i;
+        int j = cellEntity.getGameBoardCoords().j;
+        CellEntity existingCellEntityInDestintation = cellEntities[i][j - 1];
+        if (existingCellEntityInDestintation.isOccupied()) {
+            return;
+        }
+        cellEntities[i][j - 1] = new CellEntity(existingCellEntityInDestintation.getId(), existingCellEntityInDestintation.getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
+        cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
+    }
+
+    private void moveCellEntityToDirection(GameBoardCoords gameBoardCoords, CellEntity cellEntity) {
+
     }
 
 
-    private void rotateRight() {
+    private void rotate() {
         if (!blockPairActive.isPresent()) {
             System.out.println("Its not active!");
             return;
         }
-    }
-
-    public static class Coords {
-        int i;
-        int j;
-
-        public Coords(int i, int j) {
-            this.i = i;
-            this.j = j;
+        BlockPair blockPair = blockPairActive.get();
+        Optional<BlockPair.BlockBOrientation> blockBOrientation = blockPair.getBlockBOrientation();
+        if (!blockBOrientation.isPresent()) {
+            System.out.printf("Can not determine the orientation of block b to block a!");
+            return;
+        }
+        BlockPair.BlockBOrientation orientation = blockBOrientation.get();
+        if (orientation.equals(BlockPair.BlockBOrientation.BOTTOM_OF)) {
+            moveCellEntityLeftOne(blockPair.getBlockBEntity());
+            repaint();
+            moveCellEntityUpOne(getCellEntity(getCoords(blockPair.getBlockB())));
+            repaint();
+        }
+        if (orientation.equals(BlockPair.BlockBOrientation.LEFT_OF)) {
+            moveCellEntityUpOne(blockPair.getBlockBEntity());
+            repaint();
+            moveCellEntityRightOne(blockPair.getBlockBEntity());
+            repaint();
+        }
+        if (orientation.equals(BlockPair.BlockBOrientation.TOP_OF)) {
+            moveCellEntityRightOne(blockPair.getBlockBEntity());
+            repaint();
+            moveCellEntityDownOne(blockPair.getBlockBEntity());
+            repaint();
+        }
+        if (orientation.equals(BlockPair.BlockBOrientation.RIGHT_OF)) {
+            moveCellEntityDownOne(blockPair.getBlockBEntity());
+            repaint();
+            moveCellEntityLeftOne(blockPair.getBlockBEntity());
+            repaint();
         }
     }
 
+    public GameBoardCoords getCoords(GameBlock gameBlock) {
+        final GameBoardCoords[] located = {null};
+        runOnEveryCellEntity((invocationNumber, currentCords) -> {
+            CellEntity cE = cellEntities[currentCords.i][currentCords.j];
+            if (cE.getGameBlock().isPresent() && cE.getGameBlock().get().equals(gameBlock)) {
+                located[0] = cE.getGameBoardCoords();
+            }
+        });
+        if (located[0] == null) {
+            throw new RuntimeException("Unable to find coordinates for gameBlock.");
+        }
+        return located[0];
+    }
+
     interface CellRun {
-        void run(int invocationNumber, Coords currentCords);
+        void run(int invocationNumber, GameBoardCoords currentCords);
     }
 
     @Override
