@@ -185,18 +185,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         return false;
     }
 
-    private void moveCellEntityContents(MoveDirection moveDirection, CellEntity cellEntity, boolean repaint) {
+    private Optional<CellEntity> moveCellEntityContents(MoveDirection moveDirection, CellEntity cellEntity, boolean repaint) {
         int i = cellEntity.getGameBoardCoords().i;
         int j = cellEntity.getGameBoardCoords().j;
         Optional<CellEntity> cellEntityOptional = getCellEntity(new GameBoardCoords(i + moveDirection.getDirectionApplyCoords().i, j + moveDirection.getDirectionApplyCoords().j));
         if (!cellEntityOptional.isPresent() || cellEntityOptional.get().isOccupied()) {
-            return;
+            return Optional.empty();
         }
         cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new CellEntity(cellEntityOptional.get().getId(), cellEntityOptional.get().getGameBoardCoords(), cellEntity.getGameBlock().orElse(null));
         cellEntities[i][j] = new CellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords());
         if (repaint) {
             repaint();
         }
+        return Optional.ofNullable(cellEntities[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j]);
     }
 
     private void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
@@ -206,8 +207,18 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
         GameBlockPair gameBlockPair = blockPairActive.get();
 
-        if (isSpaceAvailable(direction, gameBlockPair.getBlockAEntity()) &&
-                isSpaceAvailable(direction, gameBlockPair.getBlockBEntity())) {
+        Optional<CellEntity> blockAEntityOpt = gameBlockPair.getBlockAEntity();
+        Optional<CellEntity> blockBEntityOpt = gameBlockPair.getBlockBEntity();
+
+        if (!blockAEntityOpt.isPresent() || !blockBEntityOpt.isPresent()) {
+            return;
+        }
+
+        CellEntity blockAEntity = blockAEntityOpt.get();
+        CellEntity blockBEntity = blockBEntityOpt.get();
+
+        if (isSpaceAvailable(direction, blockAEntity) &&
+                isSpaceAvailable(direction, blockBEntity)) {
 
             Optional<GameBlockPair.BlockBOrientation> blockBOrientationOptional = gameBlockPair.getBlockBOrientation();
             if (!blockBOrientationOptional.isPresent()) {
@@ -217,43 +228,43 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             GameBlockPair.BlockBOrientation blockBOrientation = blockBOrientationOptional.get();
 
             if ((blockBOrientation.equals(BOTTOM_OF) || blockBOrientation.equals(TOP_OF)) && (!direction.equals(MoveDirection.DOWN))) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), true);
+                moveCellEntityContents(direction, blockAEntity, false);
+                moveCellEntityContents(direction, blockBEntity, true);
             }
 
             if (blockBOrientation.equals(BOTTOM_OF) && direction.equals(MoveDirection.DOWN)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), true);
+                moveCellEntityContents(direction, blockBEntity, false);
+                moveCellEntityContents(direction, blockAEntity, true);
             }
 
             if (blockBOrientation.equals(TOP_OF) && direction.equals(MoveDirection.DOWN)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), true);
+                moveCellEntityContents(direction, blockAEntity, false);
+                moveCellEntityContents(direction, blockBEntity, true);
             }
 
             if ((blockBOrientation.equals(RIGHT_OF) || blockBOrientation.equals(LEFT_OF)) && direction.equals(MoveDirection.DOWN)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), true);
+                moveCellEntityContents(direction, blockAEntity, false);
+                moveCellEntityContents(direction, blockBEntity, true);
             }
 
             if (blockBOrientation.equals(LEFT_OF) && direction.equals(MoveDirection.LEFT)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), true);
+                moveCellEntityContents(direction, blockBEntity, false);
+                moveCellEntityContents(direction, blockAEntity, true);
             }
 
             if (blockBOrientation.equals(LEFT_OF) && direction.equals(MoveDirection.RIGHT)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), true);
+                moveCellEntityContents(direction, blockAEntity, false);
+                moveCellEntityContents(direction, blockBEntity, true);
             }
 
             if (blockBOrientation.equals(RIGHT_OF) && direction.equals(MoveDirection.LEFT)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), true);
+                moveCellEntityContents(direction, blockAEntity, false);
+                moveCellEntityContents(direction, blockBEntity, true);
             }
 
             if (blockBOrientation.equals(RIGHT_OF) && direction.equals(MoveDirection.RIGHT)) {
-                moveCellEntityContents(direction, gameBlockPair.getBlockBEntity(), false);
-                moveCellEntityContents(direction, gameBlockPair.getBlockAEntity(), true);
+                moveCellEntityContents(direction, blockBEntity, false);
+                moveCellEntityContents(direction, blockAEntity, true);
             }
         }
     }
@@ -314,25 +325,24 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         GameBlockPair.BlockBOrientation orientation = blockBOrientation.get();
-        if (orientation.equals(BOTTOM_OF)) {
-            moveCellEntityContents(MoveDirection.LEFT, gameBlockPair.getBlockBEntity(), true);
-            moveCellEntityContents(MoveDirection.UP, gameBlockPair.getBlockBEntity(), true);
-        }
-        if (orientation.equals(GameBlockPair.BlockBOrientation.LEFT_OF)) {
-            moveCellEntityContents(MoveDirection.UP, gameBlockPair.getBlockBEntity(), true);
-            moveCellEntityContents(MoveDirection.RIGHT, gameBlockPair.getBlockBEntity(), true);
-        }
-        if (orientation.equals(GameBlockPair.BlockBOrientation.TOP_OF)) {
-            moveCellEntityContents(MoveDirection.RIGHT, gameBlockPair.getBlockBEntity(), true);
-            moveCellEntityContents(MoveDirection.DOWN, gameBlockPair.getBlockBEntity(), true);
-        }
-        if (orientation.equals(GameBlockPair.BlockBOrientation.RIGHT_OF)) {
-            moveCellEntityContents(MoveDirection.DOWN, gameBlockPair.getBlockBEntity(), true);
-            moveCellEntityContents(MoveDirection.LEFT, gameBlockPair.getBlockBEntity(), true);
+        Optional<CellEntity> blockBEntity = gameBlockPair.getBlockBEntity();
+        if (blockBEntity.isPresent()) {
+            if (orientation.equals(BOTTOM_OF)) {
+                moveCellEntityContents(MoveDirection.UP, moveCellEntityContents(MoveDirection.LEFT, blockBEntity.get(), true).get(), true);
+            }
+            if (orientation.equals(GameBlockPair.BlockBOrientation.LEFT_OF)) {
+                moveCellEntityContents(MoveDirection.RIGHT, moveCellEntityContents(MoveDirection.UP, blockBEntity.get(), true).get(), true);
+            }
+            if (orientation.equals(GameBlockPair.BlockBOrientation.TOP_OF)) {
+                moveCellEntityContents(MoveDirection.DOWN, moveCellEntityContents(MoveDirection.RIGHT, blockBEntity.get(), true).get(), true);
+            }
+            if (orientation.equals(GameBlockPair.BlockBOrientation.RIGHT_OF)) {
+                moveCellEntityContents(MoveDirection.LEFT, moveCellEntityContents(MoveDirection.DOWN, blockBEntity.get(), true).get(), true);
+            }
         }
     }
 
-    public GameBoardCoords getCoords(GameBlock gameBlock) {
+    public Optional<GameBoardCoords> getCoords(GameBlock gameBlock) {
         final GameBoardCoords[] located = {null};
         runOnEveryCellEntity((invocationNumber, currentCords) -> {
             CellEntity cE = cellEntities[currentCords.i][currentCords.j];
@@ -340,10 +350,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 located[0] = cE.getGameBoardCoords();
             }
         });
-        if (located[0] == null) {
-            throw new RuntimeException("Unable to find coordinates for gameBlock.");
-        }
-        return located[0];
+        return Optional.ofNullable(located[0]);
     }
 
     public boolean allBlocksResting() {
@@ -389,6 +396,14 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         downCell.ifPresent(neighbors::add);
         leftCell.ifPresent(neighbors::add);
         rightCell.ifPresent(neighbors::add);
-        return neighbors.stream().filter(cellEntity1 -> cellEntity1.getType().equals(filter)).collect(Collectors.toList());
+        return neighbors.stream().filter(cellEntity1 -> {
+            if (cellEntity1.getType().getRelated().isPresent()) {
+                GameBlock.Type relatedType = cellEntity1.getType().getRelated().get();
+                if (relatedType.equals(filter)) {
+                    return true;
+                }
+            }
+            return cellEntity1.getType().equals(filter);
+        }).collect(Collectors.toList());
     }
 }

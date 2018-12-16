@@ -63,7 +63,7 @@ public class StandardMagicBlockProcessor implements MagicBlockProcessor {
 
     private List<CellEntity> destroyLikeNeighbors(GameBoard gameBoard, CellEntity cellEntity, GameBlock.Type targetType) {
         List<CellEntity> destroyedNeighbors = new ArrayList<>();
-        if (cellEntity.getType().isMagic()) {
+        if ((cellEntity.getType().equals(targetType) || (cellEntity.getType().getRelated().isPresent() && cellEntity.getType().getRelated().get().equals(targetType)))) {
             List<CellEntity> occupiedNeighbors = gameBoard.getOccupiedNeighbors(cellEntity, targetType);
             for (CellEntity ce : occupiedNeighbors) {
                 if (!ce.isMarkedForDestruction()) {
