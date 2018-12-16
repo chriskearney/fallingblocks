@@ -55,6 +55,7 @@ public class GameBlock {
     private final static int MAGIC_VALUES_SIZE = NORMAL_VALUES.size();
 
     private final Type type;
+    private boolean resting = false;
 
     public GameBlock(Type type) {
         this.type = type;
@@ -73,5 +74,13 @@ public class GameBlock {
     public static GameBlock randomMagicBlock() {
         Type randomType = NORMAL_VALUES.get(RANDOM.nextInt(NORMAL_VALUES_SIZE));
         return new GameBlock(randomType);
+    }
+
+    public void setResting(boolean resting) {
+        this.resting = resting;
+    }
+
+    public boolean isResting() {
+        return resting;
     }
 }
