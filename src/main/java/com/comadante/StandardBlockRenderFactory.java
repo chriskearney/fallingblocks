@@ -26,17 +26,17 @@ public class StandardBlockRenderFactory implements BlockRenderFactory {
         BufferedImage redBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/RedBlock256x256.png"));
         typeBufferedImageMap.put(GameBlock.Type.RED, redBlock);
 
-//        BufferedImage magicBlueBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicBlueBlock256x256.png"));
-//        typeBufferedImageMap.put(GameBlock.Type.MAGIC_BLUE, magicBlueBlock);
-//
-//        BufferedImage magicGreenBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicGreenBlock256x256.png"));
-//        typeBufferedImageMap.put(GameBlock.Type.MAGIC_GREEN, magicGreenBlock);
-//
-//        BufferedImage magicYellowBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicYellowBlock256x256.png"));
-//        typeBufferedImageMap.put(GameBlock.Type.MAGIC_YELLOW, magicYellowBlock);
-//
-//        BufferedImage magicRedBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicRedBlock256x256.png"));
-//        typeBufferedImageMap.put(GameBlock.Type.MAGIC_RED, magicRedBlock);
+        BufferedImage magicBlueBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicBlueBlock256x256.png"));
+        typeBufferedImageMap.put(GameBlock.Type.MAGIC_BLUE, magicBlueBlock);
+
+        BufferedImage magicGreenBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicGreenBlock256x256.png"));
+        typeBufferedImageMap.put(GameBlock.Type.MAGIC_GREEN, magicGreenBlock);
+
+        BufferedImage magicYellowBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicYellowBlock256x256.png"));
+        typeBufferedImageMap.put(GameBlock.Type.MAGIC_YELLOW, magicYellowBlock);
+
+        BufferedImage magicRedBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicRedBlock256x256.png"));
+        typeBufferedImageMap.put(GameBlock.Type.MAGIC_RED, magicRedBlock);
 
         BufferedImage emptyBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/EmptyBlock256x256.png"));
         typeBufferedImageMap.put(GameBlock.Type.EMPTY, emptyBlock);

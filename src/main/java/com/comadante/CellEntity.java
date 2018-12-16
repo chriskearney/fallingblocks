@@ -39,4 +39,11 @@ public class CellEntity
         return gameBlockOptional;
     }
 
+    public GameBlock.Type getType() {
+        if (gameBlockOptional.isPresent()) {
+            return gameBlockOptional.get().getType();
+        }
+        return GameBlock.Type.EMPTY;
+    }
+
 }

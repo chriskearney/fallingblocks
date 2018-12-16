@@ -13,7 +13,7 @@ public class MainGame extends JFrame implements ActionListener {
 
     public MainGame() throws IOException {
         StandardBlockRenderFactory standardBlockRenderFactory = new StandardBlockRenderFactory();
-        GameBoard gameBoard = new GameBoard(new int[10][20], standardBlockRenderFactory);
+        GameBoard gameBoard = new GameBoard(new int[10][20], standardBlockRenderFactory, new StandardBlockPairFactory());
         gamePanel.add(gameBoard);
         setSize(1024,1050);
         add(gamePanel);

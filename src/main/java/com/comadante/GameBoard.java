@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.comadante.GameBlockPair.BlockBOrientation.BOTTOM_OF;
 import static com.comadante.GameBlockPair.BlockBOrientation.LEFT_OF;
@@ -23,14 +24,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final Timer timer;
     private final CellEntity[][] cellEntities;
     private final BlockRenderFactory blockRenderFactory;
+    private final BlockPairFactory blockPairFactory;
 
     //Some State
     private Optional<GameBlockPair> blockPairActive;
     private boolean wasDrop = false;
 
-    public GameBoard(int[][] a, BlockRenderFactory blockRenderFactory) {
+    public GameBoard(int[][] a, BlockRenderFactory blockRenderFactory, BlockPairFactory blockPairFactory) {
         this.cellEntities = new CellEntity[a.length][a[0].length];
         this.blockRenderFactory = blockRenderFactory;
+        this.blockPairFactory = blockPairFactory;
         resetBoard();
         timer = new Timer(500, this);
         timer.start();
@@ -45,7 +48,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (!wasDrop) {
-            insertNewBlockPair(new GameBlockPair(GameBlock.random(), GameBlock.random(), this));
+            insertNewBlockPair(blockPairFactory.createBlockPair(this));
             repaint();
         }
         wasDrop = processAllDrops();
@@ -54,12 +57,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     public void paintComponent(Graphics g) {
         runOnEveryCellEntity((invocationNumber, currentCords) -> {
-            CellEntity cellEntity = getCellEntity(currentCords).get();
-            if (!cellEntity.isOccupied()) {
-                blockRenderFactory.render(GameBlock.Type.EMPTY, g, currentCords);
-                return;
-            }
-            blockRenderFactory.render(cellEntity.getGameBlock().get().getType(), g, currentCords);
+            Optional<CellEntity> cellEntity = getCellEntity(currentCords);
+            cellEntity.ifPresent(cellEntity1 -> blockRenderFactory.render(cellEntity1.getType(), g, currentCords));
         });
     }
 
