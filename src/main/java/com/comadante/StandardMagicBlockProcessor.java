@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 
 public class StandardMagicBlockProcessor implements MagicBlockProcessor {
 
@@ -17,7 +15,7 @@ public class StandardMagicBlockProcessor implements MagicBlockProcessor {
         for (CellEntity cellEntity : cellEntitiesWithMagicBlocks) {
             if (processMagic(gameBoard, cellEntity, cellEntity.getType().getRelated().get())) {
                 wasMagic = true;
-                if (wasMagic) {
+                // There was magic, lets remove all of the "tombstoned" cells
                     gameBoard.runOnEveryCellEntity((invocationNumber, currentCords) -> {
                         Optional<CellEntity> cellEntityOptional = gameBoard.getCellEntity(currentCords);
                         if (cellEntityOptional.isPresent() && cellEntityOptional.get().isMarkedForDestruction()) {
@@ -27,7 +25,7 @@ public class StandardMagicBlockProcessor implements MagicBlockProcessor {
                         }
                     });
                     gameBoard.repaint();
-                }
+
             }
         }
 
