@@ -7,12 +7,12 @@ public class StandardBlockPairFactory implements BlockPairFactory {
     public GameBlockPair createBlockPair(GameBoard gameBoard) {
 
         GameBlock blockA = GameBlock.randomNormalBlock();
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.5) {
             blockA = GameBlock.randomMagicBlock();
         }
 
         GameBlock blockB = GameBlock.randomNormalBlock();
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.5) {
             blockB = GameBlock.randomMagicBlock();
         }
 

@@ -8,9 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.comadante.GameBlockPair.BlockBOrientation.BOTTOM_OF;
 import static com.comadante.GameBlockPair.BlockBOrientation.LEFT_OF;
@@ -58,8 +61,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             boolean wasThereMagic;
             do {
                 wasThereMagic = magicBlockProcessor.process(this);
+                if (wasThereMagic) {
+                    processAllDrops();
+                }
             } while (wasThereMagic);
         }
+        repaint();
         repaint();
     }
 
@@ -113,7 +120,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-    private void runOnEveryCellEntity(CellRun cellRun) {
+    public void runOnEveryCellEntity(CellRun cellRun) {
         int invocationNumber = 0;
         for (int i = 0; i < cellEntities.length; i++) {
             for (int j = 0; j < cellEntities[0].length; j++) {
@@ -146,7 +153,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         boolean wasDrop = false;
         for (CellEntity cellEntity : row) {
             if (cellEntity.isOccupied()) {
-                if (isCellEntityBelowIsEmptyOrNotBorder(cellEntity)) {
+                if (!cellEntity.isMarkedForDestruction() && isCellEntityBelowIsEmptyOrNotBorder(cellEntity)) {
                     moveCellEntityContents(MoveDirection.DOWN, cellEntity, false);
                     wasDrop = true;
                 } else {
@@ -273,6 +280,28 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         return false;
     }
 
+    private Optional<CellEntity> getCellEntityIfOccupied(MoveDirection direction, CellEntity cellEntity) {
+        Optional<CellEntity> destinationEntityOptional = getCellEntity(new GameBoardCoords(cellEntity.getGameBoardCoords().i + direction.getDirectionApplyCoords().i, cellEntity.getGameBoardCoords().j + direction.getDirectionApplyCoords().j));
+        if (!destinationEntityOptional.isPresent()) {
+            return Optional.empty();
+        }
+        CellEntity destinationEntity = destinationEntityOptional.get();
+        if (destinationEntity.getGameBlock().isPresent()) {
+            GameBlock gameBlock = destinationEntity.getGameBlock().get();
+            if (blockPairActive.isPresent()) {
+                if (blockPairActive.get().getBlockB().equals(gameBlock) ||
+                        blockPairActive.get().getBlockA().equals(gameBlock)) {
+                    return Optional.of(destinationEntity);
+                }
+            }
+        }
+
+        if (destinationEntity.isOccupied()) {
+            return Optional.of(destinationEntity);
+        }
+        return Optional.empty();
+    }
+
     private void rotate() {
         if (!blockPairActive.isPresent()) {
             System.out.println("Its not active!");
@@ -346,4 +375,20 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     }
 
+    public CellEntity[][] getCellEntities() {
+        return cellEntities;
+    }
+
+    public java.util.List<CellEntity> getOccupiedNeighbors(CellEntity cellEntity, GameBlock.Type filter) {
+        java.util.List<CellEntity> neighbors = new ArrayList<>();
+        Optional<CellEntity> upCell = getCellEntityIfOccupied(MoveDirection.UP, cellEntity);
+        Optional<CellEntity> downCell = getCellEntityIfOccupied(MoveDirection.DOWN, cellEntity);
+        Optional<CellEntity> leftCell = getCellEntityIfOccupied(MoveDirection.LEFT, cellEntity);
+        Optional<CellEntity> rightCell = getCellEntityIfOccupied(MoveDirection.RIGHT, cellEntity);
+        upCell.ifPresent(neighbors::add);
+        downCell.ifPresent(neighbors::add);
+        leftCell.ifPresent(neighbors::add);
+        rightCell.ifPresent(neighbors::add);
+        return neighbors.stream().filter(cellEntity1 -> cellEntity1.getType().equals(filter)).collect(Collectors.toList());
+    }
 }

@@ -69,6 +69,10 @@ public class GameBlock {
             return magicRelated.isPresent();
         }
 
+        public Optional<Type> getRelated() {
+            return magicRelated;
+        }
+
         public static Type[] getNormalRandomPool() {
             ArrayList<Type> normalBlockTypes = Arrays.asList(values()).stream().filter(type -> !type.isMagic()).collect(Collectors.toCollection(ArrayList::new));
             normalBlockTypes.remove(EMPTY);

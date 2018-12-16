@@ -7,6 +7,7 @@ public class CellEntity
     private final int id;
     private final GameBoardCoords gameBoardCoords;
     private final Optional<GameBlock> gameBlockOptional;
+    private boolean markedForDestruction = false;
 
     public CellEntity(int id, GameBoardCoords gameBoardCoords, GameBlock gameBlock) {
         this.id = id;
@@ -43,4 +44,11 @@ public class CellEntity
         return GameBlock.Type.EMPTY;
     }
 
+    public void setMarkedForDestruction(boolean markedForDestruction) {
+        this.markedForDestruction = markedForDestruction;
+    }
+
+    public boolean isMarkedForDestruction() {
+        return markedForDestruction;
+    }
 }
