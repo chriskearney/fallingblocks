@@ -5,6 +5,17 @@ public class StandardBlockPairFactory implements BlockPairFactory {
 
     @Override
     public GameBlockPair createBlockPair(GameBoard gameBoard) {
-        return new GameBlockPair(GameBlock.randomNormalBlock(), GameBlock.randomNormalBlock(), gameBoard);
+
+        GameBlock blockA = GameBlock.randomNormalBlock();
+        if (Math.random() < 0.05) {
+            blockA = GameBlock.randomMagicBlock();
+        }
+
+        GameBlock blockB = GameBlock.randomNormalBlock();
+        if (Math.random() < 0.05) {
+            blockB = GameBlock.randomMagicBlock();
+        }
+
+        return new GameBlockPair(blockA, blockB, gameBoard);
     }
 }

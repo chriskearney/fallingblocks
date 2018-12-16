@@ -72,7 +72,7 @@ public class GameBlock {
 
 
     public static GameBlock randomMagicBlock() {
-        Type randomType = NORMAL_VALUES.get(RANDOM.nextInt(NORMAL_VALUES_SIZE));
+        Type randomType = MAGIC_VALUES.get(RANDOM.nextInt(MAGIC_VALUES_SIZE));
         return new GameBlock(randomType);
     }
 
