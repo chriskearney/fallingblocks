@@ -13,10 +13,10 @@ public class GameBlock {
         GREEN,
         RED,
         YELLOW,
-        MAGIC_BLUE,
-        MAGIC_GREEN,
-        MAGIC_RED,
-        MAGIC_YELLOW,
+//        MAGIC_BLUE,
+//        MAGIC_GREEN,
+//        MAGIC_RED,
+//        MAGIC_YELLOW,
         EMPTY;
 
         public static Type[] getRandomPool() {
