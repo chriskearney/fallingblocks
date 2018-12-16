@@ -29,7 +29,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     //Some State
     private Optional<GameBlockPair> blockPairActive;
-    private boolean wasDrop = false;
 
     public GameBoard(int[][] a, BlockRenderFactory blockRenderFactory, BlockPairFactory blockPairFactory, MagicBlockProcessor magicBlockProcessor) {
         this.cellEntities = new CellEntity[a.length][a[0].length];
@@ -40,6 +39,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         timer = new Timer(500, this);
         timer.start();
         addKeyListener(this);
+        setOpaque(false);
     }
 
     public void addNotify() {
