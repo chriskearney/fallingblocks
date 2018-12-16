@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.comadante.GameBoard.BOARD_SIZE;
+import static com.comadante.GameBoard.BLOCK_SIZE;
 
 public class StandardBlockRenderFactory implements BlockRenderFactory {
 
@@ -46,7 +46,7 @@ public class StandardBlockRenderFactory implements BlockRenderFactory {
     public void render(GameBlock.Type type, Graphics g, GameBoardCoords currentCoords) {
             BufferedImage image = typeBufferedImageMap.get(type);
             g.setColor(Color.black);
-            g.fillRect(currentCoords.i * BOARD_SIZE, currentCoords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE);
-            g.drawImage(image, currentCoords.i * BOARD_SIZE, currentCoords.j * BOARD_SIZE, BOARD_SIZE, BOARD_SIZE, null);
+            g.fillRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            g.drawImage(image, currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
     }
 }

@@ -1,9 +1,6 @@
 package com.comadante;
 
-import java.awt.*;
 import java.util.Optional;
-
-import static com.comadante.GameBoard.BOARD_SIZE;
 
 public class CellEntity
 {

@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.comadante.GameBlockPair.BlockBOrientation.BOTTOM_OF;
 import static com.comadante.GameBlockPair.BlockBOrientation.LEFT_OF;
@@ -19,7 +18,7 @@ import static com.comadante.GameBlockPair.BlockBOrientation.TOP_OF;
 
 public class GameBoard extends JComponent implements ActionListener, KeyListener {
 
-    public final static int BOARD_SIZE = 50;
+    public final static int BLOCK_SIZE = 27;
 
     private final Timer timer;
     private final CellEntity[][] cellEntities;
@@ -63,7 +62,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(cellEntities.length * BOARD_SIZE, cellEntities[0].length * BOARD_SIZE);
+        return new Dimension(cellEntities.length * BLOCK_SIZE, cellEntities[0].length * BLOCK_SIZE);
     }
 
     private void resetBoard() {
