@@ -11,42 +11,29 @@ import static com.comadante.GameBoard.BLOCK_SIZE;
 
 public class StandardBlockRenderFactory implements BlockRenderFactory {
 
-    Map<GameBlock.Type, BufferedImage> typeBufferedImageMap = new HashMap<>();
+    Map<GameBlock.Type, BufferedImage> blockImageTypes = new HashMap<>();
 
     public StandardBlockRenderFactory() throws IOException {
-        BufferedImage blueBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/BlueBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.BLUE, blueBlock);
+        blockImageTypes.put(GameBlock.Type.BLUE, getImageFor(GameBlock.Type.BLUE));
+        blockImageTypes.put(GameBlock.Type.GREEN, getImageFor(GameBlock.Type.GREEN));
+        blockImageTypes.put(GameBlock.Type.YELLOW, getImageFor(GameBlock.Type.YELLOW));
+        blockImageTypes.put(GameBlock.Type.RED, getImageFor(GameBlock.Type.RED));
+        blockImageTypes.put(GameBlock.Type.EMPTY, getImageFor(GameBlock.Type.EMPTY));
+        blockImageTypes.put(GameBlock.Type.MAGIC_BLUE, getImageFor(GameBlock.Type.MAGIC_BLUE));
+        blockImageTypes.put(GameBlock.Type.MAGIC_GREEN, getImageFor(GameBlock.Type.MAGIC_GREEN));
+        blockImageTypes.put(GameBlock.Type.MAGIC_YELLOW, getImageFor(GameBlock.Type.MAGIC_YELLOW));
+        blockImageTypes.put(GameBlock.Type.MAGIC_RED, getImageFor(GameBlock.Type.MAGIC_RED));
+    }
 
-        BufferedImage greenBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/GreenBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.GREEN, greenBlock);
-
-        BufferedImage yellowBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/YellowBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.YELLOW, yellowBlock);
-
-        BufferedImage redBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/RedBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.RED, redBlock);
-
-        BufferedImage magicBlueBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicBlueBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.MAGIC_BLUE, magicBlueBlock);
-
-        BufferedImage magicGreenBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicGreenBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.MAGIC_GREEN, magicGreenBlock);
-
-        BufferedImage magicYellowBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicYellowBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.MAGIC_YELLOW, magicYellowBlock);
-
-        BufferedImage magicRedBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/MagicRedBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.MAGIC_RED, magicRedBlock);
-
-        BufferedImage emptyBlock = ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/EmptyBlock256x256.png"));
-        typeBufferedImageMap.put(GameBlock.Type.EMPTY, emptyBlock);
+    private BufferedImage getImageFor(GameBlock.Type type) throws IOException {
+        return ImageIO.read(StandardBlockRenderFactory.class.getResourceAsStream("/tilesets/GlossyEyeBalls/" + type + ".png"));
     }
 
     @Override
     public void render(GameBlock.Type type, Graphics g, GameBoardCoords currentCoords) {
-            BufferedImage image = typeBufferedImageMap.get(type);
-            g.setColor(Color.black);
-            g.fillRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-            g.drawImage(image, currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+        BufferedImage image = blockImageTypes.get(type);
+        g.setColor(Color.black);
+        g.fillRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        g.drawImage(image, currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
     }
 }

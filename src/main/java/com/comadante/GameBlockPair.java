@@ -23,6 +23,21 @@ public class GameBlockPair {
         return blockB;
     }
 
+    public Optional<BlockBOrientation> getBlockBOrientation() {
+        GameBoardCoords blockAGameBoardCoords = gameBoard.getCoords(blockA);
+        GameBoardCoords blockBGameBoardCoords = gameBoard.getCoords(blockB);
+        return BlockBOrientation.fromCoords(subtractCoords(blockAGameBoardCoords, blockBGameBoardCoords));
+    }
+
+    public CellEntity getBlockBEntity() {
+        return gameBoard.getCellEntity(gameBoard.getCoords(blockB)).get();
+    }
+
+    public CellEntity getBlockAEntity() {
+        return gameBoard.getCellEntity(gameBoard.getCoords(blockA)).get();
+    }
+
+
     public enum BlockBOrientation {
         BOTTOM_OF(new GameBoardCoords(0, -1)),
         LEFT_OF(new GameBoardCoords(1, 0)),
@@ -47,20 +62,6 @@ public class GameBlockPair {
             }
             return Optional.empty();
         }
-    }
-
-    public Optional<BlockBOrientation> getBlockBOrientation() {
-        GameBoardCoords blockAGameBoardCoords = gameBoard.getCoords(blockA);
-        GameBoardCoords blockBGameBoardCoords = gameBoard.getCoords(blockB);
-        return BlockBOrientation.fromCoords(subtractCoords(blockAGameBoardCoords, blockBGameBoardCoords));
-    }
-
-    public CellEntity getBlockBEntity() {
-        return gameBoard.getCellEntity(gameBoard.getCoords(blockB)).get();
-    }
-
-    public CellEntity getBlockAEntity() {
-        return gameBoard.getCellEntity(gameBoard.getCoords(blockA)).get();
     }
 
 }

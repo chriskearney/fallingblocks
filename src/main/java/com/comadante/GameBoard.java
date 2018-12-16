@@ -25,15 +25,17 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final CellEntity[][] cellEntities;
     private final BlockRenderFactory blockRenderFactory;
     private final BlockPairFactory blockPairFactory;
+    private final MagicBlockProcessor magicBlockProcessor;
 
     //Some State
     private Optional<GameBlockPair> blockPairActive;
     private boolean wasDrop = false;
 
-    public GameBoard(int[][] a, BlockRenderFactory blockRenderFactory, BlockPairFactory blockPairFactory) {
+    public GameBoard(int[][] a, BlockRenderFactory blockRenderFactory, BlockPairFactory blockPairFactory, MagicBlockProcessor magicBlockProcessor) {
         this.cellEntities = new CellEntity[a.length][a[0].length];
         this.blockRenderFactory = blockRenderFactory;
         this.blockPairFactory = blockPairFactory;
+        this.magicBlockProcessor = magicBlockProcessor;
         resetBoard();
         timer = new Timer(500, this);
         timer.start();
@@ -53,7 +55,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
         processAllDrops();
         if (allBlocksResting()) {
-            System.out.println("EVALUATE MAGIC.");
+            boolean wasThereMagic;
+            do {
+                wasThereMagic = magicBlockProcessor.process(this);
+            } while (wasThereMagic);
         }
         repaint();
     }

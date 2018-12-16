@@ -1,63 +1,24 @@
 package com.comadante;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import com.sun.org.apache.regexp.internal.RE;
+
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GameBlock {
 
-    enum Type {
-        BLUE,
-        GREEN,
-        RED,
-        YELLOW,
-        MAGIC_BLUE(true),
-        MAGIC_GREEN(true),
-        MAGIC_RED(true),
-        MAGIC_YELLOW(true),
-        EMPTY;
-
-        private final boolean magic;
-
-        Type(boolean magic) {
-            this.magic = magic;
-        }
-
-        Type() {
-            this(false);
-        }
-
-        public boolean isMagic() {
-            return magic;
-        }
-
-        public static Type[] getNormalRandomPool() {
-            ArrayList<Type> normalBlockTypes = Arrays.asList(values()).stream().filter(type -> !type.magic).collect(Collectors.toCollection(ArrayList::new));
-            normalBlockTypes.remove(EMPTY);
-            return normalBlockTypes.toArray(new Type[0]);
-        }
-
-        public static Type[] getMagicRandomPool() {
-            ArrayList<Type> magicBlockTypes = Arrays.asList(values()).stream().filter(type -> type.magic).collect(Collectors.toCollection(ArrayList::new));
-            magicBlockTypes.remove(EMPTY);
-            return magicBlockTypes.toArray(new Type[0]);
-        }
-    }
     private final static Random RANDOM = new Random();
     private final static List<Type> NORMAL_VALUES = Collections.unmodifiableList(Arrays.asList(Type.getNormalRandomPool()));
     private final static int NORMAL_VALUES_SIZE = NORMAL_VALUES.size();
 
-    private final static List<Type> MAGIC_VALUES = Collections.unmodifiableList(Arrays.asList(Type.getMagicRandomPool()));
-    private final static int MAGIC_VALUES_SIZE = NORMAL_VALUES.size();
+    private final static List<Type> RANDOM_VALUES = Collections.unmodifiableList(Arrays.asList(Type.getRandomPool()));
+    private final static int RANDOM_VALUE_SIZE = RANDOM_VALUES.size();
 
     private final Type type;
     private boolean resting = false;
 
-    public GameBlock(Type type) {
+    private GameBlock(Type type) {
         this.type = type;
     }
 
@@ -70,9 +31,8 @@ public class GameBlock {
         return new GameBlock(randomType);
     }
 
-
     public static GameBlock randomMagicBlock() {
-        Type randomType = MAGIC_VALUES.get(RANDOM.nextInt(MAGIC_VALUES_SIZE));
+        Type randomType = RANDOM_VALUES.get(RANDOM.nextInt(RANDOM_VALUE_SIZE));
         return new GameBlock(randomType);
     }
 
@@ -82,5 +42,48 @@ public class GameBlock {
 
     public boolean isResting() {
         return resting;
+    }
+
+    enum Type {
+        BLUE,
+        GREEN,
+        RED,
+        YELLOW,
+        MAGIC_BLUE(Optional.of(BLUE)),
+        MAGIC_GREEN(Optional.of(GREEN)),
+        MAGIC_RED(Optional.of(RED)),
+        MAGIC_YELLOW(Optional.of(YELLOW)),
+        EMPTY;
+
+        private Optional<Type> magicRelated;
+
+        Type(Optional<Type> magicRelated) {
+            this.magicRelated = magicRelated;
+        }
+
+        Type() {
+            this.magicRelated = Optional.empty();
+        }
+
+        public boolean isMagic() {
+            return magicRelated.isPresent();
+        }
+
+        public static Type[] getNormalRandomPool() {
+            ArrayList<Type> normalBlockTypes = Arrays.asList(values()).stream().filter(type -> !type.isMagic()).collect(Collectors.toCollection(ArrayList::new));
+            normalBlockTypes.remove(EMPTY);
+            return normalBlockTypes.toArray(new Type[0]);
+        }
+
+        public static Type[] getRandomPool() {
+            List<Type> randoms = new ArrayList<>();
+            for (Type t: Type.values()) {
+                if (t.isMagic()) {
+                    randoms.add(t);
+                }
+            }
+            return randoms.toArray(new Type[0]);
+        }
+
     }
 }
