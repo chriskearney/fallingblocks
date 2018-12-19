@@ -7,4 +7,6 @@ public interface GameBlockPairFactory {
 
     GameBlockPair createBlockPair(GameBoard gameBoard);
 
+    GameBlockPair getNextPair();
+
 }

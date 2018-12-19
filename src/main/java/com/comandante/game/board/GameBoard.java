@@ -1,10 +1,10 @@
 package com.comandante.game.board;
 
-import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
 import com.comandante.game.board.logic.GameBlockPairFactory;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.comandante.game.board.logic.MagicGameBlockProcessor;
+import com.comandante.game.textboard.TextBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +43,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.magicGameBlockProcessor = magicGameBlockProcessor;
         this.textBoard = textBoard;
         initializeBoard();
-        timer = new Timer(500, this);
+        timer = new Timer(400, this);
         timer.start();
         addKeyListener(this);
         setOpaque(false);
@@ -62,6 +62,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
         if (allBlocksResting()) {
             insertNewBlockPair(gameBlockPairFactory.createBlockPair(this));
+            textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
             repaint();
         }
         processAllDrops();
@@ -114,19 +115,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public void keyPressed(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
         switch (keyCode) {
-            case KeyEvent.VK_UP:
-                //
-                break;
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
                 moveActiveBlockPair(MoveDirection.DOWN);
                 break;
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 moveActiveBlockPair(MoveDirection.LEFT);
                 break;
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 moveActiveBlockPair(MoveDirection.RIGHT);
                 break;
-            case KeyEvent.VK_CONTROL:
+            case KeyEvent.VK_W:
                 rotate();
                 break;
             case KeyEvent.VK_P:
@@ -376,9 +374,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             largestScore = amount;
         }
         score += amount;
-        this.textBoard.getTextBoardContents().setHeader("Score: " + score + " Largest: " + largestScore);
+        this.textBoard.getTextBoardContents().setScore(score);
         if (amount > 0) {
-            this.textBoard.getTextBoardContents().addBattleLogMessage(amount + " points.");
+            this.textBoard.getTextBoardContents().addNewPointsToBattleLog(amount);
         }
     }
 }

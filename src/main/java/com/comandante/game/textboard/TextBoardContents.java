@@ -11,8 +11,7 @@ public class TextBoardContents {
     private final static PixelFont.Type DEFAULT_FONT_TYPE = PixelFont.Type.COLOUR8;
     private final static int MAX_BATTLE_MESSAGE_SIZE = 5;
 
-    private TextBoard.TextCellEntity[] header;
-    private TextBoard.TextCellEntity[] footer;
+    private Integer score = 0;
 
     private final int boardMaxI;
     private final int boardMaxJ;
@@ -23,8 +22,6 @@ public class TextBoardContents {
     public TextBoardContents(int[][] a) {
         this.boardMaxI = a.length;
         this.boardMaxJ = a[0].length;
-        setHeader("");
-        setFooter("");
         battleMessagesQueue = new ArrayBlockingQueue<>(100);
     }
 
@@ -32,30 +29,22 @@ public class TextBoardContents {
         this.isGamePaused = p;
     }
 
-    public void setHeader(String h) {
-        header = createTextCellEntityArray(h);
-    }
-
-    public void setHeader(TextBoard.TextCellEntity[] headerChars) {
-        this.header = headerChars;
-    }
-
-    public void setFooter(TextBoard.TextCellEntity[] footerChars) {
-        this.footer = footerChars;
-    }
-
-    public void setFooter(String f) {
-        this.footer = createTextCellEntityArray(f);
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     public void addBattleLogMessage(String message) {
         battleMessagesQueue.add(createTextCellEntityArray(message));
     }
 
+    public void addNewPointsToBattleLog(Integer amt) {
+        TextBoard.TextCellEntity[] textCellEntities = createTextCellEntityArray(PixelFont.Type.COLOUR3, "+" + amt);
+        battleMessagesQueue.add(textCellEntities);
+    }
+
     public TextBoard.TextCellEntity[][] getAsciiArray() {
         TextBoard.TextCellEntity[][] builtAsciiArray = new TextBoard.TextCellEntity[boardMaxI][boardMaxJ];
-        builtAsciiArray[0] = header;
-        builtAsciiArray[boardMaxI - 1] = footer;
+        builtAsciiArray[1] = createTextCellEntityArray(PixelFont.Type.COLOUR1, "Next");
 
         // START BATTLE LOG
         List<TextBoard.TextCellEntity[]> scrollingBattleMessages = new ArrayList<>();
@@ -65,16 +54,17 @@ public class TextBoardContents {
                 addNewRemoveOldToMakeRoom(scrollingBattleMessages.remove(i));
             }
         }
+        builtAsciiArray[10] = createTextCellEntityArray(PixelFont.Type.COLOUR7, "Rotate   = W");
+        builtAsciiArray[11] = createTextCellEntityArray(PixelFont.Type.COLOUR7, "Movement = A,S,D");
+        builtAsciiArray[12] = createTextCellEntityArray(PixelFont.Type.COLOUR7, "Pause    = P");
 
-        builtAsciiArray[10] = createTextCellEntityArray(PixelFont.Type.COLOUR3, "CTRL - Rotate");
-        builtAsciiArray[11] = createTextCellEntityArray(PixelFont.Type.COLOUR3, "ARROWS - Movement");
-        builtAsciiArray[12] = createTextCellEntityArray(PixelFont.Type.COLOUR3, "P - Pause");
 
         if (isGamePaused) {
             builtAsciiArray[20] = createTextCellEntityArray(PixelFont.Type.COLOUR6, "PAUSED");
         }
 
-        builtAsciiArray[21] = createTextCellEntityArray(PixelFont.Type.COLOUR2, "Battle Log:");
+        String stringScore = String.format("%1$" + 9 + "s", Integer.toString(score));
+        builtAsciiArray[21] = createTextCellEntityArray(PixelFont.Type.COLOUR8, stringScore.replace(" ", "0"));
         int i = 22;
         for (TextBoard.TextCellEntity[] cellEntities: battleLog) {
             builtAsciiArray[i] = cellEntities;

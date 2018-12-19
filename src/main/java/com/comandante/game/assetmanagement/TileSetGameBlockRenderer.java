@@ -1,8 +1,8 @@
 package com.comandante.game.assetmanagement;
 
-import com.comandante.game.board.logic.GameBlockRenderer;
 import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBoardCoords;
+import com.comandante.game.board.logic.GameBlockRenderer;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.comandante.game.board.GameBoard.BLOCK_SIZE;
@@ -65,5 +66,10 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         g.setColor(Color.black);
         g.fillRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         g.drawImage(image, currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+    }
+
+    @Override
+    public List<BufferedImage> getImage(GameBlock.Type type) {
+        return images.get(type);
     }
 }
