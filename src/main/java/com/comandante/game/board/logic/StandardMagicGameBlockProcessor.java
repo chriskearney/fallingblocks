@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.comandante.game.board.GameBoardUtil.getOccupiedNeighborsOfType;
+
 
 public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor {
 
@@ -77,24 +79,4 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         return destroyedNeighbors;
     }
 
-    public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
-        List<GameBoardCellEntity> neighbors = new ArrayList<>();
-        Optional<GameBoardCellEntity> upCell = gameBoard.getCellEntityIfOccupied(GameBoardCoords.MoveDirection.UP, gameBoardCellEntity);
-        Optional<GameBoardCellEntity> downCell = gameBoard.getCellEntityIfOccupied(GameBoardCoords.MoveDirection.DOWN, gameBoardCellEntity);
-        Optional<GameBoardCellEntity> leftCell = gameBoard.getCellEntityIfOccupied(GameBoardCoords.MoveDirection.LEFT, gameBoardCellEntity);
-        Optional<GameBoardCellEntity> rightCell = gameBoard.getCellEntityIfOccupied(GameBoardCoords.MoveDirection.RIGHT, gameBoardCellEntity);
-        upCell.ifPresent(neighbors::add);
-        downCell.ifPresent(neighbors::add);
-        leftCell.ifPresent(neighbors::add);
-        rightCell.ifPresent(neighbors::add);
-        return neighbors.stream().filter(ce -> {
-            if (ce.getType().getRelated().isPresent()) {
-                GameBlock.Type relatedType = ce.getType().getRelated().get();
-                if (relatedType.equals(targetType)) {
-                    return true;
-                }
-            }
-            return ce.getType().equals(targetType);
-        }).collect(Collectors.toList());
-    }
 }

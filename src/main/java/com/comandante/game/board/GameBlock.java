@@ -1,5 +1,7 @@
 package com.comandante.game.board;
 
+import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,14 +15,26 @@ public class GameBlock {
     private final static int RANDOM_VALUE_SIZE = RANDOM_VALUES.size();
 
     private final Type type;
+    private final UUID identifier;
     private boolean resting = false;
+    private Optional<BorderType> borderType;
 
-    private GameBlock(Type type) {
+    public GameBlock(Type type) {
         this.type = type;
+        this.identifier = UUID.randomUUID();
+    }
+
+    public GameBlock(Type type, UUID uuid) {
+        this.type = type;
+        this.identifier = uuid;
     }
 
     public Type getType() {
         return type;
+    }
+
+    public UUID getIdentifier() {
+        return identifier;
     }
 
     public static GameBlock randomNormalBlock() {
@@ -41,15 +55,35 @@ public class GameBlock {
         return resting;
     }
 
+    public Optional<BorderType> getBorderType() {
+        return borderType;
+    }
+
+    public void setBorderType(Optional<BorderType> borderType) {
+        this.borderType = borderType;
+    }
+
+    public TileSetGameBlockRenderer.BlockTypeBorder getBlockTypeBorder() {
+        if (borderType == null) {
+            return new TileSetGameBlockRenderer.BlockTypeBorder(getType());
+        }
+        return new TileSetGameBlockRenderer.BlockTypeBorder(getType(), borderType.orElse(BorderType.NO_BORDER));
+    }
+
     public enum BorderType {
+        TOP,
         TOP_LEFT,
         LEFT,
-        LEFT_BOTTOM,
-        BOTTOM,
-        BOTTOM_RIGHT,
+        BOTTOM_LEFT,
+        TOP_RIGHT,
         RIGHT,
-        TOP,
-        TOP_RIGHT;
+        BOTTOM_RIGHT,
+        BOTTOM,
+        TOP_BOTTOM,
+        TOP_LEFT_BOTTOM,
+        TOP_RIGHT_BOTTOM,
+        TOP_LEFT_RIGHT,
+        NO_BORDER
     }
 
     public enum Type {
