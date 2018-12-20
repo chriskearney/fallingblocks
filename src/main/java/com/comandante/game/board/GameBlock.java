@@ -41,6 +41,17 @@ public class GameBlock {
         return resting;
     }
 
+    public enum BorderType {
+        TOP_LEFT,
+        LEFT,
+        LEFT_BOTTOM,
+        BOTTOM,
+        BOTTOM_RIGHT,
+        RIGHT,
+        TOP,
+        TOP_RIGHT;
+    }
+
     public enum Type {
         BLUE,
         GREEN,
@@ -78,7 +89,7 @@ public class GameBlock {
 
         public static Type[] getRandomPool() {
             List<Type> randoms = new ArrayList<>();
-            for (Type t: Type.values()) {
+            for (Type t : Type.values()) {
                 if (t.isMagic()) {
                     randoms.add(t);
                 }
