@@ -130,7 +130,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
-        System.out.println("KeyCode received: " + keyCode);
         switch (keyCode) {
             case KeyEvent.VK_S:
                 moveActiveBlockPair(MoveDirection.DOWN);
@@ -557,11 +556,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 if (x == maxX && y == maxY) {
                     type = TOP_RIGHT;
                 }
-
                 if (y == maxY && x < maxX && x > 1) {
                     type = TOP;
                 }
-
                 byXandY.setBorderType(Optional.ofNullable(type));
             }
         }
