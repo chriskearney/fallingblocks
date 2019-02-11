@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.comandante.game.board.GameBoardUtil.getOccupiedNeighborsOfType;
-
 
 public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor {
 
@@ -33,10 +31,10 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
 
     private int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
         int destroyed = 0;
-        for (GameBoardCellEntity ce : GameBoardUtil.getCellsFromBottom(gameBoard.getCellEntities())) {
+        for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
            if (ce.isMarkedForDestruction()) {
                destroyed++;
-               gameBoard.getCellEntities()[ce.getGameBoardCoords().i][ce.getGameBoardCoords().j] = new GameBoardCellEntity(ce.getId(), ce.getGameBoardCoords(), null);
+               gameBoard.getGameBoardData().getCellEntities()[ce.getGameBoardCoords().i][ce.getGameBoardCoords().j] = new GameBoardCellEntity(ce.getId(), ce.getGameBoardCoords(), null);
            }
         }
         return  destroyed;
@@ -57,7 +55,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
 
     private List<GameBoardCellEntity> getCellEntitiesWithMagicBlocks(GameBoard gameBoard) {
         List<GameBoardCellEntity> magicCellEntities = new ArrayList<>();
-        for (GameBoardCellEntity ce : GameBoardUtil.getCellsFromBottom(gameBoard.getCellEntities())) {
+        for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
             if (ce.getType().isMagic()) {
                 magicCellEntities.add(ce);
             }
@@ -68,7 +66,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
     private List<GameBoardCellEntity> destroyLikeNeighbors(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
         List<GameBoardCellEntity> destroyedNeighbors = new ArrayList<>();
         if ((gameBoardCellEntity.getType().equals(targetType) || (gameBoardCellEntity.getType().getRelated().isPresent() && gameBoardCellEntity.getType().getRelated().get().equals(targetType)))) {
-            List<GameBoardCellEntity> occupiedNeighbors = getOccupiedNeighborsOfType(gameBoard, gameBoardCellEntity, targetType);
+            List<GameBoardCellEntity> occupiedNeighbors = gameBoard.getGameBoardData().getOccupiedNeighborsOfType(gameBoardCellEntity, targetType);
             for (GameBoardCellEntity ce : occupiedNeighbors) {
                 if (!ce.isMarkedForDestruction()) {
                     ce.setMarkedForDestruction(true);

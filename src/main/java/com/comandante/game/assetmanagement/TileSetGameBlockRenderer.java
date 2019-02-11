@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-import static com.comandante.game.board.GameBoard.BLOCK_SIZE;
+import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 
 public class TileSetGameBlockRenderer implements GameBlockRenderer {
 

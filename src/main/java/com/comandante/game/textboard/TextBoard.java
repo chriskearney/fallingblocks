@@ -12,8 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import static com.comandante.game.board.GameBoard.BLOCK_SIZE;
-
+import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 
 public class TextBoard extends JComponent implements ActionListener {
 

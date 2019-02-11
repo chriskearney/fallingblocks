@@ -39,7 +39,7 @@ public class StandardGameBlockPairFactory implements GameBlockPairFactory {
 
 
 
-        return new GameBlockPair(blockA, blockB, gameBoard);
+        return new GameBlockPair(blockA, blockB, gameBoard.getGameBoardData());
         //return new GameBlockPair(new GameBlock(GameBlock.Type.GREEN), new GameBlock(GameBlock.Type.GREEN), gameBoard);
     }
 }
