@@ -4,6 +4,7 @@ import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBlockPair;
 import com.comandante.game.board.GameBoard;
+import com.comandante.game.board.GameBoardData;
 import com.comandante.game.board.logic.GameBlockPairFactory;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
@@ -22,7 +23,8 @@ public class Main extends JFrame {
         GamePanel gamePanel = new GamePanel();
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
-        GameBoard gameBoard = new GameBoard(new int[10][20], tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
+        GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
         gamePanel.add(gameBoard);
         gamePanel.add(textBoard);
         setTitle("Mystery Fighter");

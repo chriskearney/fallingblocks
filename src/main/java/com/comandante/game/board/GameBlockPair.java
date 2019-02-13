@@ -7,12 +7,12 @@ import static com.comandante.game.board.GameBoardUtil.subtractCoords;
 public class GameBlockPair {
     private final GameBlock blockA;
     private final GameBlock blockB;
-    private final GameBoard gameBoard;
+    private final GameBoardData gameBoardData;
 
-    public GameBlockPair(GameBlock blockA, GameBlock blockB, GameBoard gameBoard) {
+    public GameBlockPair(GameBlock blockA, GameBlock blockB, GameBoardData gameBoardData) {
         this.blockA = blockA;
         this.blockB = blockB;
-        this.gameBoard = gameBoard;
+        this.gameBoardData = gameBoardData;
     }
 
     public GameBlock getBlockA() {
@@ -24,8 +24,8 @@ public class GameBlockPair {
     }
 
     public Optional<BlockBOrientation> getBlockBOrientation() {
-        Optional<GameBoardCoords> blockAGameBoardCoords = gameBoard.getCoords(blockA);
-        Optional<GameBoardCoords> blockBGameBoardCoords = gameBoard.getCoords(blockB);
+        Optional<GameBoardCoords> blockAGameBoardCoords = gameBoardData.getCoords(blockA);
+        Optional<GameBoardCoords> blockBGameBoardCoords = gameBoardData.getCoords(blockB);
         if (blockAGameBoardCoords.isPresent() && blockBGameBoardCoords.isPresent()) {
             return BlockBOrientation.fromCoords(subtractCoords(blockAGameBoardCoords.get(), blockBGameBoardCoords.get()));
         }
@@ -33,15 +33,15 @@ public class GameBlockPair {
     }
 
     public Optional<GameBoardCellEntity> getBlockBEntity() {
-        if (gameBoard.getCoords(blockB).isPresent()) {
-            return gameBoard.getCellEntity(gameBoard.getCoords(blockB).get());
+        if (gameBoardData.getCoords(blockB).isPresent()) {
+            return gameBoardData.getCellEntity(gameBoardData.getCoords(blockB).get());
         }
         return Optional.empty();
     }
 
     public Optional<GameBoardCellEntity> getBlockAEntity() {
-        if (gameBoard.getCoords(blockA).isPresent()) {
-            return gameBoard.getCellEntity(gameBoard.getCoords(blockA).get());
+        if (gameBoardData.getCoords(blockA).isPresent()) {
+            return gameBoardData.getCellEntity(gameBoardData.getCoords(blockA).get());
         }
         return Optional.empty();
     }

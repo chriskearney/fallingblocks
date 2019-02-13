@@ -17,17 +17,14 @@ import static org.junit.Assert.*;
 public class GameBoardTest {
 
     private GameBoard gameBoard;
+    private GameBoardData gameBoardData;
     @Before
     public void setUp() throws Exception {
 
         TextBoard textBoard = new TextBoard(new int[10][20], new TileSetGameBlockRenderer("8bit"));
-        gameBoard = new GameBoard(new int[10][20], new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
-
-
+        gameBoardData = new GameBoardData(new int[10][20]);
+        gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
     }
-
-
-
 
     @Test
     public void TestGetLikeGroupsFromRow() {
@@ -84,9 +81,9 @@ public class GameBoardTest {
         gameBoardCellEntityRowStepAbove2[9] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
 
 
-        gameBoard.setRow(gameBoard.getCellEntities()[0].length - 1, gameBoardCellEntity);
-        gameBoard.setRow(gameBoard.getCellEntities()[0].length - 2, gameBoardCellEntityRowStepAbove);
-        gameBoard.setRow(gameBoard.getCellEntities()[0].length - 3, gameBoardCellEntityRowStepAbove2);
+        gameBoardData.setRow(gameBoardData.getCellEntities()[0].length - 1, gameBoardCellEntity);
+        gameBoardData.setRow(gameBoardData.getCellEntities()[0].length - 2, gameBoardCellEntityRowStepAbove);
+        gameBoardData.setRow(gameBoardData.getCellEntities()[0].length - 3, gameBoardCellEntityRowStepAbove2);
 
         gameBoard.calculatePermaGroups();
         Optional<UUID> permaGroupForBlock = gameBoard.getPermaGroupManager().getPermaGroupForBlock(gameBlock1x2);
