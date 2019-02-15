@@ -1,7 +1,5 @@
 package com.comandante.game.board;
 
-import com.sun.istack.internal.NotNull;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
