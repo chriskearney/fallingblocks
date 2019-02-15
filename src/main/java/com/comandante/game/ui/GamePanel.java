@@ -28,12 +28,16 @@ public class GamePanel extends JPanel {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                GameBoardCellEntity byPoint = gameBoard.getGameBoardData().getByPoint(e.getPoint());
-                delayFire.add(byPoint.getId(), () -> {
-                    GameBoardCoords gameBoardCoords = byPoint.getGameBoardCoords();
+                Optional<GameBoardCellEntity> gameBoardCellEntityOptional = gameBoard.getGameBoardData().getByPoint(e.getPoint());
+                if (!gameBoardCellEntityOptional.isPresent()) {
+                    return;
+                }
+                GameBoardCellEntity gameBoardCellEntity = gameBoardCellEntityOptional.get();
+                delayFire.add(gameBoardCellEntity.getId(), () -> {
+                    GameBoardCoords gameBoardCoords = gameBoardCellEntity.getGameBoardCoords();
                     System.out.print("x=" + gameBoardCoords.i + " y=" + gameBoardCoords.j);
-                    if (byPoint.getGameBlock().isPresent()) {
-                        GameBlock gameBlock = byPoint.getGameBlock().get();
+                    if (gameBoardCellEntity.getGameBlock().isPresent()) {
+                        GameBlock gameBlock = gameBoardCellEntity.getGameBlock().get();
                         System.out.print(" gameBlockType: " + gameBlock.getType() + " id: " + gameBlock.getIdentifier() + " resting: " + gameBlock.isResting() + " ");
                         if (gameBlock.getBorderType() != null && gameBlock.getBorderType().isPresent()) {
                             System.out.print("borderType: " + gameBlock.getBorderType().get());

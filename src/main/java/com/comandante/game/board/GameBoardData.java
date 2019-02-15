@@ -27,7 +27,7 @@ public class GameBoardData {
         initializeBoard();
     }
 
-    public GameBoardCellEntity getByPoint(Point point) {
+    public Optional<GameBoardCellEntity> getByPoint(Point point) {
         Optional<GameBoardCellEntity> first = getCellsFromBottom().stream().filter(new Predicate<GameBoardCellEntity>() {
             @Override
             public boolean test(GameBoardCellEntity gameBoardCellEntity) {
@@ -37,7 +37,7 @@ public class GameBoardData {
                 return false;
             }
         }).findFirst();
-        return first.get();
+        return first;
     }
 
     public GameBoardData(GameBoardCellEntity[][] cellEntities) {
