@@ -1,5 +1,6 @@
 package com.comandante.game.board;
 
+import java.awt.*;
 import java.util.Optional;
 
 public class GameBoardCellEntity
@@ -8,6 +9,7 @@ public class GameBoardCellEntity
     private final GameBoardCoords gameBoardCoords;
     private final Optional<GameBlock> gameBlockOptional;
     private boolean markedForDestruction = false;
+    private Rectangle rectangle;
 
     public GameBoardCellEntity(int id, GameBoardCoords gameBoardCoords, GameBlock gameBlock) {
         this.id = id;
@@ -50,5 +52,13 @@ public class GameBoardCellEntity
 
     public boolean isMarkedForDestruction() {
         return markedForDestruction;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
     }
 }

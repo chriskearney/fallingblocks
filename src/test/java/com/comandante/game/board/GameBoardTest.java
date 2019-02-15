@@ -47,15 +47,14 @@ public class GameBoardTest {
     }
 
     // Useful for getting a handle on json exports of the board, visually
+    @Test
     public void testRenderFromJson() throws IOException, InterruptedException {
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
-        //gameBoard.setPaused(true);
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_2.json");
         this.gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
         GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
-        GamePanel gamePanel = new GamePanel();
-        gamePanel.add(gameBoard);
+        GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         JFrame jFrame = new JFrame();
         jFrame.getContentPane().add(gamePanel);
         jFrame.pack();

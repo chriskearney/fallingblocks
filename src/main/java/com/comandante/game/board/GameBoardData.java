@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -24,6 +25,19 @@ public class GameBoardData {
     public GameBoardData(int[][] init) {
         this.cellEntities = new GameBoardCellEntity[init.length][init[0].length];
         initializeBoard();
+    }
+
+    public GameBoardCellEntity getByPoint(Point point) {
+        Optional<GameBoardCellEntity> first = getCellsFromBottom().stream().filter(new Predicate<GameBoardCellEntity>() {
+            @Override
+            public boolean test(GameBoardCellEntity gameBoardCellEntity) {
+                if (gameBoardCellEntity.getRectangle().contains(point)) {
+                    return true;
+                }
+                return false;
+            }
+        }).findFirst();
+        return first.get();
     }
 
     public GameBoardData(GameBoardCellEntity[][] cellEntities) {
