@@ -31,7 +31,8 @@ public class GameBoardData {
         Optional<GameBoardCellEntity> first = getCellsFromBottom().stream().filter(new Predicate<GameBoardCellEntity>() {
             @Override
             public boolean test(GameBoardCellEntity gameBoardCellEntity) {
-                if (gameBoardCellEntity.getRectangle().contains(point)) {
+                if (gameBoardCellEntity.getRectangle() != null &&
+                        gameBoardCellEntity.getRectangle().contains(point)) {
                     return true;
                 }
                 return false;
