@@ -155,7 +155,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 0,
+        "id": 18,
         "gameBoardCoords": {
           "i": 0,
           "j": 17
@@ -164,21 +164,33 @@
         "markedForDestruction": false
       },
       {
-        "id": 0,
+        "id": 19,
         "gameBoardCoords": {
           "i": 0,
           "j": 18
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "7493ef63-bd26-48b0-a41a-c8ce094f269f",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       },
       {
-        "id": 0,
+        "id": 20,
         "gameBoardCoords": {
           "i": 0,
           "j": 19
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "bde29b84-b3a9-4e2a-8331-f314777ddf53",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       }
     ],
@@ -337,7 +349,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 1,
+        "id": 38,
         "gameBoardCoords": {
           "i": 1,
           "j": 17
@@ -346,21 +358,33 @@
         "markedForDestruction": false
       },
       {
-        "id": 1,
+        "id": 39,
         "gameBoardCoords": {
           "i": 1,
           "j": 18
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "84c3c80e-3500-4bb2-a51f-f230ddabb2fa",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       },
       {
-        "id": 1,
+        "id": 40,
         "gameBoardCoords": {
           "i": 1,
           "j": 19
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "31bd85da-eeb1-4cba-aa8b-a34e0258b329",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       }
     ],
@@ -519,7 +543,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 2,
+        "id": 58,
         "gameBoardCoords": {
           "i": 2,
           "j": 17
@@ -528,7 +552,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 2,
+        "id": 59,
         "gameBoardCoords": {
           "i": 2,
           "j": 18
@@ -537,12 +561,18 @@
         "markedForDestruction": false
       },
       {
-        "id": 2,
+        "id": 60,
         "gameBoardCoords": {
           "i": 2,
           "j": 19
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "MAGIC_BLUE",
+            "identifier": "8eafd156-af5c-4759-8180-d9bdb1f08b18",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       }
     ],
@@ -701,7 +731,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 3,
+        "id": 78,
         "gameBoardCoords": {
           "i": 3,
           "j": 17
@@ -710,21 +740,33 @@
         "markedForDestruction": false
       },
       {
-        "id": 3,
+        "id": 79,
         "gameBoardCoords": {
           "i": 3,
           "j": 18
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "MAGIC_YELLOW",
+            "identifier": "9c42f6b3-0394-4ffa-836b-bac746ebf729",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       },
       {
-        "id": 3,
+        "id": 80,
         "gameBoardCoords": {
           "i": 3,
           "j": 19
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "55eec94c-f97c-418d-bd76-6d5c99a9992f",
+            "resting": true
+          }
+        },
         "markedForDestruction": false
       }
     ],
@@ -883,7 +925,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 4,
+        "id": 98,
         "gameBoardCoords": {
           "i": 4,
           "j": 17
@@ -892,7 +934,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 4,
+        "id": 99,
         "gameBoardCoords": {
           "i": 4,
           "j": 18
@@ -900,14 +942,14 @@
         "gameBlockOptional": {
           "value": {
             "type": "GREEN",
-            "identifier": "4fad86e7-cb14-40d3-96ed-87252deff155",
-            "resting": false
+            "identifier": "2b0899e4-d83e-4f7f-b11a-8c3c5c17cf78",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 4,
+        "id": 100,
         "gameBoardCoords": {
           "i": 4,
           "j": 19
@@ -915,8 +957,8 @@
         "gameBlockOptional": {
           "value": {
             "type": "GREEN",
-            "identifier": "1297c647-e99a-481b-aa78-e7ce05b30a01",
-            "resting": false
+            "identifier": "824234ec-dbd1-4049-82a8-d01a9c2fc383",
+            "resting": true
           }
         },
         "markedForDestruction": false
@@ -956,7 +998,13 @@
           "i": 5,
           "j": 3
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "cce33392-a300-4f05-a1ee-5d30b3364e9f",
+            "resting": false
+          }
+        },
         "markedForDestruction": false
       },
       {
@@ -965,7 +1013,13 @@
           "i": 5,
           "j": 4
         },
-        "gameBlockOptional": {},
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "d4f883fc-6750-4e2b-92c5-151aed605673",
+            "resting": false
+          }
+        },
         "markedForDestruction": false
       },
       {
@@ -1077,46 +1131,40 @@
         "markedForDestruction": false
       },
       {
-        "id": 5,
+        "id": 118,
         "gameBoardCoords": {
           "i": 5,
           "j": 17
         },
-        "gameBlockOptional": {
-          "value": {
-            "type": "GREEN",
-            "identifier": "fc3d9f0d-ed5e-4799-a17a-f3307b31e425",
-            "resting": false
-          }
-        },
+        "gameBlockOptional": {},
         "markedForDestruction": false
       },
       {
-        "id": 5,
+        "id": 119,
         "gameBoardCoords": {
           "i": 5,
           "j": 18
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "e9aa78bf-3d36-4fbc-975d-19bb598e9abc",
-            "resting": false
+            "type": "YELLOW",
+            "identifier": "c0119d3c-bf87-450f-82bf-f10f99837b7a",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 5,
+        "id": 120,
         "gameBoardCoords": {
           "i": 5,
           "j": 19
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "a89d2011-dad4-4727-ae5b-f6316edd5962",
-            "resting": false
+            "type": "YELLOW",
+            "identifier": "a2e6407b-5318-4e58-8df9-562e8eb3c614",
+            "resting": true
           }
         },
         "markedForDestruction": false
@@ -1277,46 +1325,46 @@
         "markedForDestruction": false
       },
       {
-        "id": 6,
+        "id": 138,
         "gameBoardCoords": {
           "i": 6,
           "j": 17
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "557473bd-e0d8-4436-a01e-292207c1b01a",
-            "resting": false
+            "type": "YELLOW",
+            "identifier": "71b282ce-0cfb-44d3-af91-f2762507c2be",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 6,
+        "id": 139,
         "gameBoardCoords": {
           "i": 6,
           "j": 18
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "e7f23eb5-98ec-4087-8160-3b42e95207c9",
-            "resting": false
+            "type": "YELLOW",
+            "identifier": "7b1174c7-3be1-4b9e-9efa-ec7bb381eab7",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 6,
+        "id": 140,
         "gameBoardCoords": {
           "i": 6,
           "j": 19
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "626d7eae-0ea3-4881-a623-9b9e7bee832a",
-            "resting": false
+            "type": "YELLOW",
+            "identifier": "b23b12d4-661b-41cd-993f-431954b92ed9",
+            "resting": true
           }
         },
         "markedForDestruction": false
@@ -1477,7 +1525,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 7,
+        "id": 158,
         "gameBoardCoords": {
           "i": 7,
           "j": 17
@@ -1486,31 +1534,31 @@
         "markedForDestruction": false
       },
       {
-        "id": 7,
+        "id": 159,
         "gameBoardCoords": {
           "i": 7,
           "j": 18
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "3fca4d32-aba9-4168-937f-98737b28805f",
-            "resting": false
+            "type": "RED",
+            "identifier": "fd910495-8c2d-4807-883c-da3b505cbc73",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 7,
+        "id": 160,
         "gameBoardCoords": {
           "i": 7,
           "j": 19
         },
         "gameBlockOptional": {
           "value": {
-            "type": "GREEN",
-            "identifier": "1ccfbc85-45c4-4306-9592-cbc6228ffe94",
-            "resting": false
+            "type": "YELLOW",
+            "identifier": "b3258d53-6845-45e6-8762-26075ca3a912",
+            "resting": true
           }
         },
         "markedForDestruction": false
@@ -1671,7 +1719,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 8,
+        "id": 178,
         "gameBoardCoords": {
           "i": 8,
           "j": 17
@@ -1680,31 +1728,31 @@
         "markedForDestruction": false
       },
       {
-        "id": 8,
+        "id": 179,
         "gameBoardCoords": {
           "i": 8,
           "j": 18
         },
         "gameBlockOptional": {
           "value": {
-            "type": "BLUE",
-            "identifier": "0a698256-db07-4935-99ea-6892a3625bf5",
-            "resting": false
+            "type": "RED",
+            "identifier": "b13c0c1b-7937-4613-9841-aa124cfb21d2",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 8,
+        "id": 180,
         "gameBoardCoords": {
           "i": 8,
           "j": 19
         },
         "gameBlockOptional": {
           "value": {
-            "type": "BLUE",
-            "identifier": "72f09f33-16f9-48dd-81d8-0d0a10015910",
-            "resting": false
+            "type": "GREEN",
+            "identifier": "81e83bc5-7c2a-48e1-9c59-febb0f3f7ca9",
+            "resting": true
           }
         },
         "markedForDestruction": false
@@ -1865,7 +1913,7 @@
         "markedForDestruction": false
       },
       {
-        "id": 9,
+        "id": 198,
         "gameBoardCoords": {
           "i": 9,
           "j": 17
@@ -1874,36 +1922,49 @@
         "markedForDestruction": false
       },
       {
-        "id": 9,
+        "id": 199,
         "gameBoardCoords": {
           "i": 9,
           "j": 18
         },
         "gameBlockOptional": {
           "value": {
-            "type": "BLUE",
-            "identifier": "62370b67-9a7d-44f2-87e7-9a2418188a4e",
-            "resting": false
+            "type": "RED",
+            "identifier": "a725407e-f48a-40ef-ac3b-352d6d6ec364",
+            "resting": true
           }
         },
         "markedForDestruction": false
       },
       {
-        "id": 9,
+        "id": 200,
         "gameBoardCoords": {
           "i": 9,
           "j": 19
         },
         "gameBlockOptional": {
           "value": {
-            "type": "BLUE",
-            "identifier": "584abde5-9fd4-439c-a8d5-ee1c11ea1f76",
-            "resting": false
+            "type": "RED",
+            "identifier": "1fa79889-0d2d-49b8-b9df-87efb2844a8b",
+            "resting": true
           }
         },
         "markedForDestruction": false
       }
     ]
   ],
-  "blockPairActive": {}
+  "blockPairActive": {
+    "value": {
+      "blockA": {
+        "type": "GREEN",
+        "identifier": "cce33392-a300-4f05-a1ee-5d30b3364e9f",
+        "resting": false
+      },
+      "blockB": {
+        "type": "RED",
+        "identifier": "d4f883fc-6750-4e2b-92c5-151aed605673",
+        "resting": false
+      }
+    }
+  }
 }

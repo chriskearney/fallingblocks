@@ -1,5 +1,7 @@
 package com.comandante.game.board;
 
+import com.sun.istack.internal.NotNull;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +16,12 @@ public class GameBoardData {
     public final static int BLOCK_SIZE = 32;
 
     private final GameBoardCellEntity[][] cellEntities;
-    private Optional<GameBlockPair> blockPairActive;
+
+    public void setBlockPairActive(Optional<GameBlockPair> blockPairActive) {
+        this.blockPairActive = blockPairActive;
+    }
+
+    private Optional<GameBlockPair> blockPairActive = Optional.empty();
 
     public GameBoardData(int[][] init) {
         this.cellEntities = new GameBoardCellEntity[init.length][init[0].length];

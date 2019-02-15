@@ -61,6 +61,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         requestFocus();
     }
 
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (paused) {

@@ -4,10 +4,13 @@ import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
+import com.comandante.game.ui.GamePanel;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,12 +19,13 @@ public class GameBoardTest {
 
     private GameBoard gameBoard;
     private GameBoardData gameBoardData;
+    private final GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
+
 
     @Before
     public void setUp() throws Exception {
         TextBoard textBoard = new TextBoard(new int[10][20], new TileSetGameBlockRenderer("8bit"));
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
-        GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
         this.gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
         gameBoard = new GameBoard(this.gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
     }
@@ -40,5 +44,25 @@ public class GameBoardTest {
         Assert.assertEquals(blockGroup.getByXandY(2, 2).getIdentifier(), UUID.fromString("e9aa78bf-3d36-4fbc-975d-19bb598e9abc"));
         Assert.assertEquals(blockGroup.getByXandY(3, 2).getIdentifier(), UUID.fromString("e7f23eb5-98ec-4087-8160-3b42e95207c9"));
         Assert.assertEquals(blockGroup.getByXandY(4, 2).getIdentifier(), UUID.fromString("3fca4d32-aba9-4168-937f-98737b28805f"));
+    }
+
+    // Useful for getting a handle on json exports of the board, visually
+    @Test
+    public void testRenderFromJson() throws IOException, InterruptedException {
+        TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
+        TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
+        //gameBoard.setPaused(true);
+        String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_2.json");
+        this.gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
+        GamePanel gamePanel = new GamePanel();
+        gamePanel.add(gameBoard);
+        JFrame jFrame = new JFrame();
+        jFrame.getContentPane().add(gamePanel);
+        jFrame.pack();
+        jFrame.setVisible(true);
+        while (true) {
+            Thread.sleep(1200);
+        }
     }
 }
