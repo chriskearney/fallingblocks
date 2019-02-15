@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 public class GamePanel extends JPanel {
 
@@ -30,18 +32,17 @@ public class GamePanel extends JPanel {
                     @Override
                     public void run() {
                         GameBoardCoords gameBoardCoords = byPoint.getGameBoardCoords();
-                        System.out.printf("x=" + gameBoardCoords.i + " y=" + gameBoardCoords.j);
+                        System.out.print("x=" + gameBoardCoords.i + " y=" + gameBoardCoords.j);
                         if (byPoint.getGameBlock().isPresent()) {
                             GameBlock gameBlock = byPoint.getGameBlock().get();
-                            System.out.printf(" gameBlockType: " + gameBlock.getType() + " id: " + gameBlock.getIdentifier() + " resting: " + gameBlock.isResting() + " ");
+                            System.out.print(" gameBlockType: " + gameBlock.getType() + " id: " + gameBlock.getIdentifier() + " resting: " + gameBlock.isResting() + " ");
                             if (gameBlock.getBorderType() != null && gameBlock.getBorderType().isPresent()) {
-                                System.out.println("borderType: " + gameBlock.getBorderType().get());
-                            } else {
-                                System.out.println();
+                                System.out.print("borderType: " + gameBlock.getBorderType().get());
                             }
-                        } else {
-                            System.out.println();
+                            Optional<GameBoard.BlockGroup> first = gameBoard.getAllGroups().stream().filter(blockGroup -> blockGroup.getAllGameBlocks().stream().anyMatch(gameBlock1 -> gameBlock1.getIdentifier().equals(gameBlock1.getIdentifier()))).findFirst();
+                            first.ifPresent(blockGroup -> System.out.print(" blockGroup: " + blockGroup.getBlockGroupId()));
                         }
+                        System.out.println();
                     }
                 });
                 repaint();

@@ -334,6 +334,13 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     public static class BlockGroup {
+
+        private final UUID blockGroupId;
+
+        public BlockGroup() {
+            blockGroupId = UUID.randomUUID();
+        }
+
         java.util.List<java.util.List<GameBoardCellEntity>> groupOfBlocks = new ArrayList<>();
 
         public void addRow(GameBoardCellEntity[] row) {
@@ -383,6 +390,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             x = x - 1;
             y = y - 1;
             return groupOfBlocks.get(y).get(x).getGameBlock().get();
+        }
+
+        public UUID getBlockGroupId() {
+            return blockGroupId;
         }
     }
 
