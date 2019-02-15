@@ -1,8 +1,12 @@
 package com.comandante.game.board;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -15,6 +19,10 @@ public class GameBoardData {
     public GameBoardData(int[][] init) {
         this.cellEntities = new GameBoardCellEntity[init.length][init[0].length];
         initializeBoard();
+    }
+
+    public GameBoardData(GameBoardCellEntity[][] cellEntities) {
+        this.cellEntities = cellEntities;
     }
 
     public GameBoardCellEntity[][] getCellEntities() {
@@ -246,4 +254,5 @@ public class GameBoardData {
     public Optional<GameBlockPair> getBlockPairActive() {
         return blockPairActive;
     }
+
 }
