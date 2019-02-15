@@ -35,6 +35,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final MagicGameBlockProcessor magicGameBlockProcessor;
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
+    private final GameBoardDataSerialization gameBoardDataSerialization;
     private Integer score = 0;
     private Integer largestScore = 0;
     private boolean paused = false;
@@ -47,8 +48,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.magicGameBlockProcessor = magicGameBlockProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
-        timer = new Timer(400, this);
-        timer.start();
+        this.gameBoardDataSerialization = new GameBoardDataSerialization();
+        this.timer = new Timer(400, this);
+        this.timer.start();
         addKeyListener(this);
         setOpaque(false);
         alterScore(0);
@@ -119,6 +121,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             case KeyEvent.VK_P:
                 togglePause();
                 break;
+            case KeyEvent.VK_M:
+                try {
+                    ExportGameBoardState.export(getGameBoardData());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         }
     }
 
@@ -357,13 +365,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
         public java.util.List<GameBlock> getAllGameBlocks() {
             java.util.List<GameBlock> allBlocks = new ArrayList<>();
-            groupOfBlocks.forEach(new Consumer<java.util.List<GameBoardCellEntity>>() {
-                @Override
-                public void accept(java.util.List<GameBoardCellEntity> gameBoardCellEntities) {
-                    for (GameBoardCellEntity boardCellEntity : gameBoardCellEntities) {
-                        if (boardCellEntity.getGameBlock().isPresent()) {
-                            allBlocks.add(boardCellEntity.getGameBlock().get());
-                        }
+            groupOfBlocks.forEach(gameBoardCellEntities -> {
+                for (GameBoardCellEntity boardCellEntity : gameBoardCellEntities) {
+                    if (boardCellEntity.getGameBlock().isPresent()) {
+                        allBlocks.add(boardCellEntity.getGameBlock().get());
                     }
                 }
             });
@@ -430,7 +435,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 if (x == maxX && y == 1) {
                     type = BOTTOM_RIGHT;
                 }
-
                 if (y < maxY && y > 1 && x == maxX) {
                     type = RIGHT;
                 }

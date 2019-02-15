@@ -1,10 +1,11 @@
 package com.comandante.game.board;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class GameBoardDataSerialization {
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
     public String serialize(GameBoardData gameBoardData) {

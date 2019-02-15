@@ -7,7 +7,7 @@ import static com.comandante.game.board.GameBoardUtil.subtractCoords;
 public class GameBlockPair {
     private final GameBlock blockA;
     private final GameBlock blockB;
-    private final GameBoardData gameBoardData;
+    private final transient GameBoardData gameBoardData;
 
     public GameBlockPair(GameBlock blockA, GameBlock blockB, GameBoardData gameBoardData) {
         this.blockA = blockA;
