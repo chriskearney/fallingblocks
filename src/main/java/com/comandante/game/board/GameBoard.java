@@ -284,9 +284,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     listOfGroups.add(Lists.newArrayList(group));
                 }
             } while (isLikeNeighbor);
-//            if (!group.isEmpty() && group.size() > 1) {
-//                listOfGroups.add(group);
-//            }
         }
         return listOfGroups;
     }

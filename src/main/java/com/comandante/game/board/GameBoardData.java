@@ -13,30 +13,24 @@ import java.util.stream.Collectors;
 
 public class GameBoardData {
     public final static int BLOCK_SIZE = 32;
-
     private final GameBoardCellEntity[][] cellEntities;
-
-    public void setBlockPairActive(Optional<GameBlockPair> blockPairActive) {
-        this.blockPairActive = blockPairActive;
-    }
-
     private Optional<GameBlockPair> blockPairActive = Optional.empty();
 
     public GameBoardData(int[][] init) {
         this.cellEntities = new GameBoardCellEntity[init.length][init[0].length];
-        initializeBoard();
+        int invocationNumber = 0;
+        for (int i = 0; i < cellEntities.length; i++) {
+            for (int j = 0; j < cellEntities[0].length; j++) {
+                invocationNumber++;
+                setCellEntity(new GameBoardCoords(i, j), new GameBoardCellEntity(invocationNumber, new GameBoardCoords(i, j)));
+            }
+        }
     }
 
     public Optional<GameBoardCellEntity> getByPoint(Point point) {
-        Optional<GameBoardCellEntity> first = getCellsFromBottom().stream()
+        return getCellsFromBottom().stream()
                 .filter(gameBoardCellEntity -> gameBoardCellEntity.getRectangle() != null && gameBoardCellEntity.getRectangle().contains(point))
                 .findFirst();
-
-        return first;
-    }
-
-    public GameBoardData(GameBoardCellEntity[][] cellEntities) {
-        this.cellEntities = cellEntities;
     }
 
     public GameBoardCellEntity[][] getCellEntities() {
@@ -88,25 +82,17 @@ public class GameBoardData {
         return cellEntitiesArray;
     }
 
-
     public Dimension getPreferredSize() {
         return new Dimension(cellEntities.length * BLOCK_SIZE, cellEntities[0].length * BLOCK_SIZE);
     }
 
-    private void initializeBoard() {
-        int invocationNumber = 0;
-        for (int i = 0; i < cellEntities.length; i++) {
-            for (int j = 0; j < cellEntities[0].length; j++) {
-                invocationNumber++;
-                setCellEntity(new GameBoardCoords(i, j), new GameBoardCellEntity(invocationNumber, new GameBoardCoords(i, j)));
-            }
-        }
+    public void setBlockPairActive(Optional<GameBlockPair> blockPairActive) {
+        this.blockPairActive = blockPairActive;
     }
 
     private void setCellEntity(GameBoardCoords gameBoardCoords, GameBoardCellEntity gameBoardCellEntity) {
         cellEntities[gameBoardCoords.i][gameBoardCoords.j] = gameBoardCellEntity;
     }
-
 
     public Optional<GameBoardCellEntity> getCellEntity(GameBoardCoords gameBoardCoords) {
         try {
@@ -145,7 +131,6 @@ public class GameBoardData {
         return false;
     }
 
-
     public List<GameBoardCellEntity> getCellsFromBottom(GameBoardCellEntity[][] cellEntities) {
         List<GameBoardCellEntity> gameBoardCellEntityList = new ArrayList<>();
         Iterator<GameBoardCellEntity[]> iteratorOfRowsFromBottom = getIteratorOfRowsFromBottom();
@@ -158,7 +143,6 @@ public class GameBoardData {
     public boolean isBlockPairActive() {
         return blockPairActive.isPresent() && (!blockPairActive.filter(gameBlockPair -> gameBlockPair.getBlockA().isResting() || gameBlockPair.getBlockB().isResting()).isPresent());
     }
-
 
     public boolean isSpaceAvailable(GameBoardCoords.MoveDirection direction, GameBoardCellEntity gameBoardCellEntity) {
         Optional<GameBoardCellEntity> destinationEntityOptional = getCellEntity(new GameBoardCoords(gameBoardCellEntity.getGameBoardCoords().i + direction.getDirectionApplyCoords().i, gameBoardCellEntity.getGameBoardCoords().j + direction.getDirectionApplyCoords().j));
@@ -211,7 +195,6 @@ public class GameBoardData {
         return Optional.empty();
     }
 
-
     public Optional<GameBoardCoords> getCoords(GameBlock gameBlock) {
         Optional<GameBoardCoords> foundCoords = Optional.empty();
         for (GameBoardCellEntity ce : getCellsFromBottom()) {
@@ -221,7 +204,6 @@ public class GameBoardData {
         }
         return foundCoords;
     }
-
 
     public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
         List<GameBoardCellEntity> neighbors = new ArrayList<>();
