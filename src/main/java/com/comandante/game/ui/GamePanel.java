@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class GamePanel extends JPanel {
@@ -51,8 +52,8 @@ public class GamePanel extends JPanel {
                         if (gameBlock.getBorderType() != null && gameBlock.getBorderType().isPresent()) {
                             System.out.print("borderType: " + gameBlock.getBorderType().get());
                         }
-                        Optional<GameBoard.BlockGroup> first = gameBoard.getAllGroups().stream().filter(blockGroup -> blockGroup.getAllGameBlocks().stream().anyMatch(gameBlock1 -> gameBlock1.getIdentifier().equals(gameBlock1.getIdentifier()))).findFirst();
-                        first.ifPresent(blockGroup -> System.out.print(" blockGroup: " + blockGroup.getBlockGroupId()));
+                        Optional<UUID> permaGroupForBlock = gameBoard.getPermaGroupManager().getPermaGroupForBlock(gameBlock);
+                        permaGroupForBlock.ifPresent(uuid -> System.out.print(" blockGroup: " + uuid));
                     }
                     System.out.println();
                 });
