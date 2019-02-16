@@ -1,18 +1,22 @@
 package com.comandante.game.board.logic;
 
+import com.comandante.game.board.BlockGroup;
 import com.comandante.game.board.GameBlock;
-import com.comandante.game.board.GameBoard;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class BasicPermaGroupManager implements PermaGroupManager {
 
-    Map<UUID, GameBoard.BlockGroup> permaGroups = new HashMap<>();
+    Map<UUID, BlockGroup> permaGroups = new HashMap<>();
 
     @Override
     public Optional<UUID> getPermaGroupForBlock(GameBlock block) {
-        Optional<Map.Entry<UUID, GameBoard.BlockGroup>> first = permaGroups.entrySet().stream().filter(uuidBlockGroupEntry -> {
+        Optional<Map.Entry<UUID, BlockGroup>> first = permaGroups.entrySet().stream().filter(uuidBlockGroupEntry -> {
             List<GameBlock> allGameBlocks = uuidBlockGroupEntry.getValue().getAllGameBlocks();
             return allGameBlocks.stream().anyMatch(b -> b.getIdentifier().equals(block.getIdentifier()));
         }).findFirst();
@@ -20,13 +24,13 @@ public class BasicPermaGroupManager implements PermaGroupManager {
     }
 
     @Override
-    public void createPermagroup(GameBoard.BlockGroup blockGroup) {
+    public void createPermagroup(BlockGroup blockGroup) {
         permaGroups.put(UUID.randomUUID(), blockGroup);
 
     }
 
     @Override
-    public boolean areAnyBlocksPartOfPermaGroup(GameBoard.BlockGroup blockGroup) {
+    public boolean areAnyBlocksPartOfPermaGroup(BlockGroup blockGroup) {
         for (GameBlock gameBlock: blockGroup.getAllGameBlocks()) {
             if (getPermaGroupForBlock(gameBlock).isPresent()) {
                 return true;
@@ -36,9 +40,9 @@ public class BasicPermaGroupManager implements PermaGroupManager {
     }
 
     @Override
-    public List<GameBoard.BlockGroup> getPermaGroups() {
-        List<GameBoard.BlockGroup> allGroups = new ArrayList<>();
-        for (Map.Entry<UUID, GameBoard.BlockGroup> next : permaGroups.entrySet()) {
+    public List<BlockGroup> getPermaGroups() {
+        List<BlockGroup> allGroups = new ArrayList<>();
+        for (Map.Entry<UUID, BlockGroup> next : permaGroups.entrySet()) {
             allGroups.add(next.getValue());
         }
         return allGroups;
@@ -50,7 +54,7 @@ public class BasicPermaGroupManager implements PermaGroupManager {
     }
 
     @Override
-    public GameBoard.BlockGroup get(UUID uuid) {
+    public BlockGroup get(UUID uuid) {
         return permaGroups.get(uuid);
     }
 }

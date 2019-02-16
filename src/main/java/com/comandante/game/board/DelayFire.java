@@ -22,12 +22,7 @@ public class DelayFire {
 
     public DelayFire() {
         ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-        ses.scheduleWithFixedDelay(
-                new Runnable() {
-                    public void run() {
-                        runnableCache.cleanUp();
-                    }
-                }, 0, 50, TimeUnit.MILLISECONDS);
+        ses.scheduleWithFixedDelay(runnableCache::cleanUp, 0, 50, TimeUnit.MILLISECONDS);
     }
 
     private class ResizeRemovalListener implements RemovalListener<Integer, Runnable> {

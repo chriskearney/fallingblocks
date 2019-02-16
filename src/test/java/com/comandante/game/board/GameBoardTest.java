@@ -6,10 +6,9 @@ import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +24,9 @@ public class GameBoardTest {
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
         GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
         gameBoard.calculatePermaGroups();
-        List<GameBoard.BlockGroup> permaGroups = gameBoard.getPermaGroupManager().getPermaGroups();
-        Optional<GameBoard.BlockGroup> first = permaGroups.stream().filter(blockGroup -> blockGroup.groupOfBlocks.get(0).size() == 4).findFirst();
-        GameBoard.BlockGroup blockGroup = first.get();
+        List<BlockGroup> permaGroups = gameBoard.getPermaGroupManager().getPermaGroups();
+        Optional<BlockGroup> first = permaGroups.stream().filter(blockGroup -> blockGroup.groupOfBlocks.get(0).size() == 4).findFirst();
+        BlockGroup blockGroup = first.get();
         Assert.assertEquals(blockGroup.getByXandY(1, 1).getIdentifier(), UUID.fromString("1297c647-e99a-481b-aa78-e7ce05b30a01"));
         Assert.assertEquals(blockGroup.getByXandY(2, 1).getIdentifier(), UUID.fromString("a89d2011-dad4-4727-ae5b-f6316edd5962"));
         Assert.assertEquals(blockGroup.getByXandY(3, 1).getIdentifier(), UUID.fromString("626d7eae-0ea3-4881-a623-9b9e7bee832a"));

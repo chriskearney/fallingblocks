@@ -1,7 +1,7 @@
 package com.comandante.game.board.logic;
 
+import com.comandante.game.board.BlockGroup;
 import com.comandante.game.board.GameBlock;
-import com.comandante.game.board.GameBoard;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,13 +12,13 @@ public interface PermaGroupManager {
 
     Optional<UUID> getPermaGroupForBlock(GameBlock block);
 
-    void createPermagroup(GameBoard.BlockGroup blockGroup);
+    void createPermagroup(BlockGroup blockGroup);
 
-    boolean areAnyBlocksPartOfPermaGroup(GameBoard.BlockGroup blockGroup);
+    boolean areAnyBlocksPartOfPermaGroup(BlockGroup blockGroup);
 
-    List<GameBoard.BlockGroup> getPermaGroups();
+    List<BlockGroup> getPermaGroups();
 
-    GameBoard.BlockGroup get(UUID uuid);
+    BlockGroup get(UUID uuid);
 
     void reset();
 }

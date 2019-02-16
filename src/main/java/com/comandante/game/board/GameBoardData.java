@@ -1,13 +1,13 @@
 package com.comandante.game.board;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -259,6 +259,19 @@ public class GameBoardData {
             GameBoardCellEntity gameBoardCellEntity = new GameBoardCellEntity(i, new GameBoardCoords(i, rowNumber), row[i].getGameBlock().orElse(null));
             cellEntities[i][rowNumber] = gameBoardCellEntity;
         }
+    }
+
+    public Optional<GameBoardCellEntity> moveCellEntityContents(GameBoardCoords.MoveDirection moveDirection, GameBoardCellEntity gameBoardCellEntity, Runnable postRun) {
+        int i = gameBoardCellEntity.getGameBoardCoords().i;
+        int j = gameBoardCellEntity.getGameBoardCoords().j;
+        Optional<GameBoardCellEntity> cellEntityOptional = getCellEntity(new GameBoardCoords(i + moveDirection.getDirectionApplyCoords().i, j + moveDirection.getDirectionApplyCoords().j));
+        if (!cellEntityOptional.isPresent() || cellEntityOptional.get().isOccupied()) {
+            return Optional.empty();
+        }
+        getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new GameBoardCellEntity(cellEntityOptional.get().getId(), cellEntityOptional.get().getGameBoardCoords(), gameBoardCellEntity.getGameBlock().orElse(null));
+        getCellEntities()[i][j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords());
+        postRun.run();
+        return Optional.ofNullable(getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j]);
     }
 
     public Optional<GameBlockPair> getBlockPairActive() {
