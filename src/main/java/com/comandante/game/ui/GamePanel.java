@@ -6,6 +6,8 @@ import com.comandante.game.board.GameBoard;
 import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardCoords;
 import com.comandante.game.textboard.TextBoard;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.swing.*;
 import java.awt.*;
