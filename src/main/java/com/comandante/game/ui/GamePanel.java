@@ -25,7 +25,16 @@ public class GamePanel extends JPanel {
         setLayout(experimentLayout);
         add(gameBoard);
         add(textBoard);
-        addMouseMotionListener(new MouseAdapter() {
+        addMouseMotionListener(getDebugMouseAdapter(gameBoard));
+    }
+
+    @Override
+    public void paintComponents(Graphics g) {
+        super.paintComponents(g);
+    }
+
+    private MouseAdapter getDebugMouseAdapter(GameBoard gameBoard) {
+        return new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 Optional<GameBoardCellEntity> gameBoardCellEntityOptional = gameBoard.getGameBoardData().getByPoint(e.getPoint());
@@ -49,12 +58,6 @@ public class GamePanel extends JPanel {
                 });
                 repaint();
             }
-
-        });
-    }
-
-    @Override
-    public void paintComponents(Graphics g) {
-        super.paintComponents(g);
+        };
     }
 }

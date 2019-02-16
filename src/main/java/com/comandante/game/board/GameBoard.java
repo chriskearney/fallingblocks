@@ -8,17 +8,24 @@ import com.comandante.game.board.logic.GameBlockRenderer;
 import com.comandante.game.board.logic.MagicGameBlockProcessor;
 import com.comandante.game.board.logic.PermaGroupManager;
 import com.comandante.game.textboard.TextBoard;
+import com.google.common.collect.Lists;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 import javax.swing.Timer;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.comandante.game.board.GameBlock.BorderType.*;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.BOTTOM_OF;
@@ -35,20 +42,22 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final MagicGameBlockProcessor magicGameBlockProcessor;
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
-    private final GameBoardDataSerialization gameBoardDataSerialization;
     private Integer score = 0;
     private Integer largestScore = 0;
     private boolean paused = false;
 
 
-    public GameBoard(GameBoardData gameBoardData, GameBlockRenderer gameBlockRenderer, GameBlockPairFactory gameBlockPairFactory, MagicGameBlockProcessor magicGameBlockProcessor, TextBoard textBoard) {
+    public GameBoard(GameBoardData gameBoardData,
+                     GameBlockRenderer gameBlockRenderer,
+                     GameBlockPairFactory gameBlockPairFactory,
+                     MagicGameBlockProcessor magicGameBlockProcessor,
+                     TextBoard textBoard) {
         this.gameBoardData = gameBoardData;
         this.gameBlockRenderer = gameBlockRenderer;
         this.gameBlockPairFactory = gameBlockPairFactory;
         this.magicGameBlockProcessor = magicGameBlockProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
-        this.gameBoardDataSerialization = new GameBoardDataSerialization();
         this.timer = new Timer(400, this);
         this.timer.start();
         addKeyListener(this);
@@ -239,13 +248,13 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
 
-    public java.util.List<java.util.List<GameBoardCellEntity>> getGroupsOfLikeBlocksFromRow(GameBoardCellEntity[] row) {
-        java.util.List<java.util.List<GameBoardCellEntity>> listOfGroups = new ArrayList<>();
+    public List<List<GameBoardCellEntity>> getGroupsOfLikeBlocksFromRow(GameBoardCellEntity[] row) {
+        List<List<GameBoardCellEntity>> listOfGroups = Lists.newArrayList();
         for (GameBoardCellEntity cellEntity : row) {
             if (!cellEntity.isOccupied()) {
                 continue;
             }
-            java.util.List<GameBoardCellEntity> group = new ArrayList<>();
+            List<GameBoardCellEntity> group = Lists.newArrayList();
             GameBoardCellEntity nextEntityToCheck = cellEntity;
             boolean isLikeNeighbor = true;
             do {
@@ -256,10 +265,13 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 } else {
                     nextEntityToCheck = cellEntityIfOccupiedSameType.get();
                 }
+                if (group.size() > 1){
+                    listOfGroups.add(Lists.newArrayList(group));
+                }
             } while (isLikeNeighbor);
-            if (!group.isEmpty() && group.size() > 1) {
-                listOfGroups.add(group);
-            }
+//            if (!group.isEmpty() && group.size() > 1) {
+//                listOfGroups.add(group);
+//            }
         }
         return listOfGroups;
     }
@@ -271,7 +283,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         GameBlockPair gameBlockPair = gameBoardData.getBlockPairActive().get();
         Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBlockPair.getBlockBOrientation();
         if (!blockBOrientation.isPresent()) {
-            System.out.printf("Can not determine the orientation of block b to block a!");
+            System.out.print("Can not determine the orientation of block b to block a!");
             return;
         }
         GameBlockPair.BlockBOrientation orientation = blockBOrientation.get();
@@ -292,16 +304,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-    public Map<GameBlock.Type, java.util.List<BlockGroup>> getBlockGroups() {
-        java.util.List<BlockGroup> matchingGroups = new ArrayList<>();
+    public Map<GameBlock.Type, List<BlockGroup>> getBlockGroups() {
+        List<BlockGroup> matchingGroups = Lists.newArrayList();
         Iterator<GameBoardCellEntity[]> iteratorOfRowsFromBottom = gameBoardData.getIteratorOfRowsFromBottom();
         while (iteratorOfRowsFromBottom.hasNext()) {
             GameBoardCellEntity[] next = iteratorOfRowsFromBottom.next();
-            java.util.List<java.util.List<GameBoardCellEntity>> groupsOfLikeBlocksFromRow = getGroupsOfLikeBlocksFromRow(next);
-            for (java.util.List<GameBoardCellEntity> rowGroup : groupsOfLikeBlocksFromRow) {
+            List<List<GameBoardCellEntity>> groupsOfLikeBlocksFromRow = getGroupsOfLikeBlocksFromRow(next);
+            for (List<GameBoardCellEntity> rowGroup : groupsOfLikeBlocksFromRow) {
                 BlockGroup blockGroup = new BlockGroup();
                 boolean areMatchingRows = true;
-                java.util.List<GameBoardCellEntity> processingRow = rowGroup;
+                List<GameBoardCellEntity> processingRow = rowGroup;
                 do {
                     blockGroup.addRow(processingRow.toArray(new GameBoardCellEntity[0]));
                     Optional<GameBoardCellEntity[]> matchingRowAboveIfExists = gameBoardData.getMatchingRowAboveIfExists(processingRow.toArray(new GameBoardCellEntity[0]));
@@ -315,19 +327,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 }
             }
         }
-        Map<GameBlock.Type, java.util.List<BlockGroup>> groupsByType = new HashMap<>();
+        Map<GameBlock.Type, List<BlockGroup>> groupsByType = new HashMap<>();
         for (BlockGroup group : matchingGroups) {
             GameBlock.Type type = group.getRawGroup()[0][0].getType();
-            groupsByType.computeIfAbsent(type, k -> new ArrayList<>());
+            groupsByType.computeIfAbsent(type, k -> Lists.newArrayList());
             groupsByType.get(type).add(group);
         }
         return groupsByType;
     }
 
-    public java.util.List<BlockGroup> getAllGroups() {
-        java.util.List<BlockGroup> allGroups = new ArrayList<>();
-        Map<GameBlock.Type, java.util.List<BlockGroup>> blockGroups = getBlockGroups();
-        for (Map.Entry<GameBlock.Type, java.util.List<BlockGroup>> entry : blockGroups.entrySet()) {
+    public List<BlockGroup> getAllGroups() {
+        List<BlockGroup> allGroups = Lists.newArrayList();
+        Map<GameBlock.Type, List<BlockGroup>> blockGroups = getBlockGroups();
+        for (Map.Entry<GameBlock.Type, List<BlockGroup>> entry : blockGroups.entrySet()) {
             allGroups.addAll(entry.getValue());
         }
         return allGroups;
@@ -341,11 +353,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             blockGroupId = UUID.randomUUID();
         }
 
-        java.util.List<java.util.List<GameBoardCellEntity>> groupOfBlocks = new ArrayList<>();
+        List<List<GameBoardCellEntity>> groupOfBlocks = Lists.newArrayList();
 
         public void addRow(GameBoardCellEntity[] row) {
             List<GameBoardCellEntity> gameBoardCellEntities = Arrays.asList(row);
-            //Collections.reverse(gameBoardCellEntities);
             groupOfBlocks.add(gameBoardCellEntities);
         }
 
@@ -374,8 +385,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return getX() * getY();
         }
 
-        public java.util.List<GameBlock> getAllGameBlocks() {
-            java.util.List<GameBlock> allBlocks = new ArrayList<>();
+        public List<GameBlock> getAllGameBlocks() {
+            List<GameBlock> allBlocks = Lists.newArrayList();
             groupOfBlocks.forEach(gameBoardCellEntities -> {
                 for (GameBoardCellEntity boardCellEntity : gameBoardCellEntities) {
                     if (boardCellEntity.getGameBlock().isPresent()) {
@@ -403,7 +414,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         boolean finished = false;
         while (!finished) {
             BlockGroup largestOpenBlockGroup = null;
-            java.util.List<BlockGroup> blockGroups = getAllGroups();
+            List<BlockGroup> blockGroups = getAllGroups();
             for (BlockGroup blockGroup : blockGroups) {
                 if (permaGroupManager.areAnyBlocksPartOfPermaGroup(blockGroup)) {
                     continue;
@@ -412,7 +423,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     largestOpenBlockGroup = blockGroup;
                 }
             }
-            if (largestOpenBlockGroup != null) {
+            if (largestOpenBlockGroup != null && largestOpenBlockGroup.getArea() >= 4) {
                 permaGroupManager.createPermagroup(largestOpenBlockGroup);
                 continue;
             }
@@ -420,7 +431,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
 
 
-        java.util.List<BlockGroup> permaGroups = permaGroupManager.getPermaGroups();
+        List<BlockGroup> permaGroups = permaGroupManager.getPermaGroups();
         permaGroups.forEach(this::deriveBorderTypes);
     }
 

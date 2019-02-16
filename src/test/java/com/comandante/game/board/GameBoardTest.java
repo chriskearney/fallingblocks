@@ -17,21 +17,13 @@ import java.util.UUID;
 
 public class GameBoardTest {
 
-    private GameBoard gameBoard;
-    private GameBoardData gameBoardData;
-    private final GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
-
-
-    @Before
-    public void setUp() throws Exception {
+    @Test
+    public void TestGetLikeGroupsFromRow() throws IOException {
         TextBoard textBoard = new TextBoard(new int[10][20], new TileSetGameBlockRenderer("8bit"));
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
-        this.gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
-        gameBoard = new GameBoard(this.gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
-    }
-
-    @Test
-    public void TestGetLikeGroupsFromRow() {
+        GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
+        GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
+        GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
         gameBoard.calculatePermaGroups();
         List<GameBoard.BlockGroup> permaGroups = gameBoard.getPermaGroupManager().getPermaGroups();
         Optional<GameBoard.BlockGroup> first = permaGroups.stream().filter(blockGroup -> blockGroup.groupOfBlocks.get(0).size() == 4).findFirst();
@@ -47,18 +39,19 @@ public class GameBoardTest {
     }
 
     // Useful for getting a handle on json exports of the board, visually
-    @Test
     public void testRenderFromJson() throws IOException, InterruptedException {
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_2.json");
-        this.gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
+        GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
+        GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
         GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         JFrame jFrame = new JFrame();
         jFrame.getContentPane().add(gamePanel);
         jFrame.pack();
         jFrame.setVisible(true);
+        gameBoard.calculatePermaGroups();
         while (true) {
             Thread.sleep(1200);
         }

@@ -28,16 +28,10 @@ public class GameBoardData {
     }
 
     public Optional<GameBoardCellEntity> getByPoint(Point point) {
-        Optional<GameBoardCellEntity> first = getCellsFromBottom().stream().filter(new Predicate<GameBoardCellEntity>() {
-            @Override
-            public boolean test(GameBoardCellEntity gameBoardCellEntity) {
-                if (gameBoardCellEntity.getRectangle() != null &&
-                        gameBoardCellEntity.getRectangle().contains(point)) {
-                    return true;
-                }
-                return false;
-            }
-        }).findFirst();
+        Optional<GameBoardCellEntity> first = getCellsFromBottom().stream()
+                .filter(gameBoardCellEntity -> gameBoardCellEntity.getRectangle() != null && gameBoardCellEntity.getRectangle().contains(point))
+                .findFirst();
+
         return first;
     }
 
@@ -182,10 +176,7 @@ public class GameBoardData {
             }
         }
 
-        if (!destinationEntity.isOccupied()) {
-            return true;
-        }
-        return false;
+        return !destinationEntity.isOccupied();
     }
 
     public Optional<GameBoardCellEntity[]> getMatchingRowAboveIfExists(GameBoardCellEntity[] oneRowGroupOfMatching) {
@@ -230,7 +221,6 @@ public class GameBoardData {
         }
         return foundCoords;
     }
-
 
 
     public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {

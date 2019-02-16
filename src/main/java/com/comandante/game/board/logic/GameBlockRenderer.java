@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 public interface GameBlockRenderer {
 
-    public void render(TileSetGameBlockRenderer.BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g);
+    void render(TileSetGameBlockRenderer.BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g);
 
     java.util.List<BufferedImage> getImage(GameBlock.Type type);
 }

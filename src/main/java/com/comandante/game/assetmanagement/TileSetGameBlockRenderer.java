@@ -83,7 +83,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         GameBoardCoords currentCoords = gameBoardCellEntity.getGameBoardCoords();
         List<BufferedImage> bufferedImages = imagesNew.get(blockTypeBorder);
         if (bufferedImages == null) {
-            System.out.println("WHAT");
+            return;
         }
         BufferedImage image = bufferedImages.get(0);
         g.setColor(Color.black);
