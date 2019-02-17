@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.comandante.game.board.GameBoardUtil.subtractCoords;
+
 
 public class GameBoardData {
     public final static int BLOCK_SIZE = 32;
@@ -86,10 +88,6 @@ public class GameBoardData {
         return new Dimension(cellEntities.length * BLOCK_SIZE, cellEntities[0].length * BLOCK_SIZE);
     }
 
-    public void setBlockPairActive(Optional<GameBlockPair> blockPairActive) {
-        this.blockPairActive = blockPairActive;
-    }
-
     private void setCellEntity(GameBoardCoords gameBoardCoords, GameBoardCellEntity gameBoardCellEntity) {
         cellEntities[gameBoardCoords.i][gameBoardCoords.j] = gameBoardCellEntity;
     }
@@ -113,22 +111,48 @@ public class GameBoardData {
     public boolean isCellEntityBelowIsEmptyOrNotBorder(GameBoardCellEntity gameBoardCellEntity) {
         int i = gameBoardCellEntity.getGameBoardCoords().i;
         int j = gameBoardCellEntity.getGameBoardCoords().j;
-        // Because I will forget:
-        // I am detecting if a cellentity that contains a block that belongs to an active falling blockpair.
-        // because the following if statement means, we have reached the bottom border
-        // i will mark the blockpair as inactive / or optional.empty
         if (j == (cellEntities[0].length - 1)) {
-            if (blockPairActive.isPresent() && gameBoardCellEntity.getGameBlock().isPresent()) {
-                if (gameBoardCellEntity.getGameBlock().get().equals(blockPairActive.get().getBlockAEntity()) || gameBoardCellEntity.getGameBlock().get().equals(blockPairActive.get().getBlockBEntity())) {
-                    blockPairActive = Optional.empty();
-                }
-            }
             return false;
         }
         if (!cellEntities[i][j + 1].isOccupied()) {
             return true;
         }
         return false;
+    }
+
+    public Optional<GameBlockPair.BlockBOrientation> getBlockBOrientation() {
+        if (!blockPairActive.isPresent()) {
+            return Optional.empty();
+        }
+        GameBlockPair gameBlockPair = blockPairActive.get();
+        Optional<GameBoardCoords> blockAGameBoardCoords = getCoords(gameBlockPair.getBlockA());
+        Optional<GameBoardCoords> blockBGameBoardCoords = getCoords(gameBlockPair.getBlockB());
+        if (blockAGameBoardCoords.isPresent() && blockBGameBoardCoords.isPresent()) {
+            return GameBlockPair.BlockBOrientation.fromCoords(subtractCoords(blockAGameBoardCoords.get(), blockBGameBoardCoords.get()));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<GameBoardCellEntity> getBlockBEntity() {
+        if (!blockPairActive.isPresent()) {
+            return Optional.empty();
+        }
+        GameBlockPair gameBlockPair = blockPairActive.get();
+        if (getCoords(gameBlockPair.getBlockB()).isPresent()) {
+            return getCellEntity(getCoords(gameBlockPair.getBlockB()).get());
+        }
+        return Optional.empty();
+    }
+
+    public Optional<GameBoardCellEntity> getBlockAEntity() {
+        if (!blockPairActive.isPresent()) {
+            return Optional.empty();
+        }
+        GameBlockPair gameBlockPair = blockPairActive.get();
+        if (getCoords(gameBlockPair.getBlockA()).isPresent()) {
+            return getCellEntity(getCoords(gameBlockPair.getBlockA()).get());
+        }
+        return Optional.empty();
     }
 
     public List<GameBoardCellEntity> getCellsFromBottom(GameBoardCellEntity[][] cellEntities) {

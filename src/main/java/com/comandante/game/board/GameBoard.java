@@ -172,7 +172,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
 
-
     private boolean processAllDrops() {
         boolean wasDrop = false;
         for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
@@ -188,15 +187,14 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         return wasDrop;
     }
 
-
     public void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
         if (!gameBoardData.isBlockPairActive()) {
             return;
         }
         GameBlockPair gameBlockPair = gameBoardData.getBlockPairActive().get();
 
-        Optional<GameBoardCellEntity> blockAEntityOpt = gameBlockPair.getBlockAEntity();
-        Optional<GameBoardCellEntity> blockBEntityOpt = gameBlockPair.getBlockBEntity();
+        Optional<GameBoardCellEntity> blockAEntityOpt = gameBoardData.getBlockAEntity();
+        Optional<GameBoardCellEntity> blockBEntityOpt = gameBoardData.getBlockBEntity();
 
         if (!blockAEntityOpt.isPresent() || !blockBEntityOpt.isPresent()) {
             return;
@@ -208,7 +206,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         if (gameBoardData.isSpaceAvailable(direction, blockAEntity) &&
                 gameBoardData.isSpaceAvailable(direction, blockBEntity)) {
 
-            Optional<GameBlockPair.BlockBOrientation> blockBOrientationOptional = gameBlockPair.getBlockBOrientation();
+            Optional<GameBlockPair.BlockBOrientation> blockBOrientationOptional = gameBoardData.getBlockBOrientation();
             if (!blockBOrientationOptional.isPresent()) {
                 return;
             }
@@ -293,13 +291,13 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         GameBlockPair gameBlockPair = gameBoardData.getBlockPairActive().get();
-        Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBlockPair.getBlockBOrientation();
+        Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBoardData.getBlockBOrientation();
         if (!blockBOrientation.isPresent()) {
             System.out.print("Can not determine the orientation of block b to block a!");
             return;
         }
         GameBlockPair.BlockBOrientation orientation = blockBOrientation.get();
-        Optional<GameBoardCellEntity> blockBEntity = gameBlockPair.getBlockBEntity();
+        Optional<GameBoardCellEntity> blockBEntity = gameBoardData.getBlockBEntity();
         if (blockBEntity.isPresent()) {
             if (orientation.equals(BOTTOM_OF)) {
                 gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.UP, gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.LEFT, blockBEntity.get(), rePainter()).get(), rePainter());
