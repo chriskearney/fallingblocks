@@ -166,9 +166,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     private Runnable rePainter() {
-        return () -> {
-            repaint();
-        };
+        return this::repaint;
     }
 
 
@@ -191,7 +189,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         if (!gameBoardData.isBlockPairActive()) {
             return;
         }
-        GameBlockPair gameBlockPair = gameBoardData.getBlockPairActive().get();
 
         Optional<GameBoardCellEntity> blockAEntityOpt = gameBoardData.getBlockAEntity();
         Optional<GameBoardCellEntity> blockBEntityOpt = gameBoardData.getBlockBEntity();
