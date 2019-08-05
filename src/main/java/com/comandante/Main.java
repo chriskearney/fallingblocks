@@ -1,43 +1,54 @@
 package com.comandante;
 
+import com.comandante.game.MusicManager;
+import com.comandante.game.assetmanagement.PixelFont;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
-import com.comandante.game.board.GameBlock;
-import com.comandante.game.board.GameBlockPair;
 import com.comandante.game.board.GameBoard;
-import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardData;
-import com.comandante.game.board.logic.GameBlockPairFactory;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
+import com.comandante.game.ui.WelcomeScreenPanel;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Locale;
 
 public class Main extends JFrame {
 
 
-    public Main() throws IOException {
+    public Main() throws IOException, InvalidMidiDataException, MidiUnavailableException {
         configurateOperatingSpecificBehavior();
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
         GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
+        MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
+        musicManager.loadMusis();
+        musicManager.playMusic();
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, musicManager);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
-        setTitle("Mystery Fighter");
+        setTitle("PixelPuzzler");
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().add(gamePanel);
+
+
+//        int[][] rawBoard = new int[27][32];
+//        TextBoard welcomeScreenTextBoard = new TextBoard(rawBoard, tileSetBlockRenderProcessor);
+//        WelcomeScreenPanel welcomeScreenPanel = new WelcomeScreenPanel(welcomeScreenTextBoard, gameBoard.getGameBoardData().getPreferredSize());
+//        getContentPane().add(welcomeScreenPanel);
+
         pack();
         setVisible(true);
 
+
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InvalidMidiDataException, MidiUnavailableException {
         try {
             Main main = new Main();
         } catch (Error e) {

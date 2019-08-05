@@ -5,6 +5,7 @@ import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBoard;
 import com.comandante.game.board.GameBoardCoords;
 import com.comandante.game.board.GameBoardUtil;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +32,22 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
 
     private int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
         int destroyed = 0;
-        for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
-           if (ce.isMarkedForDestruction()) {
-               destroyed++;
-               gameBoard.getGameBoardData().getCellEntities()[ce.getGameBoardCoords().i][ce.getGameBoardCoords().j] = new GameBoardCellEntity(ce.getId(), ce.getGameBoardCoords(), null);
-           }
+        List<GameBoardCellEntity> cellEntitiesMarkedForDeletion = getCellEntitiesMarkedForDeletion(gameBoard);
+        for (GameBoardCellEntity ce: cellEntitiesMarkedForDeletion) {
+            destroyed++;
+            gameBoard.getGameBoardData().getCellEntities()[ce.getGameBoardCoords().i][ce.getGameBoardCoords().j] = new GameBoardCellEntity(ce.getId(), ce.getGameBoardCoords(), null);
         }
         return  destroyed;
+    }
+
+    private List<GameBoardCellEntity> getCellEntitiesMarkedForDeletion(GameBoard gameBoard) {
+        List<GameBoardCellEntity> gameBoardCellEntities = Lists.newArrayList();
+        for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
+            if (ce.isMarkedForDestruction()) {
+                gameBoardCellEntities.add(ce);
+            }
+        }
+        return gameBoardCellEntities;
     }
 
     private boolean processMagic(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {

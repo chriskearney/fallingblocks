@@ -1,0 +1,3254 @@
+{
+  "cellEntities": [
+    [
+      {
+        "id": 1,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 2,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 3,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 4,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 5,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 6,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 7,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 8,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 9,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 10,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 11,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 12,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 13,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 14,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 15,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 16,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 15
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 17,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 16
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 18,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 17
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 19,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 18
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 20,
+        "gameBoardCoords": {
+          "i": 0,
+          "j": 19
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 0,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 21,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 22,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 23,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 24,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 25,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 26,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 27,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 28,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 29,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 30,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 31,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 32,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 33,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 34,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 35,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 36,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 15
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 37,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 16
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 38,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 17
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 39,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 18
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "6279cd18-0587-4405-9c04-c7d78eddae4d",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 40,
+        "gameBoardCoords": {
+          "i": 1,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "38f19c19-db74-48a4-97ad-0769e581149b",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 32,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 41,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 42,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 43,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 44,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 45,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 46,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 47,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 48,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 49,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 50,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 51,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 52,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 53,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 54,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 55,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 56,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 15
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 57,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 16
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 58,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 17
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 59,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 18
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 60,
+        "gameBoardCoords": {
+          "i": 2,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "9294e345-5269-47d7-afb1-c5eedafcc558",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 64,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 61,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 62,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 63,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 64,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 65,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 66,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 67,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 68,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 69,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 70,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 71,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 72,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 73,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 74,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 75,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 14
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "27210eaf-14b1-4d28-b0c8-d85946c79d2c",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 76,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 15
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "65c44b5a-5b83-4bc5-95fd-1839f33e1035",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 77,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 16
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "fec3b206-2a55-4b66-9ec2-4fde7ad2522f",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 78,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 17
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "dc98676c-1607-4b2d-b0bf-1883fed6f1a6",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 79,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 18
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "b7106448-96c6-4caa-9a44-eca594f048ce",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 80,
+        "gameBoardCoords": {
+          "i": 3,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "555b9a29-c645-480a-81e0-b59835cb123e",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 96,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 81,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 82,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 83,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 84,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 85,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 86,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 87,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 88,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 7
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "YELLOW",
+            "identifier": "0bc16bd4-614e-40b2-a31b-252605fe2c13",
+            "resting": false
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 89,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 8
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "YELLOW",
+            "identifier": "ea732154-4f0d-4870-aaec-c97634ad1671",
+            "resting": false
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 90,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 91,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 92,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 93,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 94,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 95,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 96,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 15
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "266081e3-a909-44ba-85cd-89e5939f6b8c",
+            "resting": true,
+            "borderType": {
+              "value": "TOP_LEFT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 97,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 16
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "d5757741-8fdc-4797-8496-89dd29ccb122",
+            "resting": true,
+            "borderType": {
+              "value": "LEFT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 98,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 17
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "ced1cec1-14c1-48f0-ac68-a945b2ec6e2a",
+            "resting": true,
+            "borderType": {
+              "value": "LEFT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 99,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 18
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "459968e9-86fe-45ca-b6fd-831c383e6f63",
+            "resting": true,
+            "borderType": {
+              "value": "BOTTOM_LEFT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 100,
+        "gameBoardCoords": {
+          "i": 4,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "3679bfaf-7150-407d-9e8c-bf0cdbf9e3fb",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 128,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 101,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 102,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 103,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 104,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 105,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 106,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 107,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 108,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 109,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 110,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 111,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 112,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 113,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 114,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 115,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 116,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 15
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "4532a343-3ecd-4c40-a305-24b0740b9b52",
+            "resting": true,
+            "borderType": {
+              "value": "TOP"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 117,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 16
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "06efb46e-343d-4cd7-a806-9450864d7697",
+            "resting": true,
+            "borderType": {
+              "value": "NO_BORDER"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 118,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 17
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "0ef0d5b3-e6ab-4839-85d0-e65f33ed3cc1",
+            "resting": true,
+            "borderType": {
+              "value": "NO_BORDER"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 119,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 18
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "0fece28e-192d-4a69-96f7-ababcbb5dbcd",
+            "resting": true,
+            "borderType": {
+              "value": "BOTTOM"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 120,
+        "gameBoardCoords": {
+          "i": 5,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "685d8593-b3da-405e-a305-770d596c0806",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 160,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 121,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 122,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 123,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 124,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 125,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 126,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 127,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 128,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 129,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 130,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 131,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 132,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 133,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 134,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 135,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 14
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "RED",
+            "identifier": "1fb9429c-5817-4987-83e5-e27d6bb55a17",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 136,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 15
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "43641772-9c82-449e-a8ab-f8a8836e9fb8",
+            "resting": true,
+            "borderType": {
+              "value": "TOP_RIGHT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 137,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 16
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "890dd3b9-99ac-40fb-8372-fa389cc89f19",
+            "resting": true,
+            "borderType": {
+              "value": "RIGHT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 138,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 17
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "889eedc4-8d43-4794-8e96-64a542d18f46",
+            "resting": true,
+            "borderType": {
+              "value": "RIGHT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 139,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 18
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "BLUE",
+            "identifier": "b34282dd-b2b7-4acd-819f-8f3419749e24",
+            "resting": true,
+            "borderType": {
+              "value": "BOTTOM_RIGHT"
+            }
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 140,
+        "gameBoardCoords": {
+          "i": 6,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "1e3d637d-0532-422c-bb48-bc4eea746135",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 192,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 141,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 142,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 143,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 144,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 145,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 146,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 147,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 148,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 149,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 150,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 151,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 152,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 153,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 154,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 155,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 156,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 15
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 157,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 16
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 158,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 17
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 159,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 18
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 160,
+        "gameBoardCoords": {
+          "i": 7,
+          "j": 19
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 224,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 161,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 162,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 163,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 164,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 165,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 166,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 167,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 168,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 169,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 170,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 171,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 172,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 173,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 174,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 175,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 176,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 15
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 177,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 16
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 178,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 17
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "0a7232a1-9c20-4413-a668-2e72d5efaeaa",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 179,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 18
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "09e7cc2b-fffe-405b-bfbf-08b9ebb62cf9",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 180,
+        "gameBoardCoords": {
+          "i": 8,
+          "j": 19
+        },
+        "gameBlockOptional": {
+          "value": {
+            "type": "GREEN",
+            "identifier": "2c62e33f-9985-47ed-bb7b-f62a54dcfb2f",
+            "resting": true
+          }
+        },
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 256,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ],
+    [
+      {
+        "id": 181,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 0
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 182,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 1
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 32,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 183,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 2
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 64,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 184,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 3
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 96,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 185,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 4
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 128,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 186,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 5
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 160,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 187,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 6
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 192,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 188,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 7
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 224,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 189,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 8
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 256,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 190,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 9
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 288,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 191,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 10
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 320,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 192,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 11
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 352,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 193,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 12
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 384,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 194,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 13
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 416,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 195,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 14
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 448,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 196,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 15
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 480,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 197,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 16
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 512,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 198,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 17
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 544,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 199,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 18
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 576,
+          "width": 32,
+          "height": 32
+        }
+      },
+      {
+        "id": 200,
+        "gameBoardCoords": {
+          "i": 9,
+          "j": 19
+        },
+        "gameBlockOptional": {},
+        "markedForDestruction": false,
+        "rectangle": {
+          "x": 288,
+          "y": 608,
+          "width": 32,
+          "height": 32
+        }
+      }
+    ]
+  ],
+  "blockPairActive": {
+    "value": {
+      "blockA": {
+        "type": "YELLOW",
+        "identifier": "0bc16bd4-614e-40b2-a31b-252605fe2c13",
+        "resting": false
+      },
+      "blockB": {
+        "type": "YELLOW",
+        "identifier": "ea732154-4f0d-4870-aaec-c97634ad1671",
+        "resting": false
+      }
+    }
+  }
+}

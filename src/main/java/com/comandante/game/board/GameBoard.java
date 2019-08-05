@@ -1,5 +1,6 @@
 package com.comandante.game.board;
 
+import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
 import com.comandante.game.board.logic.BasicPermaGroupManager;
@@ -48,6 +49,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final MagicGameBlockProcessor magicGameBlockProcessor;
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
+    private final MusicManager musicManager;
     private Integer score = 0;
     private Integer largestScore = 0;
     private boolean paused = false;
@@ -58,13 +60,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                      GameBlockRenderer gameBlockRenderer,
                      GameBlockPairFactory gameBlockPairFactory,
                      MagicGameBlockProcessor magicGameBlockProcessor,
-                     TextBoard textBoard) {
+                     TextBoard textBoard,
+                     MusicManager musicManager) {
         this.gameBoardData = gameBoardData;
         this.gameBlockRenderer = gameBlockRenderer;
         this.gameBlockPairFactory = gameBlockPairFactory;
         this.magicGameBlockProcessor = magicGameBlockProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
+        this.musicManager = musicManager;
         this.timer = new Timer(400, this);
         this.timer.start();
         addKeyListener(this);
@@ -186,6 +190,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     public void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
+        if (paused) {
+            return;
+        }
+
         if (!gameBoardData.isBlockPairActive()) {
             return;
         }
@@ -255,6 +263,11 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public void togglePause() {
         paused = !paused;
         textBoard.getTextBoardContents().setPaused(paused);
+        if (paused) {
+            musicManager.pauseMusic();
+        } else {
+            musicManager.playMusic();
+        }
     }
 
 
@@ -287,7 +300,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         if (!gameBoardData.isBlockPairActive()) {
             return;
         }
-        GameBlockPair gameBlockPair = gameBoardData.getBlockPairActive().get();
         Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBoardData.getBlockBOrientation();
         if (!blockBOrientation.isPresent()) {
             System.out.print("Can not determine the orientation of block b to block a!");

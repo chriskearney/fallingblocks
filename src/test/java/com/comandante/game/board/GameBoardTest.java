@@ -22,7 +22,7 @@ public class GameBoardTest {
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
         GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
-        GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
+        GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, null);
         gameBoard.calculatePermaGroups();
         List<BlockGroup> permaGroups = gameBoard.getPermaGroupManager().getPermaGroups();
         Optional<BlockGroup> first = permaGroups.stream().filter(blockGroup -> blockGroup.groupOfBlocks.get(0).size() == 4).findFirst();
@@ -42,10 +42,10 @@ public class GameBoardTest {
     public void testRenderFromJson() throws IOException, InterruptedException {
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
-        String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_3.json");
+        String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
         GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard);
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, null);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         JFrame jFrame = new JFrame();
         jFrame.getContentPane().add(gamePanel);
