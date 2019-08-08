@@ -101,12 +101,18 @@ public class GameBoardData {
         return Optional.empty();
     }
 
-    public void insertNewBlockPair(GameBlockPair gameBlockPair) {
+    public boolean insertNewBlockPairAndDetectGameOver(GameBlockPair gameBlockPair) {
         int insertNewBlockCell = cellEntities.length / 2;
+        if (cellEntities[insertNewBlockCell][0].isOccupied()) {
+            return true;
+        }
         cellEntities[insertNewBlockCell][0] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getGameBoardCoords(), gameBlockPair.getBlockA());
         cellEntities[insertNewBlockCell][1] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getGameBoardCoords(), gameBlockPair.getBlockB());
         blockPairActive = Optional.of(gameBlockPair);
+        return false;
     }
+
+
 
     public boolean isCellEntityBelowIsEmptyOrNotBorder(GameBoardCellEntity gameBoardCellEntity) {
         int i = gameBoardCellEntity.getGameBoardCoords().i;

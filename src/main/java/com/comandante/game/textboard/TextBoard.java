@@ -25,6 +25,8 @@ public class TextBoard extends JComponent implements ActionListener {
     private GameBlockPair nextBlockPair;
     private final GameBlockRenderer gameBlockRenderer;
 
+    private boolean gameOver = false;
+
     private final int maxI;
     private final int maxJ;
 
@@ -43,8 +45,17 @@ public class TextBoard extends JComponent implements ActionListener {
         repaint();
     }
 
+    public void setGameOver() {
+        gameOver = true;
+    }
+
     public void paintComponent(Graphics g) {
-        TextCellEntity[][] asciiArray = textBoardContents.getAsciiArray();
+        TextCellEntity[][] asciiArray;
+        if (gameOver) {
+            asciiArray = textBoardContents.getGameOverArray();
+        } else {
+            asciiArray = textBoardContents.getAsciiArray();
+        }
         for (int i = 0; i < maxI; i++) {
             for (int j = 0; j < maxJ; j++) {
                 g.setColor(Color.black);

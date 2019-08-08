@@ -75,6 +75,14 @@ public class TextBoardContents {
         return builtAsciiArray;
     }
 
+    public TextBoard.TextCellEntity[][] getGameOverArray() {
+        TextBoard.TextCellEntity[][] builtAsciiArray = new TextBoard.TextCellEntity[boardMaxI][boardMaxJ];
+        builtAsciiArray[10] = createTextCellEntityArray(PixelFont.Type.COLOUR2, "GAME OVER");
+        String stringScore = String.format("%1$" + 9 + "s", Integer.toString(score));
+        builtAsciiArray[11] = createTextCellEntityArray(PixelFont.Type.COLOUR8, "Final Score: " + stringScore.replace(" ", "0"));
+        return builtAsciiArray;
+    }
+
     public String pad(String pad) {
         return " " + String.format("%1$-" + (boardMaxJ -1) + "s", pad);
     }

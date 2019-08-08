@@ -1,5 +1,6 @@
 package com.comandante.game.board;
 
+import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
@@ -8,6 +9,9 @@ import com.comandante.game.ui.GamePanel;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
 import javax.swing.JFrame;
 import java.io.IOException;
 import java.util.List;
@@ -39,13 +43,16 @@ public class GameBoardTest {
 
     // Useful for getting a handle on json exports of the board, visually
     @Test
-    public void testRenderFromJson() throws IOException, InterruptedException {
+    public void testRenderFromJson() throws IOException, InterruptedException, MidiUnavailableException {
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
-        String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
+        String gameBoardDataJson = TestUtilities.readGameBoardState("GAMEOVER_TESTCASE.json");
         GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, null);
+        Sequencer sequencer = MidiSystem.getSequencer();
+        sequencer.open();
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, new MusicManager(sequencer));
+        gameBoard.togglePause();
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         JFrame jFrame = new JFrame();
         jFrame.getContentPane().add(gamePanel);

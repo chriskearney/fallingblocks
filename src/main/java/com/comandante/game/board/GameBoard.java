@@ -106,7 +106,11 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         if (gameBoardData.allBlocksResting()) {
-            gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(this));
+            boolean isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
+            if (isGameOver) {
+                textBoard.setGameOver();
+                return;
+            }
             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
             repaint();
         }
