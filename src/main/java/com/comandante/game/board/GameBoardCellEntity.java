@@ -3,8 +3,7 @@ package com.comandante.game.board;
 import java.awt.*;
 import java.util.Optional;
 
-public class GameBoardCellEntity
-{
+public class GameBoardCellEntity {
     private final int id;
     private final GameBoardCoords gameBoardCoords;
     private final Optional<GameBlock> gameBlockOptional;
@@ -21,6 +20,12 @@ public class GameBoardCellEntity
         this.id = id;
         this.gameBoardCoords = gameBoardCoords;
         gameBlockOptional = Optional.empty();
+    }
+
+    public GameBoardCellEntity(GameBlock gameBlock) {
+        this.id = 1;
+        this.gameBoardCoords = new GameBoardCoords(-1, -1);
+        gameBlockOptional = Optional.of(gameBlock);
     }
 
     public boolean isOccupied() {

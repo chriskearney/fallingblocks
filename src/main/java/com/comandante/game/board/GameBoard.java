@@ -144,6 +144,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             case KeyEvent.VK_W:
                 rotate();
                 break;
+            case KeyEvent.VK_U:
+                gameBoardData.insertAttackBlocksAndDetectGameOver(getRandomAttackBlocks());
+                break;
             case KeyEvent.VK_P:
                 togglePause();
                 break;
@@ -156,6 +159,13 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
+    private GameBoardCellEntity[] getRandomAttackBlocks() {
+        GameBoardCellEntity[] attackBlocks = new GameBoardCellEntity[gameBoardData.getCellEntities().length];
+        for (int i = 0; i < attackBlocks.length; i++) {
+            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(GameBlock.Type.GREEN));
+        }
+        return attackBlocks;
+    }
 
     public Dimension getPreferredSize() {
         return gameBoardData.getPreferredSize();
