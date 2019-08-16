@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.comandante.game.board.GameBoard.NO_OP;
 import static com.comandante.game.board.GameBoardUtil.subtractCoords;
 
 
@@ -81,15 +82,54 @@ public class GameBoardData {
         return false;
     }
 
-    public boolean insertAttackBlocksAndDetectGameOver(GameBoardCellEntity[] attackBlocks) {
-        for (int i = 0; i < attackBlocks.length; i++) {
+    public boolean processAllDrops() {
+        boolean wasDrop = false;
+        for (GameBoardCellEntity ce : getCellsFromBottom()) {
+            if (ce.isOccupied()) {
+                if (!ce.isMarkedForDestruction() && isCellEntityBelowIsEmptyOrNotBorder(ce)) {
+                    moveCellEntityContents(GameBoardCoords.MoveDirection.DOWN, ce, NO_OP);
+                    wasDrop = true;
+                }
+            }
+        }
+        if (wasDrop) {
+            evaluateRestingStatus();
+        }
+        return wasDrop;
+    }
+
+    public void evaluateRestingStatus() {
+        for (GameBoardCellEntity ce : getCellsFromBottom()) {
+            if (ce.getGameBlock().isPresent()) {
+                boolean cellEntityBelowIsEmptyOrNotBorder = isCellEntityBelowIsEmptyOrNotBorder(ce);
+                if (cellEntityBelowIsEmptyOrNotBorder) {
+                    ce.getGameBlock().get().setResting(false);
+                }
+            }
+        }
+    }
+
+    public boolean insertAttackBlocksAndDetectGameOver(GameBoardCellEntity[][] attackBlocks) {
+        Iterator<GameBoardCellEntity[]> iteratorOfRowsFromBottom = GameBoardUtil.getIteratorOfRowsFromBottom(attackBlocks);
+        while (iteratorOfRowsFromBottom.hasNext()) {
+            GameBoardCellEntity[] next = iteratorOfRowsFromBottom.next();
+            boolean b = insertAttackBlocksAndDetectGameOver(next);
+            if (b) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean insertAttackBlocksAndDetectGameOver(GameBoardCellEntity[] attackRow) {
+        for (int i = 0; i < attackRow.length; i++) {
             GameBoardCellEntity existingGameBlockOnBoard = cellEntities[i][0];
             if (existingGameBlockOnBoard.isOccupied()) {
                 //game over
                 return true;
             } else {
                 // set the existing cell to the incoming attack block
-                cellEntities[i][0] = new GameBoardCellEntity(existingGameBlockOnBoard.getId(), existingGameBlockOnBoard.getGameBoardCoords(), attackBlocks[i].getGameBlock().get());
+                cellEntities[i][0] = new GameBoardCellEntity(existingGameBlockOnBoard.getId(), existingGameBlockOnBoard.getGameBoardCoords(), attackRow[i].getGameBlock().get());
             }
         }
         return false;

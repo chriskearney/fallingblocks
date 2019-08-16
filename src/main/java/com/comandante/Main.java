@@ -1,15 +1,14 @@
 package com.comandante;
 
 import com.comandante.game.MusicManager;
-import com.comandante.game.assetmanagement.PixelFont;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
+import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.GameBoard;
 import com.comandante.game.board.GameBoardData;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
-import com.comandante.game.ui.WelcomeScreenPanel;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -29,7 +28,13 @@ public class Main extends JFrame {
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
         musicManager.loadMusis();
         musicManager.playMusic();
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, musicManager);
+        AttackProcessor attackProcessor = new AttackProcessor() {
+            @Override
+            public void attack(GameBoard gameBoard) {
+
+            }
+        };
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         setTitle("PixelPuzzler");
         setResizable(false);

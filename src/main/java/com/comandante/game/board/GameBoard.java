@@ -3,11 +3,7 @@ package com.comandante.game.board;
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
-import com.comandante.game.board.logic.BasicPermaGroupManager;
-import com.comandante.game.board.logic.GameBlockPairFactory;
-import com.comandante.game.board.logic.GameBlockRenderer;
-import com.comandante.game.board.logic.MagicGameBlockProcessor;
-import com.comandante.game.board.logic.PermaGroupManager;
+import com.comandante.game.board.logic.*;
 import com.comandante.game.textboard.TextBoard;
 import com.google.common.collect.Lists;
 
@@ -47,6 +43,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final GameBlockRenderer gameBlockRenderer;
     private final GameBlockPairFactory gameBlockPairFactory;
     private final MagicGameBlockProcessor magicGameBlockProcessor;
+    private final AttackProcessor attackProcessor;
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
     private final MusicManager musicManager;
@@ -54,11 +51,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private Integer largestScore = 0;
     private boolean paused = false;
 
-    private static final Runnable NO_OP = () -> { };
+    public static final Runnable NO_OP = () -> { };
 
     public GameBoard(GameBoardData gameBoardData,
                      GameBlockRenderer gameBlockRenderer,
                      GameBlockPairFactory gameBlockPairFactory,
+                     AttackProcessor attackProcessor,
                      MagicGameBlockProcessor magicGameBlockProcessor,
                      TextBoard textBoard,
                      MusicManager musicManager) {
@@ -66,6 +64,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.gameBlockRenderer = gameBlockRenderer;
         this.gameBlockPairFactory = gameBlockPairFactory;
         this.magicGameBlockProcessor = magicGameBlockProcessor;
+        this.attackProcessor = attackProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
@@ -105,6 +104,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         if (paused) {
             return;
         }
+        attackProcessor.attack(this);
         if (gameBoardData.allBlocksResting()) {
             boolean isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
             if (isGameOver) {
@@ -113,18 +113,20 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             }
             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
             repaint();
+            return;
         }
-        processAllDrops();
+        gameBoardData.processAllDrops();
         if (gameBoardData.allBlocksResting()) {
             calculatePermaGroups();
             boolean wasThereMagic;
             do {
                 wasThereMagic = magicGameBlockProcessor.process(this);
                 if (wasThereMagic) {
-                    processAllDrops();
+                    gameBoardData.processAllDrops();
                 }
             } while (wasThereMagic);
         }
+        gameBoardData.evaluateRestingStatus();
         repaint();
     }
 
@@ -187,21 +189,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         return this::repaint;
     }
 
-
-    private boolean processAllDrops() {
-        boolean wasDrop = false;
-        for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
-            if (ce.isOccupied()) {
-                if (!ce.isMarkedForDestruction() && gameBoardData.isCellEntityBelowIsEmptyOrNotBorder(ce)) {
-                    gameBoardData.moveCellEntityContents(MoveDirection.DOWN, ce, NO_OP);
-                    wasDrop = true;
-                } else {
-                    ce.getGameBlock().get().setResting(true);
-                }
-            }
-        }
-        return wasDrop;
-    }
 
     public void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
         if (paused) {
