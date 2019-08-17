@@ -47,11 +47,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
     private final MusicManager musicManager;
+
+    private final InvocationRound<Void> processAllDropsInvocationRound;
+
     private Integer score = 0;
     private Integer largestScore = 0;
     private boolean paused = false;
+    private boolean isGameOver = false;
 
-    public static final Runnable NO_OP = () -> { };
+    public static final Runnable NO_OP = () -> {
+    };
 
     public GameBoard(GameBoardData gameBoardData,
                      GameBlockRenderer gameBlockRenderer,
@@ -68,11 +73,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
-        this.timer = new Timer(400, this);
-        this.timer.start();
+        this.processAllDropsInvocationRound = new InvocationRound<>(5, new InvocationRound.Invoker<Void>() {
+            @Override
+            public Optional<Void> invoke() {
+                gameBoardData.processAllDrops();
+                gameBoardData.evaluateRestingStatus();
+                return null;
+            }
+        });
+        this.timer = new Timer(50, this);
         addKeyListener(this);
         setOpaque(false);
         alterScore(0);
+        this.timer.start();
     }
 
     public void addNotify() {
@@ -101,33 +114,40 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (paused) {
+
+        if (paused || isGameOver) {
             return;
         }
-        attackProcessor.attack(this);
         if (gameBoardData.allBlocksResting()) {
-            boolean isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
+            calculatePermaGroups();
+            loopAndProcessAllMagic();
+            isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
+            textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
             if (isGameOver) {
                 textBoard.setGameOver();
                 return;
             }
-            textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
-            repaint();
-            return;
+        } else {
+            processAllDropsInvocationRound.invoke();
         }
-        gameBoardData.processAllDrops();
-        if (gameBoardData.allBlocksResting()) {
-            calculatePermaGroups();
-            boolean wasThereMagic;
-            do {
-                wasThereMagic = magicGameBlockProcessor.process(this);
-                if (wasThereMagic) {
-                    gameBoardData.processAllDrops();
-                }
-            } while (wasThereMagic);
-        }
-        gameBoardData.evaluateRestingStatus();
         repaint();
+    }
+
+    private void loopAndProcessAllMagic() {
+        boolean wasThereMagic;
+        do {
+            wasThereMagic = magicGameBlockProcessor.process(this);
+            gameBoardData.processAllDrops();
+            gameBoardData.evaluateRestingStatus();
+        } while (wasThereMagic);
+    }
+
+    private void loopAndProcessAllDrops() {
+        boolean wasThereDrops;
+        do {
+            wasThereDrops = gameBoardData.processAllDrops();
+            gameBoardData.evaluateRestingStatus();
+        } while (wasThereDrops);
     }
 
     @Override
@@ -191,6 +211,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
 
     public void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
+
         if (paused) {
             return;
         }
@@ -289,7 +310,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 } else {
                     nextEntityToCheck = cellEntityIfOccupiedSameType.get();
                 }
-                if (group.size() > 1){
+                if (group.size() > 1) {
                     listOfGroups.add(Lists.newArrayList(group));
                 }
             } while (isLikeNeighbor);
@@ -326,9 +347,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     private Map<GameBlock.Type, List<BlockGroup>> buildGroupsByType() {
         List<BlockGroup> matchingGroups = Lists.newArrayList();
-        Iterator<GameBoardCellEntity[]> iteratorOfRowsFromBottom = gameBoardData.getIteratorOfRowsFromBottom();
-        while (iteratorOfRowsFromBottom.hasNext()) {
-            GameBoardCellEntity[] next = iteratorOfRowsFromBottom.next();
+        List<GameBoardCellEntity[]> lisOfRowsFromBottom = gameBoardData.getListOfRowsFromBottom();
+        for (GameBoardCellEntity[] next: lisOfRowsFromBottom) {
             List<List<GameBoardCellEntity>> groupsOfLikeBlocksFromRow = getGroupsOfLikeBlocksFromRow(next);
             for (List<GameBoardCellEntity> rowGroup : groupsOfLikeBlocksFromRow) {
                 BlockGroup blockGroup = new BlockGroup();
