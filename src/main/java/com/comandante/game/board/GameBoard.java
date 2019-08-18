@@ -124,7 +124,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
             if (isGameOver) {
-                textBoard.setGameOver();
+                textBoard.setGameOver(true);
                 return;
             }
         } else {
@@ -166,6 +166,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             case KeyEvent.VK_W:
                 rotate();
                 break;
+            case KeyEvent.VK_R:
+                resetGame();
+                break;
             case KeyEvent.VK_U:
                 gameBoardData.insertAttackBlocksAndDetectGameOver(getRandomAttackBlocks());
                 break;
@@ -181,10 +184,21 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
+    private void resetGame() {
+        if (!isGameOver) {
+            return;
+        }
+        gameBoardData.resetBoard();
+        repaint();
+        isGameOver = false;
+        textBoard.reset();
+    }
+
     private GameBoardCellEntity[] getRandomAttackBlocks() {
         GameBoardCellEntity[] attackBlocks = new GameBoardCellEntity[gameBoardData.getCellEntities().length];
+        GameBlock gameBlock = GameBlock.randomNormalBlock();
         for (int i = 0; i < attackBlocks.length; i++) {
-            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(GameBlock.Type.GREEN));
+            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(gameBlock.getType()));
         }
         return attackBlocks;
     }
@@ -212,7 +226,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     public void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
 
-        if (paused) {
+        if (paused || isGameOver) {
             return;
         }
 
@@ -319,9 +333,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     public void rotate() {
+
+        if (paused || isGameOver) {
+            return;
+        }
+
         if (!gameBoardData.isBlockPairActive()) {
             return;
         }
+
         Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBoardData.getBlockBOrientation();
         if (!blockBOrientation.isPresent()) {
             System.out.print("Can not determine the orientation of block b to block a!");
@@ -408,7 +428,23 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
 
         List<BlockGroup> permaGroups = permaGroupManager.getPermaGroups();
+        resetOrphanedBlocksBorders();
+
         permaGroups.forEach(this::deriveBorderTypes);
+    }
+
+    private void resetOrphanedBlocksBorders() {
+        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+        for (GameBoardCellEntity cellEntity: cellsFromBottom) {
+            if (!cellEntity.isOccupied()) {
+                continue;
+            }
+
+            GameBlock gameBlock = cellEntity.getGameBlock().get();
+            if (gameBlock.getBorderType() != null && !permaGroupManager.getPermaGroupForBlock(gameBlock).isPresent()) {
+                gameBlock.setBorderType(null);
+            }
+        }
     }
 
 

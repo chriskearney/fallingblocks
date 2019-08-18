@@ -19,11 +19,20 @@ import static com.comandante.game.board.GameBoardUtil.subtractCoords;
 
 public class GameBoardData {
     public final static int BLOCK_SIZE = 32;
-    private final GameBoardCellEntity[][] cellEntities;
+    private GameBoardCellEntity[][] cellEntities;
     private Optional<GameBlockPair> blockPairActive = Optional.empty();
 
+    private int initLengthX;
+    private int initLengthY;
+
     public GameBoardData(int[][] init) {
-        this.cellEntities = new GameBoardCellEntity[init.length][init[0].length];
+        this.initLengthX = init.length;
+        this.initLengthY = init[0].length;
+        resetBoard();
+    }
+
+    public void resetBoard() {
+        cellEntities = new GameBoardCellEntity[initLengthX][initLengthY];
         int invocationNumber = 0;
         for (int i = 0; i < cellEntities.length; i++) {
             for (int j = 0; j < cellEntities[0].length; j++) {

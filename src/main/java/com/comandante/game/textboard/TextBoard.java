@@ -21,7 +21,7 @@ public class TextBoard extends JComponent implements ActionListener {
     private final int FONT_SIZE_J = (int) (12 * scaleTime);
     private final PixelFontSpriteManager pixelFontSpriteManager;
     private final Timer timer;
-    private final TextBoardContents textBoardContents;
+    private TextBoardContents textBoardContents;
     private GameBlockPair nextBlockPair;
     private final GameBlockRenderer gameBlockRenderer;
 
@@ -30,13 +30,16 @@ public class TextBoard extends JComponent implements ActionListener {
     private final int maxI;
     private final int maxJ;
 
+    private final int[][] a;
+
     public TextBoard(int[][] a, GameBlockRenderer gameBlockRenderer) throws IOException {
         maxI = a.length;
         maxJ = a[0].length;
+        this.a = a;
         this.textBoardContents = new TextBoardContents(a);
         this.pixelFontSpriteManager = new PixelFontSpriteManager();
         this.gameBlockRenderer = gameBlockRenderer;
-        timer = new Timer(500, this);
+        timer = new Timer(10, this);
         timer.start();
     }
 
@@ -45,13 +48,14 @@ public class TextBoard extends JComponent implements ActionListener {
         repaint();
     }
 
-    public void setGameOver() {
-        gameOver = true;
+    public void setGameOver(boolean state) {
+        gameOver = state;
     }
 
     public void paintComponent(Graphics g) {
         TextCellEntity[][] asciiArray;
         if (gameOver) {
+            nextBlockPair = null;
             asciiArray = textBoardContents.getGameOverArray();
         } else {
             asciiArray = textBoardContents.getAsciiArray();
@@ -105,4 +109,8 @@ public class TextBoard extends JComponent implements ActionListener {
         return textBoardContents;
     }
 
+    public void reset() {
+        this.gameOver = false;
+        this.textBoardContents = new TextBoardContents(a);
+    }
 }

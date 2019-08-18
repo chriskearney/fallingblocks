@@ -1,6 +1,7 @@
 package com.comandante.game.textboard;
 
 import com.comandante.game.assetmanagement.PixelFont;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,8 @@ public class TextBoardContents {
         builtAsciiArray[10] = createTextCellEntityArray(PixelFont.Type.COLOUR2, "GAME OVER");
         String stringScore = String.format("%1$" + 9 + "s", Integer.toString(score));
         builtAsciiArray[11] = createTextCellEntityArray(PixelFont.Type.COLOUR8, "Final Score: " + stringScore.replace(" ", "0"));
+        builtAsciiArray[13] = createTextCellEntityArray(PixelFont.Type.COLOUR3, "Press R to restart.");
+
         return builtAsciiArray;
     }
 
