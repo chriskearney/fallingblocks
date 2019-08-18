@@ -41,7 +41,6 @@ public class StandardGameBlockPairFactory implements GameBlockPairFactory {
             blockB = GameBlock.randomMagicBlock();
         }
 
-
         return new GameBlockPair(blockA, blockB);
         //return new GameBlockPair(new GameBlock(GameBlock.Type.GREEN), new GameBlock(GameBlock.Type.GREEN), gameBoard);
     }
