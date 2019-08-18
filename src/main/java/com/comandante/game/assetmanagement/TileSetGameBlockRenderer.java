@@ -65,8 +65,16 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN, borderType), Collections.singletonList(greenTileSet.get(borderType)));
             }
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_GREEN), greenTileSet.getMagicBlockFrames());
+        }
 
-
+        {
+            BufferedImage diamondTileSetImage = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/DIAMOND_TILESET.png"));
+            PixelArtTileset diamondTileSet = new PixelArtTileset(diamondTileSetImage);
+            imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), diamondTileSet.getDiamondBlockFrames());
+            GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+            for (GameBlock.BorderType borderType: borderTypes) {
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND, borderType), Collections.singletonList(diamondTileSet.get(borderType)));
+            }
         }
 
         BufferedImage emptyBlackImage = new BufferedImage(8, 8, 1);

@@ -47,6 +47,10 @@ public class GameBlock {
         return new GameBlock(randomType);
     }
 
+    public static GameBlock diamondBlock() {
+        return new GameBlock(Type.DIAMOND);
+    }
+
     public void setResting(boolean resting) {
         this.resting = resting;
     }
@@ -91,6 +95,7 @@ public class GameBlock {
         GREEN,
         RED,
         YELLOW,
+        DIAMOND,
         MAGIC_BLUE(Optional.of(BLUE)),
         MAGIC_GREEN(Optional.of(GREEN)),
         MAGIC_RED(Optional.of(RED)),
@@ -118,6 +123,7 @@ public class GameBlock {
         public static Type[] getNormalRandomPool() {
             ArrayList<Type> normalBlockTypes = Arrays.asList(values()).stream().filter(type -> !type.isMagic()).collect(Collectors.toCollection(ArrayList::new));
             normalBlockTypes.remove(EMPTY);
+            normalBlockTypes.remove(DIAMOND);
             return normalBlockTypes.toArray(new Type[0]);
         }
 

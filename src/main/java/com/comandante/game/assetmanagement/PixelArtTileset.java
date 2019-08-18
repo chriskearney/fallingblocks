@@ -87,7 +87,6 @@ public class PixelArtTileset implements TileSet {
         return spriteSheet.getSubimage(8, 8, 8, 8);
     }
 
-
     private BufferedImage getTopRightBottomBordered() {
         return spriteSheet.getSubimage(32, 0, 8, 8);
     }

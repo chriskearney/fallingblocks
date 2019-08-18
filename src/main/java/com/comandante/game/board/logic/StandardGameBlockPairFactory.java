@@ -32,6 +32,10 @@ public class StandardGameBlockPairFactory implements GameBlockPairFactory {
             blockA = GameBlock.randomMagicBlock();
         }
 
+        if (Math.random() < .07) {
+            blockA = GameBlock.diamondBlock();
+        }
+
         GameBlock blockB = GameBlock.randomNormalBlock();
         if (Math.random() < 0.2) {
             blockB = GameBlock.randomMagicBlock();
