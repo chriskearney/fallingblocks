@@ -5,11 +5,20 @@ import java.util.Optional;
 public class InvocationRound<T> {
 
     private final Invoker<T> invoker;
+    private boolean useLastReturn = false;
+
+    private T lastReturn;
 
     private int numberOfInvocationsPerRound;
     private int currentRoundInvocationCount = 0;
 
     public InvocationRound(int numberOfInvocationsPerRound, Invoker<T> invoker) {
+        this.invoker = invoker;
+        this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
+    }
+
+    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T> invoker, boolean useLastReturn) {
+        this.useLastReturn = useLastReturn;
         this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
         this.invoker = invoker;
     }
@@ -20,9 +29,13 @@ public class InvocationRound<T> {
 
     public Optional<T> invoke() {
         if (processRoundStatus()) {
-            return invoker.invoke();
+            Optional<T> invoke = invoker.invoke();
+            if (invoke.isPresent() && useLastReturn) {
+                lastReturn = invoke.get();
+            }
+            return invoke;
         }
-        return Optional.empty();
+        return Optional.ofNullable(lastReturn);
     }
 
     private boolean processRoundStatus() {

@@ -4,6 +4,7 @@ import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardCoords;
 import com.comandante.game.board.logic.GameBlockRenderer;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,7 +27,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             PixelArtTileset blueTileSet = new PixelArtTileset(blueTileSetImg);
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE), blueTileSet.getStandardBlockFrames());
             GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType: borderTypes) {
+            for (GameBlock.BorderType borderType : borderTypes) {
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE, borderType), Collections.singletonList(blueTileSet.get(borderType)));
             }
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_BLUE), blueTileSet.getMagicBlockFrames());
@@ -38,7 +39,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             PixelArtTileset redTileSet = new PixelArtTileset(redTileSetImg);
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED), redTileSet.getStandardBlockFrames());
             GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType: borderTypes) {
+            for (GameBlock.BorderType borderType : borderTypes) {
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED, borderType), Collections.singletonList(redTileSet.get(borderType)));
             }
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_RED), redTileSet.getMagicBlockFrames());
@@ -50,7 +51,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             PixelArtTileset yellowTileSet = new PixelArtTileset(yellowTileSetImg);
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW), yellowTileSet.getStandardBlockFrames());
             GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType: borderTypes) {
+            for (GameBlock.BorderType borderType : borderTypes) {
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW, borderType), Collections.singletonList(yellowTileSet.get(borderType)));
             }
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_YELLOW), yellowTileSet.getMagicBlockFrames());
@@ -61,7 +62,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             PixelArtTileset greenTileSet = new PixelArtTileset(greenTileSetImg);
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN), greenTileSet.getStandardBlockFrames());
             GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType: borderTypes) {
+            for (GameBlock.BorderType borderType : borderTypes) {
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN, borderType), Collections.singletonList(greenTileSet.get(borderType)));
             }
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_GREEN), greenTileSet.getMagicBlockFrames());
@@ -72,7 +73,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             PixelArtTileset diamondTileSet = new PixelArtTileset(diamondTileSetImage);
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), diamondTileSet.getDiamondBlockFrames());
             GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType: borderTypes) {
+            for (GameBlock.BorderType borderType : borderTypes) {
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND, borderType), Collections.singletonList(diamondTileSet.get(borderType)));
             }
         }
@@ -82,25 +83,36 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, 8, 8);
         g2d.dispose();
-        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY) , Collections.singletonList(emptyBlackImage));
+        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(emptyBlackImage));
 
     }
 
     @Override
     public void render(BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g) {
         GameBoardCoords currentCoords = gameBoardCellEntity.getGameBoardCoords();
-        List<BufferedImage> bufferedImages = imagesNew.get(blockTypeBorder);
-        if (bufferedImages == null) {
+
+        Optional<BufferedImage> imageToRender = Optional.empty();
+        if (gameBoardCellEntity.getGameBlock().isPresent()) {
+            imageToRender = gameBoardCellEntity.getGameBlock().get().getImageToRender();
+        }
+        if (!imageToRender.isPresent()) {
+            List<BufferedImage> bufferedImages = imagesNew.get(blockTypeBorder);
+            if (bufferedImages == null) {
+                return;
+            }
+            imageToRender = Optional.ofNullable(bufferedImages.get(0));
+        }
+
+        if (!imageToRender.isPresent()) {
             return;
         }
-        BufferedImage image = bufferedImages.get(0);
+
         g.setColor(Color.black);
         g.fillRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-        g.drawImage(image, currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+        g.drawImage(imageToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
         gameBoardCellEntity.setRectangle(new Rectangle(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE));
         //https://stackoverflow.com/questions/34461186/how-to-detect-mouse-hover-on-an-image-drawn-from-paintcomponents-drawimage-m
     }
-
 
 
     @Override

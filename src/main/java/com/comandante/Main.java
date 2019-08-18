@@ -38,7 +38,7 @@ public class Main extends JFrame {
             }
         };
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
 

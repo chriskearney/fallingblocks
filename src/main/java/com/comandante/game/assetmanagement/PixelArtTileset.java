@@ -1,6 +1,7 @@
 package com.comandante.game.assetmanagement;
 
 import com.comandante.game.board.GameBlock;
+import com.google.common.collect.Lists;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -22,7 +23,11 @@ public class PixelArtTileset implements TileSet {
 
     @Override
     public List<BufferedImage> getMagicBlockFrames() {
-        return Collections.singletonList(spriteSheet.getSubimage(32, 16, 8, 8));
+        BufferedImage frame1 = spriteSheet.getSubimage(24, 8, 8, 8);
+        BufferedImage frame2 = spriteSheet.getSubimage(32, 8, 8, 8);
+        BufferedImage frame3 = spriteSheet.getSubimage(24, 16, 8, 8);
+        BufferedImage frame4 = spriteSheet.getSubimage(32, 16, 8, 8);
+        return Lists.newArrayList(frame1, frame2, frame3, frame4);
     }
 
     @Override

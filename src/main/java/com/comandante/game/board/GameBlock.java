@@ -1,7 +1,11 @@
 package com.comandante.game.board;
 
+import com.comandante.game.assetmanagement.RenderInvoker;
+import com.comandante.game.assetmanagement.TileSet;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
+import com.comandante.game.board.logic.GameBlockRenderer;
 
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,15 +22,24 @@ public class GameBlock {
     private final UUID identifier;
     private boolean resting = false;
     private Optional<BorderType> borderType;
+    private final Optional<InvocationRound<BufferedImage>> invocationRound;
+
+    public GameBlock(Type type, InvocationRound<BufferedImage> invocationRenderRounds) {
+        this.type = type;
+        this.identifier = UUID.randomUUID();
+        this.invocationRound = Optional.of(invocationRenderRounds);
+    }
 
     public GameBlock(Type type) {
         this.type = type;
         this.identifier = UUID.randomUUID();
+        this.invocationRound = Optional.empty();
     }
 
     public GameBlock(Type type, UUID uuid) {
         this.type = type;
         this.identifier = uuid;
+        this.invocationRound = Optional.empty();
     }
 
     public Type getType() {
@@ -42,9 +55,10 @@ public class GameBlock {
         return new GameBlock(randomType);
     }
 
-    public static GameBlock randomMagicBlock() {
+    public static GameBlock randomMagicBlock(GameBlockRenderer gameBlockRenderer) {
         Type randomType = RANDOM_VALUES.get(RANDOM.nextInt(RANDOM_VALUE_SIZE));
-        return new GameBlock(randomType);
+        InvocationRound<BufferedImage> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(randomType)), true);
+        return new GameBlock(randomType, bufferedImageInvocationRound);
     }
 
     public static GameBlock diamondBlock() {
@@ -72,6 +86,13 @@ public class GameBlock {
             return new TileSetGameBlockRenderer.BlockTypeBorder(getType());
         }
         return new TileSetGameBlockRenderer.BlockTypeBorder(getType(), borderType.orElse(BorderType.NO_BORDER));
+    }
+
+    public Optional<BufferedImage> getImageToRender() {
+        if (!invocationRound.isPresent()) {
+            return Optional.empty();
+        }
+        return invocationRound.get().invoke();
     }
 
     public enum BorderType {
