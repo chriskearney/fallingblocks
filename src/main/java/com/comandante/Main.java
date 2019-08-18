@@ -42,7 +42,7 @@ public class Main extends JFrame {
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
 
-        Application application = Application.getApplication();
+//        Application application = Application.getApplication();
 //        int[][] rawBoard = new int[27][32];
 //        TextBoard welcomeScreenTextBoard = new TextBoard(rawBoard, tileSetBlockRenderProcessor);
 //        WelcomeScreenPanel welcomeScreenPanel = new WelcomeScreenPanel(welcomeScreenTextBoard, gameBoard.getGameBoardData().getPreferredSize());
