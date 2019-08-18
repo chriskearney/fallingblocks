@@ -120,6 +120,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
             if (isGameOver) {
+                try {
+                    musicManager.loadGameOver();
+                    musicManager.playMusic();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 textBoard.setGameOver(true);
                 return;
             }
@@ -188,9 +194,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         gameBoardData.resetBoard();
-        repaint();
         isGameOver = false;
         textBoard.reset();
+        try {
+            musicManager.loadMusic();
+            musicManager.playMusic();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        repaint();
     }
 
     private GameBoardCellEntity[] getRandomAttackBlocks() {

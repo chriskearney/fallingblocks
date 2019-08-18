@@ -27,7 +27,7 @@ public class Main extends JFrame {
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
         GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
-        musicManager.loadMusis();
+        musicManager.loadMusic();
         musicManager.playMusic();
         setTitle("PixelPuzzler");
         setResizable(false);

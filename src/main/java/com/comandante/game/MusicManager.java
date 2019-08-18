@@ -18,22 +18,24 @@ public class MusicManager {
         this.sequencer = sequencer;
     }
 
-    public void loadMusis() throws MidiUnavailableException, IOException, InvalidMidiDataException {
+    public void loadMusic() throws MidiUnavailableException, IOException, InvalidMidiDataException {
 
         // Obtains the default Sequencer connected to a default device.
 //        Sequencer sequencer = MidiSystem.getSequencer();
 
         // Opens the device, indicating that it should now acquire any
         // system resources it requires and become operational.
+        sequencer.close();
         sequencer.open();
 
-        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/NowOrNever.mid")));
+        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/KingOfTheDesert.mid")));
 
         // Sets the current sequence on which the sequencer operates.
         // The stream must point to MIDI file data.
         sequencer.setSequence(is);
 
         // Starts playback of the MIDI data in the currently loaded sequence.
+        sequencer.setLoopCount(Integer.MAX_VALUE);
     }
 
     public void pauseMusic() {
@@ -42,5 +44,13 @@ public class MusicManager {
 
     public void playMusic() {
         sequencer.start();
+    }
+
+    public void loadGameOver() throws MidiUnavailableException, IOException, InvalidMidiDataException {
+        sequencer.close();
+        sequencer.open();
+        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/Nevermore.mid")));
+        sequencer.setSequence(is);
+        sequencer.setLoopCount(0);
     }
 }
