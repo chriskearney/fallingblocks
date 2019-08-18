@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.comadante</groupId>
-    <artifactId>fallingblocks</artifactId>
+    <artifactId>pixelpuzzler</artifactId>
     <version>1.0-SNAPSHOT</version>
+
 
     <build>
         <plugins>
@@ -15,8 +16,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -30,11 +31,33 @@
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.comandante.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <configuration>
+                    <mainClass>com.comandante.Main</mainClass>
+                    <!--<dictionaryFile>YourCustomInfo.plist</dictionaryFile>-->
+                    <iconFile>/packaging/PixelPuzzler.icns</iconFile>
+                    <jrePath>src/main/resources/packaging/small_jre-11.0.4</jrePath>
+<!--                    <jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk</jrePath>-->
+                    <generateDiskImageFile>true</generateDiskImageFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -63,6 +86,11 @@
             <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.apple</groupId>
+            <artifactId>AppleJavaExtensions</artifactId>
+            <version>1.4</version>
         </dependency>
     </dependencies>
 

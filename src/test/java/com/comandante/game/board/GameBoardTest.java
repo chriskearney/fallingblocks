@@ -8,6 +8,7 @@ import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.sound.midi.MidiSystem;
@@ -50,6 +51,7 @@ public class GameBoardTest {
 
     // Useful for getting a handle on json exports of the board, visually
     @Test
+    @Ignore
     public void testRenderFromJson() throws IOException, InterruptedException, MidiUnavailableException {
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);

@@ -1,5 +1,6 @@
 package com.comandante;
 
+import com.apple.eawt.Application;
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.logic.AttackProcessor;
@@ -28,30 +29,29 @@ public class Main extends JFrame {
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
         musicManager.loadMusis();
         musicManager.playMusic();
+        setTitle("PixelPuzzler");
+        setResizable(false);
         AttackProcessor attackProcessor = new AttackProcessor() {
             @Override
             public void attack(GameBoard gameBoard) {
 
             }
         };
-
-        setTitle("PixelPuzzler");
-        setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
 
-
+        Application application = Application.getApplication();
 //        int[][] rawBoard = new int[27][32];
 //        TextBoard welcomeScreenTextBoard = new TextBoard(rawBoard, tileSetBlockRenderProcessor);
 //        WelcomeScreenPanel welcomeScreenPanel = new WelcomeScreenPanel(welcomeScreenTextBoard, gameBoard.getGameBoardData().getPreferredSize());
 //        getContentPane().add(welcomeScreenPanel);
 
+        // center the frame
+        setLocationRelativeTo(null);
         pack();
         setVisible(true);
-
-
     }
 
     public static void main(String[] args) throws IOException, InvalidMidiDataException, MidiUnavailableException {
@@ -80,6 +80,13 @@ public class Main extends JFrame {
                             }
                         }
                     });
+                    System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+                    System.setProperty("apple.laf.useScreenMenuBar", "true");
+                    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "PixelFighter");
+
+                    // create an instance of the Mac Application class, so i can handle the
+                    // mac quit event with the Mac ApplicationAdapter
+
                     break;
                 case Linux:
                     break;

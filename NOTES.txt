@@ -1,0 +1,7 @@
+shrinking the jre on the mac
+http://www.balthisar.com/blog/bundle_the_jre/
+
+./jlink --add-modules java.base,java.compiler,java.desktop,java.sql,jdk.unsupported \\n--output ~/Desktop/small_jre \\n--no-header-files \\n\t--no-man-pages \\n\t--strip-debug \\n\t--compress=2
+
+
+./jdeps --print-module-deps ~/Documents/source/fallingblocks/target/pixelpuzzler-1.0-SNAPSHOT-shaded.jar
