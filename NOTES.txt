@@ -5,3 +5,6 @@ http://www.balthisar.com/blog/bundle_the_jre/
 
 
 ./jdeps --print-module-deps ~/Documents/source/fallingblocks/target/pixelpuzzler-1.0-SNAPSHOT-shaded.jar
+
+
+mvn package appbundle:bundle ; rm -rf ~/Desktop/pixelpuzzler.app; cp -Rp target/pixelpuzzler-1.0-SNAPSHOT/pixelpuzzler.app ~/Desktop
