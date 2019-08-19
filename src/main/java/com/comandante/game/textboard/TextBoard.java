@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 
@@ -24,6 +26,8 @@ public class TextBoard extends JComponent implements ActionListener {
     private TextBoardContents textBoardContents;
     private GameBlockPair nextBlockPair;
     private final GameBlockRenderer gameBlockRenderer;
+
+    private TextCellEntity[][] lastArray;
 
     private boolean gameOver = false;
 
@@ -45,6 +49,19 @@ public class TextBoard extends JComponent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TextCellEntity[][] asciiArray;
+        if (gameOver) {
+            nextBlockPair = null;
+            asciiArray = textBoardContents.getGameOverArray();
+        } else {
+            asciiArray = textBoardContents.getAsciiArray();
+        }
+
+        if (Arrays.deepEquals(lastArray, asciiArray)) {
+            lastArray = asciiArray;
+            return;
+        }
+        lastArray = asciiArray;
         repaint();
     }
 
@@ -53,23 +70,18 @@ public class TextBoard extends JComponent implements ActionListener {
     }
 
     public void paintComponent(Graphics g) {
-        TextCellEntity[][] asciiArray;
-        if (gameOver) {
-            nextBlockPair = null;
-            asciiArray = textBoardContents.getGameOverArray();
-        } else {
-            asciiArray = textBoardContents.getAsciiArray();
-        }
+
+
         for (int i = 0; i < maxI; i++) {
             for (int j = 0; j < maxJ; j++) {
                 g.setColor(Color.black);
                 g.fillRect((j * FONT_SIZE_I), i * FONT_SIZE_J, FONT_SIZE_I, FONT_SIZE_J);
-                TextCellEntity textCellEntity = asciiArray[i][j];
+                TextCellEntity textCellEntity = lastArray[i][j];
                 if (textCellEntity == null) {
-                   textCellEntity = new TextCellEntity(PixelFont.Type.COLOUR8, 32);
+                    textCellEntity = new TextCellEntity(PixelFont.Type.COLOUR8, 32);
                 }
                 BufferedImage image = pixelFontSpriteManager.get(textCellEntity.getType(), textCellEntity.getAsciiCode());
-                g.drawImage(image, (j * FONT_SIZE_I),i * FONT_SIZE_J, FONT_SIZE_I, FONT_SIZE_J, null);
+                g.drawImage(image, (j * FONT_SIZE_I), i * FONT_SIZE_J, FONT_SIZE_I, FONT_SIZE_J, null);
 
                 if (nextBlockPair != null) {
                     BufferedImage blockAImage = gameBlockRenderer.getImage(nextBlockPair.getBlockA().getType()).get(0);
@@ -102,6 +114,20 @@ public class TextBoard extends JComponent implements ActionListener {
 
         public PixelFont.Type getType() {
             return type;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            TextCellEntity that = (TextCellEntity) o;
+            return asciiCode == that.asciiCode &&
+                    type == that.type;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type, asciiCode);
         }
     }
 
