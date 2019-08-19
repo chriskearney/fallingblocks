@@ -43,7 +43,7 @@ public class TextBoard extends JComponent implements ActionListener {
         this.textBoardContents = new TextBoardContents(a);
         this.pixelFontSpriteManager = new PixelFontSpriteManager();
         this.gameBlockRenderer = gameBlockRenderer;
-        timer = new Timer(10, this);
+        timer = new Timer(400, this);
         timer.start();
     }
 
