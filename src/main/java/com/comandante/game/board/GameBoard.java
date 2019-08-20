@@ -111,7 +111,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-
+        textBoard.actionPerformed(actionEvent);
         if (paused || isGameOver) {
             return;
         }
@@ -133,7 +133,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             processAllDropsInvocationRound.invoke();
         }
         calculatePermaGroups();
-        textBoard.actionPerformed(actionEvent);
         repaint();
     }
 
@@ -161,15 +160,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         int keyCode = keyEvent.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_S:
+            case KeyEvent.VK_DOWN:
                 moveActiveBlockPair(MoveDirection.DOWN);
                 break;
             case KeyEvent.VK_A:
+            case KeyEvent.VK_LEFT:
                 moveActiveBlockPair(MoveDirection.LEFT);
                 break;
             case KeyEvent.VK_D:
+            case KeyEvent.VK_RIGHT:
                 moveActiveBlockPair(MoveDirection.RIGHT);
                 break;
             case KeyEvent.VK_W:
+            case KeyEvent.VK_UP:
                 rotate();
                 break;
             case KeyEvent.VK_R:
