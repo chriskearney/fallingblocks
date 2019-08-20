@@ -61,8 +61,10 @@ public class GameBlock {
         return new GameBlock(randomType, bufferedImageInvocationRound);
     }
 
-    public static GameBlock diamondBlock() {
-        return new GameBlock(Type.DIAMOND);
+    public static GameBlock diamondBlock(GameBlockRenderer gameBlockRenderer) {
+        InvocationRound<BufferedImage> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(Type.DIAMOND)), true);
+
+        return new GameBlock(Type.DIAMOND, bufferedImageInvocationRound);
     }
 
     public void setResting(boolean resting) {

@@ -133,6 +133,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             processAllDropsInvocationRound.invoke();
         }
         calculatePermaGroups();
+        textBoard.actionPerformed(actionEvent);
         repaint();
     }
 

@@ -2,6 +2,7 @@ package com.comandante.game.textboard;
 
 import com.comandante.game.assetmanagement.PixelFont;
 import com.comandante.game.assetmanagement.PixelFontSpriteManager;
+import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBlockPair;
 import com.comandante.game.board.logic.GameBlockRenderer;
 
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 
@@ -22,12 +24,13 @@ public class TextBoard extends JComponent implements ActionListener {
     private final int FONT_SIZE_I = (int) (5 * scaleTime);
     private final int FONT_SIZE_J = (int) (12 * scaleTime);
     private final PixelFontSpriteManager pixelFontSpriteManager;
-    private final Timer timer;
     private TextBoardContents textBoardContents;
     private GameBlockPair nextBlockPair;
     private final GameBlockRenderer gameBlockRenderer;
 
     private TextCellEntity[][] lastArray;
+
+    private GameBlockPair lastRenderedGameBlockPair;
 
     private boolean gameOver = false;
 
@@ -43,8 +46,8 @@ public class TextBoard extends JComponent implements ActionListener {
         this.textBoardContents = new TextBoardContents(a);
         this.pixelFontSpriteManager = new PixelFontSpriteManager();
         this.gameBlockRenderer = gameBlockRenderer;
-        timer = new Timer(400, this);
-        timer.start();
+//        timer = new Timer(50, this);
+//        timer.start();
     }
 
     @Override
@@ -57,10 +60,13 @@ public class TextBoard extends JComponent implements ActionListener {
             asciiArray = textBoardContents.getAsciiArray();
         }
 
-        if (Arrays.deepEquals(lastArray, asciiArray)) {
-            lastArray = asciiArray;
-            return;
-        }
+//        if (nextBlockPair != null && Arrays.deepEquals(lastArray, asciiArray) && nextBlockPair.equals(lastRenderedGameBlockPair)) {
+//            lastArray = asciiArray;
+//            lastRenderedGameBlockPair = nextBlockPair;
+//            return;
+//        }
+
+        lastRenderedGameBlockPair = nextBlockPair;
         lastArray = asciiArray;
         repaint();
     }
@@ -69,8 +75,8 @@ public class TextBoard extends JComponent implements ActionListener {
         gameOver = state;
     }
 
-    public void paintComponent(Graphics g) {
-
+    public void paint(Graphics g) {
+        super.paint(g);
 
         for (int i = 0; i < maxI; i++) {
             for (int j = 0; j < maxJ; j++) {
@@ -82,21 +88,47 @@ public class TextBoard extends JComponent implements ActionListener {
                 }
                 BufferedImage image = pixelFontSpriteManager.get(textCellEntity.getType(), textCellEntity.getAsciiCode());
                 g.drawImage(image, (j * FONT_SIZE_I), i * FONT_SIZE_J, FONT_SIZE_I, FONT_SIZE_J, null);
-
-                if (nextBlockPair != null) {
-                    BufferedImage blockAImage = gameBlockRenderer.getImage(nextBlockPair.getBlockA().getType()).get(0);
-                    BufferedImage blockBImage = gameBlockRenderer.getImage(nextBlockPair.getBlockB().getType()).get(0);
-                    int pairY = 50;
-                    g.drawImage(blockAImage, 13, pairY, BLOCK_SIZE, BLOCK_SIZE, null);
-                    g.drawImage(blockBImage, 13, pairY + BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
-
-                }
             }
         }
+
+        if (lastRenderedGameBlockPair != null) {
+            drawNextBlockPair(g);
+        }
+
+        g.dispose();
+    }
+
+    private void drawNextBlockPair(Graphics g) {
+        if (lastRenderedGameBlockPair == null) {
+            return;
+        }
+        GameBlock blockA = lastRenderedGameBlockPair.getBlockA();
+        GameBlock blockB = lastRenderedGameBlockPair.getBlockB();
+
+        BufferedImage blockAImage;
+        BufferedImage blockBImage;
+
+        if (blockA.getImageToRender().isPresent()) {
+            blockAImage = blockA.getImageToRender().get();
+        } else {
+            blockAImage = gameBlockRenderer.getImage(blockA.getType()).get(0);
+        }
+
+        if (blockB.getImageToRender().isPresent()) {
+            blockBImage = blockB.getImageToRender().get();
+        } else {
+            blockBImage = gameBlockRenderer.getImage(blockB.getType()).get(0);
+        }
+
+        int pairY = 50;
+        g.drawImage(blockAImage, 13, pairY, BLOCK_SIZE, BLOCK_SIZE, null);
+        g.drawImage(blockBImage, 13, pairY + BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
     }
 
     public void setNextBlockPair(GameBlockPair gameBlockPair) {
         this.nextBlockPair = gameBlockPair;
+//        drawNextBlockPair();
+//        repaint();
     }
 
     static class TextCellEntity {

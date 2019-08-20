@@ -4,6 +4,7 @@ import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardCoords;
 import com.comandante.game.board.logic.GameBlockRenderer;
+import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -69,13 +70,13 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         }
 
         {
-            BufferedImage diamondTileSetImage = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/DIAMOND_TILESET.png"));
-            PixelArtTileset diamondTileSet = new PixelArtTileset(diamondTileSetImage);
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), diamondTileSet.getDiamondBlockFrames());
-            GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType : borderTypes) {
-                imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND, borderType), Collections.singletonList(diamondTileSet.get(borderType)));
-            }
+            BufferedImage diamondTileSetImage = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/DIAMOND.png"));
+
+            BufferedImage frame1 = diamondTileSetImage.getSubimage(0, 0, 8, 8);
+            BufferedImage frame2 = diamondTileSetImage.getSubimage(8, 0, 8, 8);
+            BufferedImage frame3 = diamondTileSetImage.getSubimage(16, 0, 8, 8);
+            BufferedImage frame4 = diamondTileSetImage.getSubimage(24, 0, 8, 8);
+            imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), Lists.newArrayList(frame1, frame2, frame3, frame4));
         }
 
         BufferedImage emptyBlackImage = new BufferedImage(8, 8, 1);

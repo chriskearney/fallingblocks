@@ -39,7 +39,7 @@ public class StandardGameBlockPairFactory implements GameBlockPairFactory {
         }
 
         if (Math.random() < .02) {
-            blockA = GameBlock.diamondBlock();
+            blockA = GameBlock.diamondBlock(gameBlockRenderer);
         }
 
         GameBlock blockB = GameBlock.randomNormalBlock();
