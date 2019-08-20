@@ -89,7 +89,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
     private List<GameBoardCellEntity> getCellEntitiesMarkedForDeletion(GameBoard gameBoard) {
         List<GameBoardCellEntity> gameBoardCellEntities = Lists.newArrayList();
         for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
-            if (ce.isMarkedForDestruction()) {
+            if (ce.getGameBlock().isPresent() && ce.getGameBlock().get().isMarkForDeletion()) {
                 gameBoardCellEntities.add(ce);
             }
         }
@@ -99,7 +99,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
     private List<GameBoardCellEntity> getCellEntitiesReadyForDeletion(GameBoard gameBoard) {
         List<GameBoardCellEntity> gameBoardCellEntities = Lists.newArrayList();
         for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
-            if (ce.isReadyForDeletion()) {
+            if (ce.getGameBlock().isPresent() && ce.getGameBlock().get().isReadyForDeletion()) {
                 gameBoardCellEntities.add(ce);
             }
         }
@@ -134,8 +134,8 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         if ((gameBoardCellEntity.getType().equals(targetType) || (gameBoardCellEntity.getType().getRelated().isPresent() && gameBoardCellEntity.getType().getRelated().get().equals(targetType)))) {
             List<GameBoardCellEntity> occupiedNeighbors = gameBoard.getGameBoardData().getOccupiedNeighborsOfType(gameBoardCellEntity, targetType);
             for (GameBoardCellEntity ce : occupiedNeighbors) {
-                if (!ce.isMarkedForDestruction()) {
-                    ce.setMarkedForDestruction(true);
+                if (ce.getGameBlock().isPresent() && !ce.getGameBlock().get().isMarkForDeletion()) {
+                    ce.getGameBlock().get().setMarkForDeletion(true);
                     destroyedNeighbors.add(ce);
                 }
             }

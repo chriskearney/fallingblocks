@@ -7,7 +7,6 @@ public class GameBoardCellEntity {
     private final int id;
     private final GameBoardCoords gameBoardCoords;
     private final Optional<GameBlock> gameBlockOptional;
-    private boolean markedForDestruction = false;
     private Rectangle rectangle;
 
     public GameBoardCellEntity(int id, GameBoardCoords gameBoardCoords, GameBlock gameBlock) {
@@ -49,26 +48,6 @@ public class GameBoardCellEntity {
             return gameBlockOptional.get().getType();
         }
         return GameBlock.Type.EMPTY;
-    }
-
-    public void setMarkedForDestruction(boolean markedForDestruction) {
-        if (gameBlockOptional.isPresent()) {
-            gameBlockOptional.get().setMarkForDeletion(true);
-        }
-        this.markedForDestruction = markedForDestruction;
-    }
-
-    public boolean isMarkedForDestruction() {
-        return markedForDestruction;
-    }
-
-    public boolean isReadyForDeletion() {
-        if (gameBlockOptional.isPresent()) {
-            return gameBlockOptional.get().isReadyForDeletion();
-        }
-
-        //TODO dont default to marked status, this is temporary
-        return false;
     }
 
     public void setRectangle(Rectangle rectangle) {

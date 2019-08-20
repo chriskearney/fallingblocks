@@ -82,7 +82,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             public Optional<Void> invoke() {
                 gameBoardData.processAllDrops();
                 gameBoardData.evaluateRestingStatus();
-                return Optional.empty();            }
+                return Optional.empty();
+            }
 
             @Override
             public int numberRoundsComplete() {
@@ -127,45 +128,48 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         if (gameBoardData.allBlocksResting()) {
-            loopAndProcessAllMagic();
-            isGameOver = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
-            textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
-            if (isGameOver) {
-                try {
-                    musicManager.loadGameOver();
-                    musicManager.playMusic();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (loopAndProcessAllMagic()) {
+                gameBoardData.evaluateRestingStatus();
+            }
+            if (gameBoardData.allBlocksResting()) {
+                Optional<GameBlockPair> gameBlockPair = gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(this));
+                if (!gameBlockPair.isPresent()) {
+                    isGameOver = true;
+                } else {
+                    textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
                 }
-                textBoard.setGameOver(true);
-                return;
+                if (isGameOver) {
+                    try {
+                        musicManager.loadGameOver();
+                        musicManager.playMusic();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    textBoard.setGameOver(true);
+                    return;
+                }
             }
         } else {
             processAllDropsInvocationRound.invoke();
         }
+        gameBoardData.evaluateRestingStatus();
         magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(this);
         calculatePermaGroups();
         repaint();
     }
 
-    private void loopAndProcessAllMagic() {
+    private boolean loopAndProcessAllMagic() {
+        boolean returnMagic = false;
         boolean wasThereMagic;
         do {
             calculatePermaGroups();
+            returnMagic = true;
             wasThereMagic = magicGameBlockProcessor.process(this);
-            gameBoardData.processAllDrops();
-            gameBoardData.evaluateRestingStatus();
-
+            // gameBoardData.processAllDrops();
         } while (wasThereMagic);
+        return returnMagic;
     }
 
-    private void loopAndProcessAllDrops() {
-        boolean wasThereDrops;
-        do {
-            wasThereDrops = gameBoardData.processAllDrops();
-            gameBoardData.evaluateRestingStatus();
-        } while (wasThereDrops);
-    }
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {

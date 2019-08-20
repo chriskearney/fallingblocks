@@ -90,22 +90,22 @@ public class GameBoardData {
         return Optional.empty();
     }
 
-    public boolean insertNewBlockPairAndDetectGameOver(GameBlockPair gameBlockPair) {
+    public Optional<GameBlockPair> insertNewBlockPairAndDetectGameOver(GameBlockPair gameBlockPair) {
         int insertNewBlockCell = cellEntities.length / 2;
         if (cellEntities[insertNewBlockCell][0].isOccupied()) {
-            return true;
+            return Optional.empty();
         }
         cellEntities[insertNewBlockCell][0] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getGameBoardCoords(), gameBlockPair.getBlockA());
         cellEntities[insertNewBlockCell][1] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getGameBoardCoords(), gameBlockPair.getBlockB());
         blockPairActive = Optional.of(gameBlockPair);
-        return false;
+        return Optional.of(gameBlockPair);
     }
 
     public boolean processAllDrops() {
         boolean wasDrop = false;
         for (GameBoardCellEntity ce : getCellsFromBottom()) {
             if (ce.isOccupied()) {
-                if (!ce.isMarkedForDestruction() && isCellEntityBelowIsEmptyOrNotBorder(ce)) {
+                if (!ce.getGameBlock().get().isMarkForDeletion() && isCellEntityBelowIsEmptyOrNotBorder(ce)) {
                     moveCellEntityContents(GameBoardCoords.MoveDirection.DOWN, ce, NO_OP);
                     wasDrop = true;
                 }
@@ -285,13 +285,20 @@ public class GameBoardData {
     }
 
     public boolean allBlocksResting() {
-        boolean allResting = true;
-        for (GameBoardCellEntity ce : getCellsFromBottom()) {
-            if (ce.isOccupied() && (!ce.getGameBlock().get().isResting() && !ce.getGameBlock().get().isMarkForDeletion())) {
-                allResting = false;
+
+        List<GameBoardCellEntity> cellsFromBottom = getCellsFromBottom();
+        for (GameBoardCellEntity gameBoardCellEntity: cellsFromBottom) {
+            if (gameBoardCellEntity.isOccupied()) {
+                GameBlock gameBlock = gameBoardCellEntity.getGameBlock().get();
+                if (gameBlock.isMarkForDeletion()) {
+                    return false;
+                }
+                if (!gameBlock.isResting()) {
+                    return false;
+                }
             }
         }
-        return allResting;
+        return true;
     }
 
     public void setRow(int rowNumber, GameBoardCellEntity[] row) {
