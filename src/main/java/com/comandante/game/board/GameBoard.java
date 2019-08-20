@@ -3,7 +3,12 @@ package com.comandante.game.board;
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
-import com.comandante.game.board.logic.*;
+import com.comandante.game.board.logic.AttackProcessor;
+import com.comandante.game.board.logic.BasicPermaGroupManager;
+import com.comandante.game.board.logic.GameBlockPairFactory;
+import com.comandante.game.board.logic.GameBlockRenderer;
+import com.comandante.game.board.logic.MagicGameBlockProcessor;
+import com.comandante.game.board.logic.PermaGroupManager;
 import com.comandante.game.textboard.TextBoard;
 import com.google.common.collect.Lists;
 
@@ -17,7 +22,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -73,10 +77,17 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
-        this.processAllDropsInvocationRound = new InvocationRound<>(5, () -> {
-            gameBoardData.processAllDrops();
-            gameBoardData.evaluateRestingStatus();
-            return Optional.empty();
+        this.processAllDropsInvocationRound = new InvocationRound<>(5, new InvocationRound.Invoker<Void>() {
+            @Override
+            public Optional<Void> invoke() {
+                gameBoardData.processAllDrops();
+                gameBoardData.evaluateRestingStatus();
+                return Optional.empty();            }
+
+            @Override
+            public int numberRoundsComplete() {
+                return 0;
+            }
         });
         this.timer = new Timer(50, this);
         addKeyListener(this);
@@ -132,6 +143,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         } else {
             processAllDropsInvocationRound.invoke();
         }
+        magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(this);
         calculatePermaGroups();
         repaint();
     }

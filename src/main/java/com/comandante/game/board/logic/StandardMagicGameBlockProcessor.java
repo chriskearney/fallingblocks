@@ -1,16 +1,16 @@
 package com.comandante.game.board.logic;
 
-import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBoard;
-import com.comandante.game.board.GameBoardCoords;
-import com.comandante.game.board.GameBoardUtil;
+import com.comandante.game.board.GameBoardCellEntity;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 
 public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor {
@@ -30,26 +30,27 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         return wasMagic;
     }
 
-    private int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
+    @Override
+    public int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
         int destroyed = 0;
         Map<UUID, Integer> blocksDestroyedByGroup = Maps.newHashMap();
         Map<GameBlock.Type, Integer> blocksNotInAGroupDestroyedByType = Maps.newHashMap();
-        List<GameBoardCellEntity> cellEntitiesMarkedForDeletion = getCellEntitiesMarkedForDeletion(gameBoard);
-        for (GameBoardCellEntity ce : cellEntitiesMarkedForDeletion) {
+        List<GameBoardCellEntity> cellEntitiesReadyForDeletion = getCellEntitiesReadyForDeletion(gameBoard);
+        for (GameBoardCellEntity cellEntityReadyForDeletion : cellEntitiesReadyForDeletion) {
             destroyed++;
-            Optional<UUID> permaGroupForBlock = gameBoard.getPermaGroupManager().getPermaGroupForBlock(ce.getGameBlock().get());
+            Optional<UUID> permaGroupForBlock = gameBoard.getPermaGroupManager().getPermaGroupForBlock(cellEntityReadyForDeletion.getGameBlock().get());
             if (permaGroupForBlock.isPresent()) {
                 blocksDestroyedByGroup.putIfAbsent(permaGroupForBlock.get(), 0);
                 blocksDestroyedByGroup.put(permaGroupForBlock.get(), blocksDestroyedByGroup.get(permaGroupForBlock.get()) + 1);
             } else {
-                GameBlock.Type gameBlockType = ce.getGameBlock().get().getType();
+                GameBlock.Type gameBlockType = cellEntityReadyForDeletion.getGameBlock().get().getType();
                 if (gameBlockType.getRelated().isPresent()) {
                     gameBlockType = gameBlockType.getRelated().get();
                 }
                 blocksNotInAGroupDestroyedByType.putIfAbsent(gameBlockType, 0);
                 blocksNotInAGroupDestroyedByType.put(gameBlockType, blocksNotInAGroupDestroyedByType.get(gameBlockType) + 1);
             }
-            gameBoard.getGameBoardData().getCellEntities()[ce.getGameBoardCoords().i][ce.getGameBoardCoords().j] = new GameBoardCellEntity(ce.getId(), ce.getGameBoardCoords(), null);
+            gameBoard.getGameBoardData().getCellEntities()[cellEntityReadyForDeletion.getGameBoardCoords().i][cellEntityReadyForDeletion.getGameBoardCoords().j] = new GameBoardCellEntity(cellEntityReadyForDeletion.getId(), cellEntityReadyForDeletion.getGameBoardCoords(), null);
         }
 
         int groupScoreTotal = 0;
@@ -89,6 +90,16 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         List<GameBoardCellEntity> gameBoardCellEntities = Lists.newArrayList();
         for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
             if (ce.isMarkedForDestruction()) {
+                gameBoardCellEntities.add(ce);
+            }
+        }
+        return gameBoardCellEntities;
+    }
+
+    private List<GameBoardCellEntity> getCellEntitiesReadyForDeletion(GameBoard gameBoard) {
+        List<GameBoardCellEntity> gameBoardCellEntities = Lists.newArrayList();
+        for (GameBoardCellEntity ce : gameBoard.getGameBoardData().getCellsFromBottom()) {
+            if (ce.isReadyForDeletion()) {
                 gameBoardCellEntities.add(ce);
             }
         }

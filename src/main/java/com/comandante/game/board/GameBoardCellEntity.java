@@ -1,6 +1,6 @@
 package com.comandante.game.board;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.Optional;
 
 public class GameBoardCellEntity {
@@ -52,11 +52,23 @@ public class GameBoardCellEntity {
     }
 
     public void setMarkedForDestruction(boolean markedForDestruction) {
+        if (gameBlockOptional.isPresent()) {
+            gameBlockOptional.get().setMarkForDeletion(true);
+        }
         this.markedForDestruction = markedForDestruction;
     }
 
     public boolean isMarkedForDestruction() {
         return markedForDestruction;
+    }
+
+    public boolean isReadyForDeletion() {
+        if (gameBlockOptional.isPresent()) {
+            return gameBlockOptional.get().isReadyForDeletion();
+        }
+
+        //TODO dont default to marked status, this is temporary
+        return false;
     }
 
     public void setRectangle(Rectangle rectangle) {

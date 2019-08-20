@@ -6,6 +6,11 @@ public class InvocationRound<T> {
 
     private final Invoker<T> invoker;
     private boolean useLastReturn = false;
+    private Optional<Runnable> invokeRoundCompleteHandler = Optional.empty();
+
+    public void setInvokeRoundCompleteHandler(Optional<Runnable> invokeRoundCompleteHandler) {
+        this.invokeRoundCompleteHandler = invokeRoundCompleteHandler;
+    }
 
     private T lastReturn;
 
@@ -28,6 +33,9 @@ public class InvocationRound<T> {
     }
 
     public Optional<T> invoke() {
+        if (invoker.maxRounds() > 0 && invoker.numberRoundsComplete() > invoker.maxRounds() && invokeRoundCompleteHandler.isPresent()) {
+            invokeRoundCompleteHandler.get().run();
+        }
         if (processRoundStatus()) {
             Optional<T> invoke = invoker.invoke();
             if (invoke.isPresent() && useLastReturn) {
@@ -49,5 +57,9 @@ public class InvocationRound<T> {
 
     public interface Invoker<T> {
         Optional<T> invoke();
+        int numberRoundsComplete();
+        default int maxRounds() {
+            return -1;
+        }
     }
 }

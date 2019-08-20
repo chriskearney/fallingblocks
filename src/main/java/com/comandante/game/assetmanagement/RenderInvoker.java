@@ -10,6 +10,7 @@ public class RenderInvoker implements InvocationRound.Invoker<BufferedImage> {
 
     private final List<BufferedImage> bufferedImages;
     private int currentImage = 0;
+    private int numberRoundsComplete = 0;
 
     public RenderInvoker(List<BufferedImage> bufferedImages) {
         this.bufferedImages = bufferedImages;
@@ -19,9 +20,15 @@ public class RenderInvoker implements InvocationRound.Invoker<BufferedImage> {
     public Optional<BufferedImage> invoke() {
         if (currentImage >= bufferedImages.size()) {
             currentImage = 0;
+            numberRoundsComplete ++;
         }
         BufferedImage image = bufferedImages.get(currentImage);
         currentImage++;
         return Optional.of(image);
+    }
+
+    @Override
+    public int numberRoundsComplete() {
+        return numberRoundsComplete;
     }
 }

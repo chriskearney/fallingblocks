@@ -5,12 +5,8 @@ import com.google.common.collect.Lists;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.comandante.game.board.GameBoard.NO_OP;
@@ -291,7 +287,7 @@ public class GameBoardData {
     public boolean allBlocksResting() {
         boolean allResting = true;
         for (GameBoardCellEntity ce : getCellsFromBottom()) {
-            if (ce.isOccupied() && !ce.getGameBlock().get().isResting()) {
+            if (ce.isOccupied() && (!ce.getGameBlock().get().isResting() && !ce.getGameBlock().get().isMarkForDeletion())) {
                 allResting = false;
             }
         }

@@ -1,12 +1,18 @@
 package com.comandante.game.board;
 
+import com.comandante.game.assetmanagement.DestructInvoker;
 import com.comandante.game.assetmanagement.RenderInvoker;
-import com.comandante.game.assetmanagement.TileSet;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.logic.GameBlockRenderer;
 
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class GameBlock {
@@ -23,6 +29,11 @@ public class GameBlock {
     private boolean resting = false;
     private Optional<BorderType> borderType;
     private final Optional<InvocationRound<BufferedImage>> invocationRound;
+    private Optional<InvocationRound<BufferedImage>> destructionRound;
+
+    private boolean markForDeletion = false;
+    private boolean readyForDeletion = false;
+
 
     public GameBlock(Type type, InvocationRound<BufferedImage> invocationRenderRounds) {
         this.type = type;
@@ -42,14 +53,6 @@ public class GameBlock {
         this.invocationRound = Optional.empty();
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public UUID getIdentifier() {
-        return identifier;
-    }
-
     public static GameBlock randomNormalBlock() {
         Type randomType = NORMAL_VALUES.get(RANDOM.nextInt(NORMAL_VALUES_SIZE));
         return new GameBlock(randomType);
@@ -63,7 +66,6 @@ public class GameBlock {
 
     public static GameBlock diamondBlock(GameBlockRenderer gameBlockRenderer) {
         InvocationRound<BufferedImage> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(Type.DIAMOND)), true);
-
         return new GameBlock(Type.DIAMOND, bufferedImageInvocationRound);
     }
 
@@ -83,6 +85,35 @@ public class GameBlock {
         this.borderType = borderType;
     }
 
+    public boolean isMarkForDeletion() {
+        return markForDeletion;
+    }
+
+    public boolean isReadyForDeletion() {
+        return readyForDeletion;
+    }
+
+    public void setReadyForDeletion(boolean readyForDeletion) {
+        this.readyForDeletion = readyForDeletion;
+    }
+
+    public void setMarkForDeletion(boolean markForDeletion) {
+        if (markForDeletion) {
+            Runnable postDeleteCode = () -> setReadyForDeletion(true);
+            this.destructionRound = Optional.of(new InvocationRound<BufferedImage>(3, new DestructInvoker(getBlockTypeBorder()), true));
+            this.destructionRound.get().setInvokeRoundCompleteHandler(Optional.of(postDeleteCode));
+        }
+        this.markForDeletion = markForDeletion;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public UUID getIdentifier() {
+        return identifier;
+    }
+
     public TileSetGameBlockRenderer.BlockTypeBorder getBlockTypeBorder() {
         if (borderType == null) {
             return new TileSetGameBlockRenderer.BlockTypeBorder(getType());
@@ -91,6 +122,11 @@ public class GameBlock {
     }
 
     public Optional<BufferedImage> getImageToRender() {
+        if (markForDeletion) {
+            if (destructionRound.isPresent()) {
+                return destructionRound.get().invoke();
+            }
+        }
         if (!invocationRound.isPresent()) {
             return Optional.empty();
         }

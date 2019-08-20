@@ -7,17 +7,24 @@ import com.comandante.game.board.logic.GameBlockRenderer;
 import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 
 public class TileSetGameBlockRenderer implements GameBlockRenderer {
 
-    private final static Map<BlockTypeBorder, java.util.List<BufferedImage>> imagesNew = new HashMap<>();
+    public final static Map<BlockTypeBorder, java.util.List<BufferedImage>> imagesNew = new HashMap<>();
 
     private final String tileSetName;
 
@@ -79,12 +86,11 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), Lists.newArrayList(frame1, frame2, frame3, frame4));
         }
 
-        BufferedImage emptyBlackImage = new BufferedImage(8, 8, 1);
         Graphics2D g2d = emptyBlackImage.createGraphics();
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, 8, 8);
         g2d.dispose();
-        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(emptyBlackImage));
+        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(GameBlockRenderer.emptyBlackImage));
 
     }
 
