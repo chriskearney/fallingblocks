@@ -153,7 +153,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             processAllDropsInvocationRound.invoke();
         }
         gameBoardData.evaluateRestingStatus();
-        magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(this);
+        int destroyed = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(this);
+        alterScore(destroyed);
         calculatePermaGroups();
         repaint();
     }

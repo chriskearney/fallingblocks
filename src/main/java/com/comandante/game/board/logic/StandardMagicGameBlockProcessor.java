@@ -22,8 +22,6 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         for (GameBoardCellEntity gameBoardCellEntity : cellEntitiesWithMagicBlocks) {
             if (processMagic(gameBoard, gameBoardCellEntity, gameBoardCellEntity.getType().getRelated().get())) {
                 wasMagic = true;
-                int destroyed = destroyCellEntitiesThatAreMarkedForDeletion(gameBoard);
-                gameBoard.alterScore(destroyed);
                 gameBoard.repaint();
             }
         }
