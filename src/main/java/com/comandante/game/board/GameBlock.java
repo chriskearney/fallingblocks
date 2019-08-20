@@ -1,17 +1,20 @@
 package com.comandante.game.board;
 
+import com.comandante.game.assetmanagement.BlockTypeBorder;
 import com.comandante.game.assetmanagement.DestructInvoker;
 import com.comandante.game.assetmanagement.RenderInvoker;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.logic.GameBlockRenderer;
+import com.google.common.collect.Sets;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -114,11 +117,11 @@ public class GameBlock {
         return identifier;
     }
 
-    public TileSetGameBlockRenderer.BlockTypeBorder getBlockTypeBorder() {
+    public BlockTypeBorder getBlockTypeBorder() {
         if (borderType == null) {
-            return new TileSetGameBlockRenderer.BlockTypeBorder(getType());
+            return new BlockTypeBorder(getType());
         }
-        return new TileSetGameBlockRenderer.BlockTypeBorder(getType(), borderType.orElse(BorderType.NO_BORDER));
+        return new BlockTypeBorder(getType(), borderType.orElse(BorderType.NO_BORDER));
     }
 
     public Optional<BufferedImage> getImageToRender() {
@@ -151,12 +154,22 @@ public class GameBlock {
 
     public enum Type {
         BLUE,
+        CYAN,
+        GOLD,
         GREEN,
+        MAGENTA,
+        ORANGE,
+        PURPLE,
         RED,
         YELLOW,
         DIAMOND,
         MAGIC_BLUE(Optional.of(BLUE)),
+        MAGIC_CYAN(Optional.of(CYAN)),
+        MAGIC_GOLD(Optional.of(GOLD)),
         MAGIC_GREEN(Optional.of(GREEN)),
+        MAGIC_MAGENTA(Optional.of(MAGENTA)),
+        MAGIC_ORANGE(Optional.of(ORANGE)),
+        MAGIC_PURPLE(Optional.of(PURPLE)),
         MAGIC_RED(Optional.of(RED)),
         MAGIC_YELLOW(Optional.of(YELLOW)),
         EMPTY;
@@ -180,20 +193,24 @@ public class GameBlock {
         }
 
         public static Type[] getNormalRandomPool() {
-            ArrayList<Type> normalBlockTypes = Arrays.asList(values()).stream().filter(type -> !type.isMagic()).collect(Collectors.toCollection(ArrayList::new));
-            normalBlockTypes.remove(EMPTY);
-            normalBlockTypes.remove(DIAMOND);
-            return normalBlockTypes.toArray(new Type[0]);
+            Set<Type> resolvedTypes = Sets.newHashSet();
+            for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
+                resolvedTypes.add(next.getKey().getType());
+            }
+            List<Type> collect = resolvedTypes.stream().filter(type -> !type.isMagic()).collect(Collectors.toList());
+            collect.remove(EMPTY);
+            collect.remove(DIAMOND);
+            return collect.toArray(new Type[0]);
         }
 
         public static Type[] getRandomPool() {
-            List<Type> randoms = new ArrayList<>();
-            for (Type t : Type.values()) {
-                if (t.isMagic()) {
-                    randoms.add(t);
-                }
+            Set<Type> resolvedTypes = Sets.newHashSet();
+            for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
+                resolvedTypes.add(next.getKey().getType());
             }
-            return randoms.toArray(new Type[0]);
+
+            List<Type> collect = resolvedTypes.stream().filter(type -> type.isMagic()).collect(Collectors.toList());
+            return collect.toArray(new Type[0]);
         }
 
     }

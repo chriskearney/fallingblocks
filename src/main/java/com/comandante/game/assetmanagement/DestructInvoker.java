@@ -13,10 +13,10 @@ import static com.comandante.game.assetmanagement.TileSetGameBlockRenderer.image
 
 public class DestructInvoker implements InvocationRound.Invoker<BufferedImage> {
 
-    private final TileSetGameBlockRenderer.BlockTypeBorder blockTypeBorder;
+    private final BlockTypeBorder blockTypeBorder;
     private int invokeCount = 0;
 
-    public DestructInvoker(TileSetGameBlockRenderer.BlockTypeBorder blockTypeBorder) {
+    public DestructInvoker(BlockTypeBorder blockTypeBorder) {
         this.blockTypeBorder = blockTypeBorder;
     }
 
@@ -43,6 +43,5 @@ public class DestructInvoker implements InvocationRound.Invoker<BufferedImage> {
     public int maxRounds() {
         return 3;
     }
-
 
 }

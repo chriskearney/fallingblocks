@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
@@ -31,54 +30,137 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
     public TileSetGameBlockRenderer(String tileSetName) throws IOException {
         this.tileSetName = tileSetName;
         {
-            BufferedImage blueTileSetImg = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/BLUE_TILESET.png"));
-            PixelArtTileset blueTileSet = new PixelArtTileset(blueTileSetImg);
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE), blueTileSet.getStandardBlockFrames());
-            GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType : borderTypes) {
-                imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE, borderType), Collections.singletonList(blueTileSet.get(borderType)));
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "blue.png");
+            if (ifExists.isPresent()) {
+                BufferedImage blueTileSetImg = ifExists.get();
+                PixelArtTileset blueTileSet = new PixelArtTileset(blueTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE), blueTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE, borderType), Collections.singletonList(blueTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_BLUE), blueTileSet.getMagicBlockFrames());
             }
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_BLUE), blueTileSet.getMagicBlockFrames());
 
         }
 
         {
-            BufferedImage redTileSetImg = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/RED_TILESET.png"));
-            PixelArtTileset redTileSet = new PixelArtTileset(redTileSetImg);
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED), redTileSet.getStandardBlockFrames());
-            GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType : borderTypes) {
-                imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED, borderType), Collections.singletonList(redTileSet.get(borderType)));
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "cyan.png");
+            if (ifExists.isPresent()) {
+                BufferedImage cyanTileSetImg = ifExists.get();
+                PixelArtTileset cyanTileSet = new PixelArtTileset(cyanTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.CYAN), cyanTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.CYAN, borderType), Collections.singletonList(cyanTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_CYAN), cyanTileSet.getMagicBlockFrames());
             }
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_RED), redTileSet.getMagicBlockFrames());
 
         }
 
         {
-            BufferedImage yellowTileSetImg = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/YELLOW_TILESET.png"));
-            PixelArtTileset yellowTileSet = new PixelArtTileset(yellowTileSetImg);
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW), yellowTileSet.getStandardBlockFrames());
-            GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType : borderTypes) {
-                imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW, borderType), Collections.singletonList(yellowTileSet.get(borderType)));
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "gold.png");
+            if (ifExists.isPresent()) {
+                BufferedImage goldTileSetImg = ifExists.get();
+                PixelArtTileset goldTileSet = new PixelArtTileset(goldTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.GOLD), goldTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.GOLD, borderType), Collections.singletonList(goldTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_GOLD), goldTileSet.getMagicBlockFrames());
             }
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_YELLOW), yellowTileSet.getMagicBlockFrames());
         }
 
         {
-            BufferedImage greenTileSetImg = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/GREEN_TILESET.png"));
-            PixelArtTileset greenTileSet = new PixelArtTileset(greenTileSetImg);
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN), greenTileSet.getStandardBlockFrames());
-            GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
-            for (GameBlock.BorderType borderType : borderTypes) {
-                imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN, borderType), Collections.singletonList(greenTileSet.get(borderType)));
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "magenta.png");
+            if (ifExists.isPresent()) {
+                BufferedImage magentaTileSetImg = ifExists.get();
+                PixelArtTileset magentaTileSet = new PixelArtTileset(magentaTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGENTA), magentaTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGENTA, borderType), Collections.singletonList(magentaTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_MAGENTA), magentaTileSet.getMagicBlockFrames());
             }
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_GREEN), greenTileSet.getMagicBlockFrames());
         }
 
         {
-            BufferedImage diamondTileSetImage = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/DIAMOND.png"));
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "orange.png");
+            if (ifExists.isPresent()) {
+                BufferedImage orangeTileSetImg = ifExists.get();
+                PixelArtTileset orangeTileSet = new PixelArtTileset(orangeTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.ORANGE), orangeTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.ORANGE, borderType), Collections.singletonList(orangeTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_ORANGE), orangeTileSet.getMagicBlockFrames());
+            }
+        }
 
+        {
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "purple.png");
+            if (ifExists.isPresent()) {
+                BufferedImage purpleTileSetImg = ifExists.get();
+                PixelArtTileset purpleTileSet = new PixelArtTileset(purpleTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.PURPLE), purpleTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.PURPLE, borderType), Collections.singletonList(purpleTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_PURPLE), purpleTileSet.getMagicBlockFrames());
+            }
+
+
+        }
+
+        {
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "red.png");
+            if (ifExists.isPresent()) {
+                BufferedImage redTileSetImg = ifExists.get();
+                PixelArtTileset redTileSet = new PixelArtTileset(redTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED), redTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED, borderType), Collections.singletonList(redTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_RED), redTileSet.getMagicBlockFrames());
+            }
+        }
+
+        {
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "yellow.png");
+            if (ifExists.isPresent()) {
+                BufferedImage yellowTileSetImg = ifExists.get();
+                PixelArtTileset yellowTileSet = new PixelArtTileset(yellowTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW), yellowTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW, borderType), Collections.singletonList(yellowTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_YELLOW), yellowTileSet.getMagicBlockFrames());
+            }
+        }
+
+        {
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "green.png");
+            if (ifExists.isPresent()) {
+                BufferedImage greenTileSetImg = ifExists.get();
+                PixelArtTileset greenTileSet = new PixelArtTileset(greenTileSetImg);
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN), greenTileSet.getStandardBlockFrames());
+                GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
+                for (GameBlock.BorderType borderType : borderTypes) {
+                    imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN, borderType), Collections.singletonList(greenTileSet.get(borderType)));
+                }
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGIC_GREEN), greenTileSet.getMagicBlockFrames());
+            }
+        }
+
+        {
+            BufferedImage diamondTileSetImage = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/diamond.png"));
             BufferedImage frame1 = diamondTileSetImage.getSubimage(0, 0, 8, 8);
             BufferedImage frame2 = diamondTileSetImage.getSubimage(8, 0, 8, 8);
             BufferedImage frame3 = diamondTileSetImage.getSubimage(16, 0, 8, 8);
@@ -92,6 +174,16 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         g2d.dispose();
         imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(GameBlockRenderer.emptyBlackImage));
 
+    }
+
+    private static Optional<BufferedImage> getIfExists(String tileSetName, String fileName) {
+        try {
+            BufferedImage read = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/" + fileName));
+            return Optional.of(read);
+        } catch (Exception e) {
+
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -127,40 +219,5 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         return imagesNew.get(new BlockTypeBorder(type));
     }
 
-    public static class BlockTypeBorder {
-        private final GameBlock.Type type;
-        private final Optional<GameBlock.BorderType> borderType;
 
-        public BlockTypeBorder(GameBlock.Type type, GameBlock.BorderType borderType) {
-            this.type = type;
-            this.borderType = Optional.ofNullable(borderType);
-        }
-
-        public BlockTypeBorder(GameBlock.Type type) {
-            this(type, null);
-        }
-
-
-        public GameBlock.Type getType() {
-            return type;
-        }
-
-        public Optional<GameBlock.BorderType> getBorderType() {
-            return borderType;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            BlockTypeBorder that = (BlockTypeBorder) o;
-            return type == that.type &&
-                    Objects.equals(borderType, that.borderType);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(type, borderType);
-        }
-    }
 }

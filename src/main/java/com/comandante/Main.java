@@ -1,11 +1,10 @@
 package com.comandante;
 
-import com.apple.eawt.Application;
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
-import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.GameBoard;
 import com.comandante.game.board.GameBoardData;
+import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
@@ -14,7 +13,8 @@ import com.comandante.game.ui.GamePanel;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -23,7 +23,7 @@ public class Main extends JFrame {
 
     public Main() throws IOException, InvalidMidiDataException, MidiUnavailableException {
         configurateOperatingSpecificBehavior();
-        TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
+        TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("diamond");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
         GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
