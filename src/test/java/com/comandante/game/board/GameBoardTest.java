@@ -23,6 +23,7 @@ import java.util.UUID;
 public class GameBoardTest {
 
     @Test
+    @Ignore
     public void TestGetLikeGroupsFromRow() throws IOException {
         TextBoard textBoard = new TextBoard(new int[10][20], new TileSetGameBlockRenderer("8bit"));
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");

@@ -169,9 +169,9 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             BufferedImage frame6 = diamondTileSetImage.getSubimage(40, 0, 8, 8);
             BufferedImage frame7 = diamondTileSetImage.getSubimage(48, 0, 8, 8);
             BufferedImage frame8 = diamondTileSetImage.getSubimage(56, 0, 8, 8);
-            BufferedImage frame9 = diamondTileSetImage.getSubimage(64, 0, 8, 8);
+//            BufferedImage frame9 = diamondTileSetImage.getSubimage(64, 0, 8, 8);
 
-            imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), Lists.newArrayList(frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8, frame9));
+            imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), Lists.newArrayList(frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8));
         }
 
         Graphics2D g2d = emptyBlackImage.createGraphics();

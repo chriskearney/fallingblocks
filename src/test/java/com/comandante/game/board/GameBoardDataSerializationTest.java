@@ -2,6 +2,7 @@ package com.comandante.game.board;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -11,6 +12,7 @@ public class GameBoardDataSerializationTest {
     GameBoardData gameBoardData;
 
     @Before
+    @Ignore
     public void setUp() throws Exception {
         gameBoardData = new GameBoardData(new int[10][20]);
         GameBoardCellEntity gameBoardCellEntity[] = new GameBoardCellEntity[10];
@@ -69,6 +71,7 @@ public class GameBoardDataSerializationTest {
     }
 
     @Test
+    @Ignore
     public void testGameDataSerialization() throws Exception {
 
         GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
