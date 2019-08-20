@@ -229,7 +229,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         GameBoardCellEntity[] attackBlocks = new GameBoardCellEntity[gameBoardData.getCellEntities().length];
         GameBlock gameBlock = GameBlock.randomNormalBlock();
         for (int i = 0; i < attackBlocks.length; i++) {
-            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(gameBlock.getType()));
+            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(GameBlock.Type.GREEN));
         }
         return attackBlocks;
     }
