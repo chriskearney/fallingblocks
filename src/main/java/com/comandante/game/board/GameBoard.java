@@ -128,6 +128,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         if (gameBoardData.allBlocksResting()) {
+            magicGameBlockProcessor.processDiamondBlocks(this);
             if (loopAndProcessAllMagic()) {
                 gameBoardData.evaluateRestingStatus();
             }

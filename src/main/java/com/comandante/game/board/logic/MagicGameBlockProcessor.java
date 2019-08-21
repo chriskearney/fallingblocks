@@ -8,4 +8,6 @@ public interface MagicGameBlockProcessor {
 
     int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard);
 
+    void processDiamondBlocks(GameBoard gameBoard);
+
 }
