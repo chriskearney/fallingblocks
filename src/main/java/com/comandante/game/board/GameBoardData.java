@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Collectors;
 
 import static com.comandante.game.board.GameBoard.NO_OP;
@@ -17,7 +18,7 @@ public class GameBoardData {
     public final static int BLOCK_SIZE = 32;
     private GameBoardCellEntity[][] cellEntities;
     private Optional<GameBlockPair> blockPairActive = Optional.empty();
-
+    private final ArrayBlockingQueue<InsertionQueueItem> insertionQueue = new ArrayBlockingQueue<>(500);
     private int initLengthX;
     private int initLengthY;
 
@@ -36,6 +37,17 @@ public class GameBoardData {
                 setCellEntity(new GameBoardCoords(i, j), new GameBoardCellEntity(invocationNumber, new GameBoardCoords(i, j)));
             }
         }
+        insertionQueue.clear();
+    }
+
+    public boolean processInsertionQueueAndDetectGameOver() {
+        processAllDrops();
+        Optional<InsertionQueueItem> insertionQueueItemOptional = Optional.ofNullable(insertionQueue.poll());
+        if (!insertionQueueItemOptional.isPresent()) {
+            return false;
+        }
+        InsertionQueueItem insertionQueueItem = insertionQueueItemOptional.get();
+        return insertRowOfBlocksAndDetectGameOver(insertionQueueItem.getGameBoardCellEntities().get(0));
     }
 
     public Optional<GameBoardCellEntity> getByPoint(Point point) {
@@ -90,15 +102,56 @@ public class GameBoardData {
         return Optional.empty();
     }
 
-    public Optional<GameBlockPair> insertNewBlockPairAndDetectGameOver(GameBlockPair gameBlockPair) {
+    public void insertNewBlockPairAndDetectGameOver(GameBlockPair gameBlockPair) {
         int insertNewBlockCell = cellEntities.length / 2;
         if (cellEntities[insertNewBlockCell][0].isOccupied()) {
-            return Optional.empty();
+            return;
         }
-        cellEntities[insertNewBlockCell][0] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getGameBoardCoords(), gameBlockPair.getBlockA());
-        cellEntities[insertNewBlockCell][1] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getGameBoardCoords(), gameBlockPair.getBlockB());
+//        cellEntities[insertNewBlockCell][0] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getGameBoardCoords(), gameBlockPair.getBlockA());
+//        cellEntities[insertNewBlockCell][1] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getGameBoardCoords(), gameBlockPair.getBlockB());
+
+        {
+            GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[cellEntities.length];
+
+            gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(gameBlockPair.getBlockA());
+            gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+
+            try {
+                insertionQueue.put(new InsertionQueueItem(true, Lists.newArrayList(new GameBoardCellEntity[][]{gameBoardCellEntities})));
+            } catch (Exception e) {
+                //
+            }
+        }
+
+        {
+            GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[cellEntities.length];
+
+            gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(gameBlockPair.getBlockB());
+            gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+
+            try {
+                insertionQueue.put(new InsertionQueueItem(true, Lists.newArrayList(new GameBoardCellEntity[][]{gameBoardCellEntities})));
+            } catch (Exception e) {
+                //
+            }
+        }
         blockPairActive = Optional.of(gameBlockPair);
-        return Optional.of(gameBlockPair);
     }
 
     public boolean processAllDrops() {
@@ -126,26 +179,17 @@ public class GameBoardData {
         }
     }
 
-    public boolean insertAttackBlocksAndDetectGameOver(GameBoardCellEntity[][] attackBlocks) {
-        List<GameBoardCellEntity[]> listOfRowsFromBottom = getListOfRowsFromBottom();
-        for (GameBoardCellEntity[] next: listOfRowsFromBottom) {
-            boolean b = insertAttackBlocksAndDetectGameOver(next);
-            if (b) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean insertAttackBlocksAndDetectGameOver(GameBoardCellEntity[] attackRow) {
+    public boolean insertRowOfBlocksAndDetectGameOver(GameBoardCellEntity[] attackRow) {
         for (int i = 0; i < attackRow.length; i++) {
-            GameBoardCellEntity existingGameBlockOnBoard = cellEntities[i][0];
-            if (existingGameBlockOnBoard.isOccupied()) {
+            GameBoardCellEntity existingGameCellEntity = cellEntities[i][0];
+            if (existingGameCellEntity.isOccupied()) {
                 //game over
                 return true;
             } else {
                 // set the existing cell to the incoming attack block
-                cellEntities[i][0] = new GameBoardCellEntity(existingGameBlockOnBoard.getId(), existingGameBlockOnBoard.getGameBoardCoords(), attackRow[i].getGameBlock().get());
+                if (attackRow[i].getGameBlock().isPresent()) {
+                    cellEntities[i][0] = new GameBoardCellEntity(existingGameCellEntity.getId(), existingGameCellEntity.getGameBoardCoords(), attackRow[i].getGameBlock().get());
+                }
             }
         }
         return false;
@@ -287,7 +331,7 @@ public class GameBoardData {
     public boolean allBlocksResting() {
 
         List<GameBoardCellEntity> cellsFromBottom = getCellsFromBottom();
-        for (GameBoardCellEntity gameBoardCellEntity: cellsFromBottom) {
+        for (GameBoardCellEntity gameBoardCellEntity : cellsFromBottom) {
             if (gameBoardCellEntity.isOccupied()) {
                 GameBlock gameBlock = gameBoardCellEntity.getGameBlock().get();
                 if (gameBlock.isMarkForDeletion()) {
@@ -323,5 +367,23 @@ public class GameBoardData {
         }
         postRun.run();
         return Optional.ofNullable(getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j]);
+    }
+
+    public static class InsertionQueueItem {
+        private final boolean blockPair;
+        private final List<GameBoardCellEntity[]> gameBoardCellEntities;
+
+        public InsertionQueueItem(boolean blockPair, List<GameBoardCellEntity[]> gameBoardCellEntities) {
+            this.blockPair = blockPair;
+            this.gameBoardCellEntities = gameBoardCellEntities;
+        }
+
+        public boolean isBlockPair() {
+            return blockPair;
+        }
+
+        public List<GameBoardCellEntity[]> getGameBoardCellEntities() {
+            return gameBoardCellEntities;
+        }
     }
 }
