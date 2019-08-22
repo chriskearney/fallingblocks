@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public interface GameBlockRenderer {
 
-    BufferedImage emptyBlackImage = new BufferedImage(8, 8, 1);
+    BufferedImage emptyBlackImage = new BufferedImage(8, 8, 6);
 
     void render(BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g);
 

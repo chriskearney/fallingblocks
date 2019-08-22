@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -145,6 +146,16 @@ public class GameBoardData {
             }
         }
         blockPairActive = Optional.of(gameBlockPair);
+    }
+
+    public void addRowsToInsertionQueue(List<GameBoardCellEntity []> row) {
+        for (GameBoardCellEntity[] ge: row) {
+            try {
+                insertionQueue.put(new InsertionQueueItem(false, Collections.singletonList(ge)));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean processAllDrops() {

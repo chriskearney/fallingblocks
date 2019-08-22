@@ -27,7 +27,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
                 .filter(gameBoardCellEntity -> gameBoardCellEntity.getType().equals(GameBlock.Type.DIAMOND))
                 .collect(Collectors.toList());
 
-        for (GameBoardCellEntity cellEntity: diamondCellEntities) {
+        for (GameBoardCellEntity cellEntity : diamondCellEntities) {
             Optional<GameBoardCellEntity> cellEntityIfOccupied = gameBoard.getGameBoardData().getCellEntityIfOccupied(GameBoardCoords.MoveDirection.DOWN, cellEntity);
             if (cellEntityIfOccupied.isPresent() && cellEntityIfOccupied.get().isOccupied()) {
                 cellEntityIfOccupied.get().getGameBlock().get().setMarkForDeletion(true);
@@ -36,9 +36,17 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
                     type = type.getRelated().get();
                 }
                 List<GameBoardCellEntity> cellsFromBottom = gameBoard.getGameBoardData().getCellsFromBottom();
-                for (GameBoardCellEntity ce: cellsFromBottom) {
-                    if (ce.getGameBlock().isPresent() && ce.getGameBlock().get().getType().equals(type)) {
-                        ce.getGameBlock().get().setMarkForDeletion(true);
+                for (GameBoardCellEntity ce : cellsFromBottom) {
+                    if (ce.getGameBlock().isPresent()) {
+                        GameBlock.Type foundType;
+                        if (ce.getGameBlock().get().getType().isMagic()) {
+                            foundType = ce.getGameBlock().get().getType().getRelated().get();
+                        } else {
+                            foundType = ce.getGameBlock().get().getType();
+                        }
+                        if (foundType.equals(type)) {
+                            ce.getGameBlock().get().setMarkForDeletion(true);
+                        }
                     }
                 }
             }

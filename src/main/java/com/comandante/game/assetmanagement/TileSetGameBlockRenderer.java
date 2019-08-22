@@ -173,18 +173,21 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
 
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), Lists.newArrayList(frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8));
         }
-
-        Graphics2D g2d = emptyBlackImage.createGraphics();
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, 8, 8);
-        g2d.dispose();
-        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(GameBlockRenderer.emptyBlackImage));
+//
+//        Graphics2D g2d = emptyBlackImage.createGraphics();
+//        g2d.setColor(Color.black);
+//        g2d.fillRect(0, 0, 8, 8);
+//        g2d.dispose();
+//        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(GameBlockRenderer.emptyBlackImage));
 
     }
 
     private static Optional<BufferedImage> getIfExists(String tileSetName, String fileName) {
         try {
             BufferedImage read = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/" + fileName));
+            if (read != null) {
+                System.out.println(read.getType());
+            }
             return Optional.of(read);
         } catch (Exception e) {
 
@@ -212,11 +215,12 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             return;
         }
 
-        g.setColor(Color.black);
-        g.fillRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-        g.drawImage(imageToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
-        gameBoardCellEntity.setRectangle(new Rectangle(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE));
-        //https://stackoverflow.com/questions/34461186/how-to-detect-mouse-hover-on-an-image-drawn-from-paintcomponents-drawimage-m
+        if (blockTypeBorder.getType().equals(GameBlock.Type.EMPTY)) {
+            g.clearRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        } else {
+            g.drawImage(imageToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+            gameBoardCellEntity.setRectangle(new Rectangle(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE));
+        }
     }
 
 

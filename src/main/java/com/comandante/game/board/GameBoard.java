@@ -2,6 +2,7 @@ package com.comandante.game.board;
 
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.BlockTypeBorder;
+import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
 import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.BasicPermaGroupManager;
@@ -9,17 +10,20 @@ import com.comandante.game.board.logic.GameBlockPairFactory;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.comandante.game.board.logic.MagicGameBlockProcessor;
 import com.comandante.game.board.logic.PermaGroupManager;
+import com.comandante.game.opponents.BasicRandomAttackingOpponent;
+import com.comandante.game.opponents.Opponent;
 import com.comandante.game.textboard.TextBoard;
 import com.google.common.collect.Lists;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.Timer;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +57,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final MusicManager musicManager;
 
     private final InvocationRound<Void, ActionEvent> processAllDropsInvocationRound;
+    private final Opponent opponent;
 
     private Integer score = 0;
     private Integer largestScore = 0;
     private boolean paused = false;
     private boolean isGameOver = false;
+
+    private final Image background = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/light-gray-background-gray-powerpoint-background.jpg"));
+
 
     public static final Runnable NO_OP = () -> {
     };
@@ -68,7 +76,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                      AttackProcessor attackProcessor,
                      MagicGameBlockProcessor magicGameBlockProcessor,
                      TextBoard textBoard,
-                     MusicManager musicManager) {
+                     MusicManager musicManager) throws IOException {
         this.gameBoardData = gameBoardData;
         this.gameBlockRenderer = gameBlockRenderer;
         this.gameBlockPairFactory = gameBlockPairFactory;
@@ -77,6 +85,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
+        this.opponent = new BasicRandomAttackingOpponent();
         this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
             @Override
             public Optional<Void> invoke(ActionEvent actionEvent) {
@@ -102,6 +111,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
                     }
                     calculatePermaGroups();
+                    if (Math.random() < 0.01) {
+                        List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
+                        gameBoardData.addRowsToInsertionQueue(attack);
+                    }
                 }
                 gameBoardData.evaluateRestingStatus();
                 int destroyed = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
@@ -236,6 +249,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     }
 
     public void paintComponent(Graphics g) {
+        g.drawImage(background, 0, 0, null);
         for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
             GameBlock.Type type = ce.getType();
             if (type.equals(GameBlock.Type.EMPTY)) {
