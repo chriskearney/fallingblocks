@@ -1,0 +1,14 @@
+shrinking the jre on the mac
+http://www.balthisar.com/blog/bundle_the_jre/
+
+./jlink --add-modules java.base,java.compiler,java.desktop,java.sql,jdk.unsupported \\n--output ~/Desktop/small_jre \\n--no-header-files \\n\t--no-man-pages \\n\t--strip-debug \\n\t--compress=2
+
+
+./jdeps --print-module-deps ~/Documents/source/fallingblocks/target/pixelpuzzler-1.0-SNAPSHOT-shaded.jar
+
+
+mvn package appbundle:bundle ; rm -rf ~/Desktop/pixelpuzzler.app; cp -Rp target/pixelpuzzler-1.0-SNAPSHOT/pixelpuzzler.app ~/Desktop
+
+Hi Eliza. All of my original music is licensed under a Creative Commons Attribution-ShareAlike 3.0 License. This allows you to use the music anywhere you like, as long as you provide proper attribution (something like “music by Tanner Helland” and a link to this page is fine). Specific details are given on each song’s page.
+
+

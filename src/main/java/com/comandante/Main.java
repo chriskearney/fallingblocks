@@ -1,20 +1,20 @@
 package com.comandante;
 
 import com.comandante.game.MusicManager;
-import com.comandante.game.assetmanagement.PixelFont;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoard;
 import com.comandante.game.board.GameBoardData;
+import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
-import com.comandante.game.ui.WelcomeScreenPanel;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -23,29 +23,35 @@ public class Main extends JFrame {
 
     public Main() throws IOException, InvalidMidiDataException, MidiUnavailableException {
         configurateOperatingSpecificBehavior();
-        TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
+        TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("diamond");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
         GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
-        musicManager.loadMusis();
+        musicManager.loadMusic();
         musicManager.playMusic();
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, musicManager);
-        GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         setTitle("PixelPuzzler");
         setResizable(false);
+        AttackProcessor attackProcessor = new AttackProcessor() {
+            @Override
+            public void attack(GameBoard gameBoard) {
+
+            }
+        };
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
+        GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
 
-
+//        Application application = Application.getApplication();
 //        int[][] rawBoard = new int[27][32];
 //        TextBoard welcomeScreenTextBoard = new TextBoard(rawBoard, tileSetBlockRenderProcessor);
 //        WelcomeScreenPanel welcomeScreenPanel = new WelcomeScreenPanel(welcomeScreenTextBoard, gameBoard.getGameBoardData().getPreferredSize());
 //        getContentPane().add(welcomeScreenPanel);
 
+        // center the frame
+        setLocationRelativeTo(null);
         pack();
         setVisible(true);
-
-
     }
 
     public static void main(String[] args) throws IOException, InvalidMidiDataException, MidiUnavailableException {
@@ -74,6 +80,13 @@ public class Main extends JFrame {
                             }
                         }
                     });
+                    System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+                    System.setProperty("apple.laf.useScreenMenuBar", "true");
+                    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "PixelFighter");
+
+                    // create an instance of the Mac Application class, so i can handle the
+                    // mac quit event with the Mac ApplicationAdapter
+
                     break;
                 case Linux:
                     break;

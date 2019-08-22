@@ -6,4 +6,8 @@ public interface MagicGameBlockProcessor {
 
     boolean process(GameBoard gameBoard);
 
+    int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard);
+
+    void processDiamondBlocks(GameBoard gameBoard);
+
 }

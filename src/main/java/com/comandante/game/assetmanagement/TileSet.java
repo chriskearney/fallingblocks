@@ -24,11 +24,4 @@ public interface TileSet {
     List<BufferedImage> getCountDownBlockFive();
 
     BufferedImage get(GameBlock.BorderType borderType);
-
-    enum Type {
-        GREEN,
-        YELLOW,
-        RED,
-        BLUE
-    }
 }

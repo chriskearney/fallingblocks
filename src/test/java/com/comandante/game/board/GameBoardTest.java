@@ -2,11 +2,13 @@ package com.comandante.game.board;
 
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
+import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.sound.midi.MidiSystem;
@@ -21,12 +23,19 @@ import java.util.UUID;
 public class GameBoardTest {
 
     @Test
+    @Ignore
     public void TestGetLikeGroupsFromRow() throws IOException {
         TextBoard textBoard = new TextBoard(new int[10][20], new TileSetGameBlockRenderer("8bit"));
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
         GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
-        GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, null);
+        AttackProcessor attackProcessor = new AttackProcessor() {
+            @Override
+            public void attack(GameBoard gameBoard) {
+
+            }
+        };
+        GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(null), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, null);
         gameBoard.calculatePermaGroups();
         List<BlockGroup> permaGroups = gameBoard.getPermaGroupManager().getPermaGroups();
         Optional<BlockGroup> first = permaGroups.stream().filter(blockGroup -> blockGroup.groupOfBlocks.get(0).size() == 4).findFirst();
@@ -43,6 +52,7 @@ public class GameBoardTest {
 
     // Useful for getting a handle on json exports of the board, visually
     @Test
+    @Ignore
     public void testRenderFromJson() throws IOException, InterruptedException, MidiUnavailableException {
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("8bit");
         TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
@@ -51,7 +61,13 @@ public class GameBoardTest {
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
         Sequencer sequencer = MidiSystem.getSequencer();
         sequencer.open();
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(), new StandardMagicGameBlockProcessor(), textBoard, new MusicManager(sequencer));
+        AttackProcessor attackProcessor = new AttackProcessor() {
+            @Override
+            public void attack(GameBoard gameBoard) {
+
+            }
+        };
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, new MusicManager(sequencer));
         gameBoard.togglePause();
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         JFrame jFrame = new JFrame();

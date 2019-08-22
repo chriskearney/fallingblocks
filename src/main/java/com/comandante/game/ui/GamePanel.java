@@ -59,7 +59,7 @@ public class GamePanel extends JPanel {
                     }
                     System.out.println();
                 });
-                repaint();
+               // repaint();
             }
         };
     }
