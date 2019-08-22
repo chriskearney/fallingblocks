@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 
-public class RenderInvoker implements InvocationRound.Invoker<BufferedImage> {
+public class RenderInvoker implements InvocationRound.Invoker<BufferedImage, Void> {
 
     private final List<BufferedImage> bufferedImages;
     private int currentImage = 0;
@@ -17,7 +17,7 @@ public class RenderInvoker implements InvocationRound.Invoker<BufferedImage> {
     }
 
     @Override
-    public Optional<BufferedImage> invoke() {
+    public Optional<BufferedImage> invoke(Void nope) {
         if (currentImage >= bufferedImages.size()) {
             currentImage = 0;
             numberRoundsComplete ++;
@@ -25,6 +25,10 @@ public class RenderInvoker implements InvocationRound.Invoker<BufferedImage> {
         BufferedImage image = bufferedImages.get(currentImage);
         currentImage++;
         return Optional.of(image);
+    }
+
+    public Optional<BufferedImage> invoke() {
+        return invoke(null);
     }
 
     @Override

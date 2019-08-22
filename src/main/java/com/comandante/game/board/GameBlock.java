@@ -31,14 +31,14 @@ public class GameBlock {
     private final UUID identifier;
     private boolean resting = false;
     private Optional<BorderType> borderType;
-    private final Optional<InvocationRound<BufferedImage>> invocationRound;
-    private Optional<InvocationRound<BufferedImage>> destructionRound;
+    private final Optional<InvocationRound<BufferedImage, Void>> invocationRound;
+    private Optional<InvocationRound<BufferedImage, Void>> destructionRound;
 
     private boolean markForDeletion = false;
     private boolean readyForDeletion = false;
 
 
-    public GameBlock(Type type, InvocationRound<BufferedImage> invocationRenderRounds) {
+    public GameBlock(Type type, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
         this.identifier = UUID.randomUUID();
         this.invocationRound = Optional.of(invocationRenderRounds);
@@ -63,12 +63,12 @@ public class GameBlock {
 
     public static GameBlock randomMagicBlock(GameBlockRenderer gameBlockRenderer) {
         Type randomType = RANDOM_VALUES.get(RANDOM.nextInt(RANDOM_VALUE_SIZE));
-        InvocationRound<BufferedImage> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(randomType)), true);
+        InvocationRound<BufferedImage, Void> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(randomType)), true);
         return new GameBlock(randomType, bufferedImageInvocationRound);
     }
 
     public static GameBlock diamondBlock(GameBlockRenderer gameBlockRenderer) {
-        InvocationRound<BufferedImage> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(Type.DIAMOND)), true);
+        InvocationRound<BufferedImage, Void> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(Type.DIAMOND)), true);
         return new GameBlock(Type.DIAMOND, bufferedImageInvocationRound);
     }
 
@@ -103,7 +103,7 @@ public class GameBlock {
     public void setMarkForDeletion(boolean markForDeletion) {
         if (markForDeletion) {
             Runnable postDeleteCode = () -> setReadyForDeletion(true);
-            this.destructionRound = Optional.of(new InvocationRound<BufferedImage>(3, new DestructInvoker(getBlockTypeBorder()), true));
+            this.destructionRound = Optional.of(new InvocationRound<BufferedImage, Void>(3, new DestructInvoker(getBlockTypeBorder()), true));
             this.destructionRound.get().setInvokeRoundCompleteHandler(Optional.of(postDeleteCode));
         }
         this.markForDeletion = markForDeletion;
@@ -127,13 +127,13 @@ public class GameBlock {
     public Optional<BufferedImage> getImageToRender() {
         if (markForDeletion) {
             if (destructionRound.isPresent()) {
-                return destructionRound.get().invoke();
+                return destructionRound.get().invoker(null);
             }
         }
         if (!invocationRound.isPresent()) {
             return Optional.empty();
         }
-        return invocationRound.get().invoke();
+        return invocationRound.get().invoker(null);
     }
 
     public enum BorderType {

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static com.comandante.game.assetmanagement.TileSetGameBlockRenderer.imagesNew;
 
-public class DestructInvoker implements InvocationRound.Invoker<BufferedImage> {
+public class DestructInvoker implements InvocationRound.Invoker<BufferedImage, Void> {
 
     private final BlockTypeBorder blockTypeBorder;
     private int invokeCount = 0;
@@ -21,7 +21,7 @@ public class DestructInvoker implements InvocationRound.Invoker<BufferedImage> {
     }
 
     @Override
-    public Optional<BufferedImage> invoke() {
+    public Optional<BufferedImage> invoke(Void v) {
         try {
             if ((invokeCount & 1) == 0) {
                 List<BufferedImage> bufferedImages = imagesNew.get(blockTypeBorder);

@@ -39,7 +39,8 @@ public class TextBoard extends JComponent implements ActionListener {
 
     private final int[][] a;
 
-    public TextBoard(int[][] a, GameBlockRenderer gameBlockRenderer) throws IOException {
+    public TextBoard(int[][]
+                             a, GameBlockRenderer gameBlockRenderer) throws IOException {
         maxI = a.length;
         maxJ = a[0].length;
         this.a = a;

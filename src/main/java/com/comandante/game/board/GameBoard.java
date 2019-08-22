@@ -14,7 +14,6 @@ import com.google.common.collect.Lists;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
-import javax.swing.text.html.Option;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -53,7 +52,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final PermaGroupManager permaGroupManager;
     private final MusicManager musicManager;
 
-    private final InvocationRound<Void> processAllDropsInvocationRound;
+    private final InvocationRound<Void, ActionEvent> processAllDropsInvocationRound;
 
     private Integer score = 0;
     private Integer largestScore = 0;
@@ -78,27 +77,29 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
-        this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void>() {
+        this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
             @Override
-            public Optional<Void> invoke() {
+            public Optional<Void> invoke(ActionEvent actionEvent) {
+                textBoard.actionPerformed(actionEvent);
                 isGameOver = gameBoardData.processInsertionQueueAndDetectGameOver();
-                if (gameBoardData.allBlocksResting()) {
-                    if (isGameOver) {
-                        try {
-                            musicManager.loadGameOver();
-                            musicManager.playMusic();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        textBoard.setGameOver(true);
-                        return Optional.empty();
+                if (isGameOver) {
+                    try {
+                        musicManager.loadGameOver();
+                        musicManager.playMusic();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    textBoard.setGameOver(true);
+                    textBoard.actionPerformed(actionEvent);
+                    return Optional.empty();
+                }
+                if (gameBoardData.allBlocksResting()) {
                     magicGameBlockProcessor.processDiamondBlocks(GameBoard.this);
                     if (loopAndProcessAllMagic()) {
                         gameBoardData.evaluateRestingStatus();
                     }
                     if (gameBoardData.allBlocksResting()) {
-                        gameBoardData.insertNewBlockPairAndDetectGameOver(gameBlockPairFactory.createBlockPair(GameBoard.this));
+                        gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
                         textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
                     }
                     calculatePermaGroups();
@@ -108,6 +109,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 alterScore(destroyed);
                 return Optional.empty();
             }
+
             @Override
             public int numberRoundsComplete() {
                 return 0;
@@ -149,8 +151,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         if (paused || isGameOver) {
             return;
         }
-        textBoard.actionPerformed(actionEvent);
-        processAllDropsInvocationRound.invoke();
+        processAllDropsInvocationRound.invoker(actionEvent);
         repaint();
     }
 

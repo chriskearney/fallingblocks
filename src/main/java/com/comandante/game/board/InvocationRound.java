@@ -2,9 +2,9 @@ package com.comandante.game.board;
 
 import java.util.Optional;
 
-public class InvocationRound<T> {
+public class InvocationRound<T, R> {
 
-    private final Invoker<T> invoker;
+    private final Invoker<T, R> invoker;
     private boolean useLastReturn = false;
     private Optional<Runnable> invokeRoundCompleteHandler = Optional.empty();
 
@@ -17,12 +17,12 @@ public class InvocationRound<T> {
     private int numberOfInvocationsPerRound;
     private int currentRoundInvocationCount = 0;
 
-    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T> invoker) {
+    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T, R> invoker) {
         this.invoker = invoker;
         this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
     }
 
-    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T> invoker, boolean useLastReturn) {
+    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T, R> invoker, boolean useLastReturn) {
         this.useLastReturn = useLastReturn;
         this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
         this.invoker = invoker;
@@ -32,12 +32,12 @@ public class InvocationRound<T> {
         this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
     }
 
-    public Optional<T> invoke() {
+    public Optional<T> invoker(R r) {
         if (invoker.maxRounds() > 0 && invoker.numberRoundsComplete() > invoker.maxRounds() && invokeRoundCompleteHandler.isPresent()) {
             invokeRoundCompleteHandler.get().run();
         }
         if (processRoundStatus()) {
-            Optional<T> invoke = invoker.invoke();
+            Optional<T> invoke = invoker.invoke(r);
             if (invoke.isPresent() && useLastReturn) {
                 lastReturn = invoke.get();
             }
@@ -55,8 +55,8 @@ public class InvocationRound<T> {
         return true;
     }
 
-    public interface Invoker<T> {
-        Optional<T> invoke();
+    public interface Invoker<T, R> {
+        Optional<T> invoke(R r);
         int numberRoundsComplete();
         default int maxRounds() {
             return -1;

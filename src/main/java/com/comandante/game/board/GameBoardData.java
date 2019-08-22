@@ -102,14 +102,7 @@ public class GameBoardData {
         return Optional.empty();
     }
 
-    public void insertNewBlockPairAndDetectGameOver(GameBlockPair gameBlockPair) {
-        int insertNewBlockCell = cellEntities.length / 2;
-        if (cellEntities[insertNewBlockCell][0].isOccupied()) {
-            return;
-        }
-//        cellEntities[insertNewBlockCell][0] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][0].getId(), cellEntities[insertNewBlockCell][0].getGameBoardCoords(), gameBlockPair.getBlockA());
-//        cellEntities[insertNewBlockCell][1] = new GameBoardCellEntity(cellEntities[insertNewBlockCell][1].getId(), cellEntities[insertNewBlockCell][1].getGameBoardCoords(), gameBlockPair.getBlockB());
-
+    public void insertNewBlockPair(GameBlockPair gameBlockPair) {
         {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[cellEntities.length];
 
@@ -118,7 +111,7 @@ public class GameBoardData {
             gameBoardCellEntities[2] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(gameBlockPair.getBlockA());
+            gameBoardCellEntities[5] = new GameBoardCellEntity(gameBlockPair.getBlockB());
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
@@ -139,7 +132,7 @@ public class GameBoardData {
             gameBoardCellEntities[2] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(gameBlockPair.getBlockB());
+            gameBoardCellEntities[5] = new GameBoardCellEntity(gameBlockPair.getBlockA());
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
