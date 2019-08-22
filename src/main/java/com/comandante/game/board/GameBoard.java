@@ -80,7 +80,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
             @Override
             public Optional<Void> invoke(ActionEvent actionEvent) {
-                textBoard.actionPerformed(actionEvent);
                 isGameOver = gameBoardData.processInsertionQueueAndDetectGameOver();
                 if (isGameOver) {
                     try {
@@ -148,6 +147,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        textBoard.actionPerformed(actionEvent);
         if (paused || isGameOver) {
             return;
         }
