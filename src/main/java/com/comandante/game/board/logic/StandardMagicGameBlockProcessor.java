@@ -32,6 +32,9 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
             if (cellEntityIfOccupied.isPresent() && cellEntityIfOccupied.get().isOccupied()) {
                 cellEntityIfOccupied.get().getGameBlock().get().setMarkForDeletion(true);
                 GameBlock.Type type = cellEntityIfOccupied.get().getGameBlock().get().getType();
+                if (type.isMagic()) {
+                    type = type.getRelated().get();
+                }
                 List<GameBoardCellEntity> cellsFromBottom = gameBoard.getGameBoardData().getCellsFromBottom();
                 for (GameBoardCellEntity ce: cellsFromBottom) {
                     if (ce.getGameBlock().isPresent() && ce.getGameBlock().get().getType().equals(type)) {
