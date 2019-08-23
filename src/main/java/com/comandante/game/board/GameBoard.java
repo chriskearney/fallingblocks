@@ -107,14 +107,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         gameBoardData.evaluateRestingStatus();
                     }
                     if (gameBoardData.allBlocksResting()) {
-                        gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
-                        textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
+                        if (Math.random() < 0.1) {
+                            List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
+                            gameBoardData.addRowsToInsertionQueue(attack);
+                        } else {
+                            gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
+                            textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
+                        }
                     }
                     calculatePermaGroups();
-                    if (Math.random() < 0.01) {
-                        List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
-                        gameBoardData.addRowsToInsertionQueue(attack);
-                    }
+
                 }
                 gameBoardData.evaluateRestingStatus();
                 int destroyed = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
