@@ -42,7 +42,6 @@ public class GameBoardData {
     }
 
     public boolean processInsertionQueueAndDetectGameOver() {
-        processAllDrops();
         Optional<InsertionQueueItem> insertionQueueItemOptional = Optional.ofNullable(insertionQueue.poll());
         if (!insertionQueueItemOptional.isPresent()) {
             return false;

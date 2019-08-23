@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -70,7 +68,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
     }
 
     @Override
-    public int destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
+    public Optional<ScoringDetails> destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
         int destroyed = 0;
         Map<UUID, Integer> blocksDestroyedByGroup = Maps.newHashMap();
         Map<GameBlock.Type, Integer> blocksNotInAGroupDestroyedByType = Maps.newHashMap();
@@ -119,10 +117,18 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
                 continue;
             }
             int typeScore = next.getValue() * next.getValue();
-            typeScoreTotal = +typeScore;
+            typeScoreTotal += typeScore;
         }
 
-        return destroyed + groupScoreTotal + typeScoreTotal;
+        ScoringDetails scoringDetails = new ScoringDetails();
+        scoringDetails.bonus = groupScoreTotal + typeScoreTotal;
+        scoringDetails.base = destroyed;
+
+        if ((scoringDetails.getScore()) > 0) {
+            return Optional.of(scoringDetails);
+        } else {
+            return Optional.empty();
+        }
     }
 
     private List<GameBoardCellEntity> getCellEntitiesMarkedForDeletion(GameBoard gameBoard) {

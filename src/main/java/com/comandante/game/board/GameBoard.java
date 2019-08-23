@@ -87,8 +87,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.musicManager = musicManager;
         this.opponent = new BasicRandomAttackingOpponent();
         this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
+
             @Override
             public Optional<Void> invoke(ActionEvent actionEvent) {
+                gameBoardData.processAllDrops();
                 isGameOver = gameBoardData.processInsertionQueueAndDetectGameOver();
                 if (isGameOver) {
                     try {
@@ -116,11 +118,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         }
                     }
                     calculatePermaGroups();
-
                 }
                 gameBoardData.evaluateRestingStatus();
-                int destroyed = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
-                alterScore(destroyed);
+                Optional<MagicGameBlockProcessor.ScoringDetails> scoringDetails = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
+                scoringDetails.ifPresent(details -> alterScore(details));
                 return Optional.empty();
             }
 
@@ -132,7 +133,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.timer = new Timer(50, this);
         addKeyListener(this);
         setOpaque(false);
-        alterScore(0);
+//        alterScore(MagicGameBlockProcessor.getBlank());
         this.timer.start();
     }
 
@@ -149,15 +150,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         return gameBoardData;
     }
 
-    public void alterScore(int amount) {
-        if (amount > largestScore) {
-            largestScore = amount;
-        }
-        score += amount;
-        this.textBoard.getTextBoardContents().setScore(score);
-        if (amount > 0) {
-            this.textBoard.getTextBoardContents().addNewPointsToBattleLog(amount);
-        }
+    public void alterScore(MagicGameBlockProcessor.ScoringDetails scoringDetails) {
+        score += scoringDetails.getScore();
+        textBoard.getTextBoardContents().setScore(score);
+        this.textBoard.getTextBoardContents().addNewPointsToBattleLog(scoringDetails);
     }
 
     @Override

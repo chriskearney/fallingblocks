@@ -1,6 +1,7 @@
 package com.comandante.game.textboard;
 
 import com.comandante.game.assetmanagement.PixelFont;
+import com.comandante.game.board.logic.MagicGameBlockProcessor;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -38,8 +39,17 @@ public class TextBoardContents {
         battleMessagesQueue.add(createTextCellEntityArray(message));
     }
 
-    public void addNewPointsToBattleLog(Integer amt) {
-        TextBoard.TextCellEntity[] textCellEntities = createTextCellEntityArray(PixelFont.Type.COLOUR3, "+" + amt);
+    public void addNewPointsToBattleLog(MagicGameBlockProcessor.ScoringDetails scoringDetails) {
+
+        String battleLogMessage = "+" + scoringDetails.getScore();
+        if (scoringDetails.bonus > 0) {
+            battleLogMessage = battleLogMessage + " bonus: " + scoringDetails.bonus;
+        }
+        if (scoringDetails.chainReactionScore > 0) {
+            battleLogMessage = battleLogMessage + " chain: " + scoringDetails.chainReactionScore;
+        }
+
+        TextBoard.TextCellEntity[] textCellEntities = createTextCellEntityArray(PixelFont.Type.COLOUR3, battleLogMessage);
         battleMessagesQueue.add(textCellEntities);
     }
 
