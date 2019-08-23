@@ -28,7 +28,7 @@ public class MusicManager {
         sequencer.close();
         sequencer.open();
 
-        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/KingOfTheDesert.mid")));
+        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/brcklayr.mid")));
 
         // Sets the current sequence on which the sequencer operates.
         // The stream must point to MIDI file data.
@@ -47,10 +47,10 @@ public class MusicManager {
     }
 
     public void loadGameOver() throws MidiUnavailableException, IOException, InvalidMidiDataException {
-        sequencer.close();
-        sequencer.open();
-        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/Nevermore.mid")));
-        sequencer.setSequence(is);
-        sequencer.setLoopCount(0);
+//        sequencer.close();
+//        sequencer.open();
+//        InputStream is = new ByteArrayInputStream(Resources.toByteArray(Resources.getResource("midi/Nevermore.mid")));
+//        sequencer.setSequence(is);
+//        sequencer.setLoopCount(0);
     }
 }
