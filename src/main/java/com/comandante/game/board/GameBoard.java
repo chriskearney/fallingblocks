@@ -25,12 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.comandante.game.board.GameBlock.BorderType.BOTTOM;
 import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_LEFT;
@@ -120,6 +116,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
+                            flushRoundScoring();
                             gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
                             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
                         }
@@ -127,9 +124,36 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     calculatePermaGroups();
                 }
                 gameBoardData.evaluateRestingStatus();
+
+
                 Optional<MagicGameBlockProcessor.ScoringDetails> scoringDetails = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
-                scoringDetails.ifPresent(details -> alterScore(details));
+                if (scoringDetails.isPresent()) {
+                    if (roundScoringList.containsKey(roundUuid)) {
+                        roundScoringList.get(roundUuid).add(scoringDetails.get());
+                    } else {
+                        roundScoringList.put(roundUuid, Lists.newArrayList());
+                        roundScoringList.get(roundUuid).add(scoringDetails.get());
+                    }
+                }
+
                 return Optional.empty();
+            }
+
+            private void flushRoundScoring() {
+                MagicGameBlockProcessor.ScoringDetails scoringDetails = new MagicGameBlockProcessor.ScoringDetails();
+                for (Map.Entry<UUID, List<MagicGameBlockProcessor.ScoringDetails>> next : roundScoringList.entrySet()) {
+                    for (MagicGameBlockProcessor.ScoringDetails details : next.getValue()) {
+                        scoringDetails.base += details.base;
+                        scoringDetails.bonus += details.bonus;
+                    }
+                    if (next.getValue().size() > 1) {
+                        scoringDetails.chainReactionScore = next.getValue().size() * 300;
+                    }
+                    if (scoringDetails.getScore() > 0) {
+                        alterScore(scoringDetails);
+                    }
+                    roundScoringList.remove(next.getKey());
+                }
             }
 
             @Override
