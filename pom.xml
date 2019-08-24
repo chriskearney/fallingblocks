@@ -42,17 +42,6 @@
                 </executions>
 
             </plugin>
-            <plugin>
-                <groupId>net.agilhard.maven.plugins</groupId>
-                <artifactId>jlink-jpackager-maven-plugin</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <verbose>true</verbose>
-                    <module>com.comandante/MainClass</module>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 
