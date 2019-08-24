@@ -14,6 +14,7 @@ import com.comandante.game.opponents.BasicRandomAttackingOpponent;
 import com.comandante.game.opponents.Opponent;
 import com.comandante.game.textboard.TextBoard;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.comandante.game.board.GameBlock.BorderType.BOTTOM;
 import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_LEFT;
@@ -88,6 +90,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.opponent = new BasicRandomAttackingOpponent();
         this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
 
+            private UUID roundUuid;
+            private Map<UUID, List<MagicGameBlockProcessor.ScoringDetails>> roundScoringList = Maps.newHashMap();
+
             @Override
             public Optional<Void> invoke(ActionEvent actionEvent) {
                 gameBoardData.processAllDrops();
@@ -113,6 +118,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                             List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
                             gameBoardData.addRowsToInsertionQueue(attack);
                         } else {
+                            // Track time between insert blockpair to calculate chaining
+                            roundUuid = UUID.randomUUID();
                             gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
                             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
                         }
@@ -129,6 +136,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             public int numberRoundsComplete() {
                 return 0;
             }
+
         });
         this.timer = new Timer(50, this);
         addKeyListener(this);
