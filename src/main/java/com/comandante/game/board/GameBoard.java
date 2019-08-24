@@ -27,6 +27,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.comandante.game.board.GameBlock.BorderType.BOTTOM;
 import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_LEFT;
@@ -235,7 +236,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 resetGame();
                 break;
             case KeyEvent.VK_U:
-                gameBoardData.insertRowOfBlocksAndDetectGameOver(getRandomAttackBlocks());
+                List<GameBoardCellEntity[]> attack = opponent.getAttack(this);
+                gameBoardData.addRowsToInsertionQueue(attack);
                 break;
             case KeyEvent.VK_P:
                 togglePause();
@@ -291,6 +293,16 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
+    private boolean areAnyBlocksMarkedForDeletion() {
+        return getGameBoardData().getCellsFromBottom().stream()
+                .anyMatch(gameBoardCellEntity -> {
+                    if (gameBoardCellEntity.getGameBlock().isPresent()) {
+                        return gameBoardCellEntity.getGameBlock().get().isMarkForDeletion() || gameBoardCellEntity.getGameBlock().get().isReadyForDeletion();
+                    }
+                    return false;
+                });
+    }
+
     private Runnable rePainter() {
         return this::repaint;
     }
@@ -302,7 +314,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
 
-        if (!gameBoardData.isBlockPairActive()) {
+        if (!gameBoardData.isBlockPairActive() || areAnyBlocksMarkedForDeletion()) {
             return;
         }
 
