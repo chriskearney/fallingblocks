@@ -325,6 +325,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
 
+        if (blockAEntityOpt.get().getGameBlock().isPresent() && blockBEntityOpt.get().getGameBlock().isPresent()) {
+            if (blockAEntityOpt.get().getGameBlock().get().isResting() && blockBEntityOpt.get().getGameBlock().get().isResting()) {
+                return;
+            }
+        }
+
         GameBoardCellEntity blockAEntity = blockAEntityOpt.get();
         GameBoardCellEntity blockBEntity = blockBEntityOpt.get();
 
@@ -424,6 +430,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
         if (!gameBoardData.isBlockPairActive()) {
             return;
+        }
+
+        Optional<GameBoardCellEntity> blockAEntityOpt = gameBoardData.getBlockAEntity();
+        Optional<GameBoardCellEntity> blockBEntityOpt = gameBoardData.getBlockBEntity();
+
+        if (!blockAEntityOpt.isPresent() || !blockBEntityOpt.isPresent()) {
+            return;
+        }
+
+        if (blockAEntityOpt.get().getGameBlock().isPresent() && blockBEntityOpt.get().getGameBlock().isPresent()) {
+            if (blockAEntityOpt.get().getGameBlock().get().isResting() && blockBEntityOpt.get().getGameBlock().get().isResting()) {
+                return;
+            }
         }
 
         Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBoardData.getBlockBOrientation();
