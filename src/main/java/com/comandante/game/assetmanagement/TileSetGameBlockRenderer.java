@@ -8,9 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -215,7 +213,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
     }
 
     @Override
-    public void render(BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g) {
+    public void render(GameBoardCellEntity[][] cellEntities, BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g) {
         GameBoardCoords currentCoords = gameBoardCellEntity.getGameBoardCoords();
 
         Optional<BufferedImage> numberToRender = Optional.empty();
@@ -226,6 +224,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 int currentCountDownInteger = gameBoardCellEntity.getGameBlock().get().getCurrentCountDownInteger();
                 if (currentCountDownInteger == 0) {
                     GameBlock gameBlock = GameBlock.blockOfType(gameBoardCellEntity.getType().getCountDownRelated().get(), this);
+                    cellEntities[gameBoardCellEntity.getGameBoardCoords().i][gameBoardCellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords(), gameBlock);;
                     gameBoardCellEntity = new GameBoardCellEntity(gameBlock);
                 } else {
                     numberToRender = Optional.ofNullable(numbers.get(currentCountDownInteger));

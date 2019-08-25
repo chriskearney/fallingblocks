@@ -296,10 +296,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
             GameBlock.Type type = ce.getType();
             if (type.equals(GameBlock.Type.EMPTY)) {
-                gameBlockRenderer.render(new BlockTypeBorder(type), ce, g);
+                gameBlockRenderer.render(gameBoardData.getCellEntities(), new BlockTypeBorder(type), ce, g);
             } else {
                 Optional<GameBlock> gameBlock = ce.getGameBlock();
-                gameBlockRenderer.render(gameBlock.get().getBlockTypeBorder(), ce, g);
+                gameBlockRenderer.render(gameBoardData.getCellEntities(), gameBlock.get().getBlockTypeBorder(), ce, g);
             }
         }
     }
