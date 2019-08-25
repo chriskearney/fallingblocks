@@ -5,6 +5,7 @@ import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardCoords;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -24,6 +25,7 @@ import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 public class TileSetGameBlockRenderer implements GameBlockRenderer {
 
     public final static Map<BlockTypeBorder, java.util.List<BufferedImage>> imagesNew = new HashMap<>();
+    private final static Map<Integer, BufferedImage> numbers = Maps.newHashMap();
 
     private final String tileSetName;
 
@@ -169,6 +171,22 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         }
 
         {
+            Optional<BufferedImage> ifExists = getIfExists(tileSetName, "numbers.png");
+            if (ifExists.isPresent()) {
+                BufferedImage one = ifExists.get().getSubimage(0, 0, 8, 8);
+                BufferedImage two = ifExists.get().getSubimage(8, 0, 8, 8);
+                BufferedImage three = ifExists.get().getSubimage(16, 0, 8, 8);
+                BufferedImage four = ifExists.get().getSubimage(24, 0, 8, 8);
+                BufferedImage five = ifExists.get().getSubimage(32, 0, 8, 8);
+                numbers.put(1, one);
+                numbers.put(2, two);
+                numbers.put(3, three);
+                numbers.put(4, four);
+                numbers.put(5, five);
+            }
+        }
+
+        {
             BufferedImage diamondTileSetImage = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/diamond.png"));
             BufferedImage frame1 = diamondTileSetImage.getSubimage(0, 0, 8, 8);
             BufferedImage frame2 = diamondTileSetImage.getSubimage(8, 0, 8, 8);
@@ -203,7 +221,11 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         Optional<BufferedImage> imageToRender = Optional.empty();
         if (gameBoardCellEntity.getGameBlock().isPresent()) {
             imageToRender = gameBoardCellEntity.getGameBlock().get().getImageToRender();
+            if (gameBoardCellEntity.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
+
+            }
         }
+
         if (!imageToRender.isPresent()) {
             List<BufferedImage> bufferedImages = imagesNew.get(blockTypeBorder);
             if (bufferedImages == null) {

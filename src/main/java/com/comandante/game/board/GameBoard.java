@@ -59,7 +59,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final Opponent opponent;
 
     private Integer score = 0;
-    private Integer largestScore = 0;
     private boolean paused = false;
     private boolean isGameOver = false;
 
@@ -117,6 +116,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
+                            GameBoard.this.addRoundToCountdownBlocks(roundUuid);
                             flushRoundScoring();
                             gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
                             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
@@ -173,6 +173,17 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public void addNotify() {
         super.addNotify();
         requestFocus();
+    }
+
+    public void addRoundToCountdownBlocks(UUID round) {
+        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+        for (GameBoardCellEntity ce: cellsFromBottom) {
+            if (ce.getGameBlock().isPresent()) {
+                if (ce.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
+                    ce.getGameBlock().get().addRound(round);
+                }
+            }
+        }
     }
 
     public PermaGroupManager getPermaGroupManager() {
@@ -599,5 +610,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public void keyTyped(KeyEvent keyEvent) {
 
     }
+
+    public GameBlockRenderer getGameBlockRenderer() {
+        return gameBlockRenderer;
+    }
+
 
 }
