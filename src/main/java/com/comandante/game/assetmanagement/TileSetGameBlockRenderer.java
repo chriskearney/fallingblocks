@@ -218,11 +218,18 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
     public void render(BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g) {
         GameBoardCoords currentCoords = gameBoardCellEntity.getGameBoardCoords();
 
+        Optional<BufferedImage> numberToRender = Optional.empty();
         Optional<BufferedImage> imageToRender = Optional.empty();
         if (gameBoardCellEntity.getGameBlock().isPresent()) {
             imageToRender = gameBoardCellEntity.getGameBlock().get().getImageToRender();
             if (gameBoardCellEntity.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
-
+                int currentCountDownInteger = gameBoardCellEntity.getGameBlock().get().getCurrentCountDownInteger();
+                if (currentCountDownInteger == 0) {
+                    GameBlock gameBlock = GameBlock.blockOfType(gameBoardCellEntity.getType().getCountDownRelated().get(), this);
+                    gameBoardCellEntity = new GameBoardCellEntity(gameBlock);
+                } else {
+                    numberToRender = Optional.ofNullable(numbers.get(currentCountDownInteger));
+                }
             }
         }
 
@@ -242,6 +249,9 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             g.clearRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         } else {
             g.drawImage(imageToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+            if (numberToRender.isPresent()) {
+                g.drawImage(numberToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+            }
             gameBoardCellEntity.setRectangle(new Rectangle(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE));
         }
     }
