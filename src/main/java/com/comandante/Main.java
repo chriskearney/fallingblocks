@@ -24,7 +24,7 @@ public class Main extends JFrame {
     public Main() throws IOException, InvalidMidiDataException, MidiUnavailableException {
         configurateOperatingSpecificBehavior();
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("diamond");
-        TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
+        TextBoard textBoard = new TextBoard(new int[33][37], tileSetBlockRenderProcessor);
         GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
         musicManager.loadMusic();

@@ -16,7 +16,7 @@ import static com.comandante.game.board.GameBoardUtil.subtractCoords;
 
 
 public class GameBoardData {
-    public final static int BLOCK_SIZE = 32;
+    public final static int BLOCK_SIZE = 36;
     private GameBoardCellEntity[][] cellEntities;
     private Optional<GameBlockPair> blockPairActive = Optional.empty();
     private final ArrayBlockingQueue<InsertionQueueItem> insertionQueue = new ArrayBlockingQueue<>(500);
