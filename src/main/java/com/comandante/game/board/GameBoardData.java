@@ -311,7 +311,7 @@ public class GameBoardData {
         return foundCoords;
     }
 
-    public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
+    public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoardCellEntity gameBoardCellEntity, GameBlockType targetType) {
         List<GameBoardCellEntity> neighbors = new ArrayList<>();
         Optional<GameBoardCellEntity> upCell = getCellEntityIfOccupied(GameBoardCoords.MoveDirection.UP, gameBoardCellEntity);
         Optional<GameBoardCellEntity> downCell = getCellEntityIfOccupied(GameBoardCoords.MoveDirection.DOWN, gameBoardCellEntity);
@@ -323,7 +323,7 @@ public class GameBoardData {
         rightCell.ifPresent(neighbors::add);
         return neighbors.stream().filter(ce -> {
             if (ce.getType().getRelated().isPresent()) {
-                GameBlock.Type relatedType = ce.getType().getRelated().get();
+                GameBlockType relatedType = ce.getType().getRelated().get();
                 if (relatedType.equals(targetType)) {
                     return true;
                 }

@@ -27,17 +27,16 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.function.Predicate;
 
-import static com.comandante.game.board.GameBlock.BorderType.BOTTOM;
-import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_LEFT;
-import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_RIGHT;
-import static com.comandante.game.board.GameBlock.BorderType.LEFT;
-import static com.comandante.game.board.GameBlock.BorderType.NO_BORDER;
-import static com.comandante.game.board.GameBlock.BorderType.RIGHT;
-import static com.comandante.game.board.GameBlock.BorderType.TOP;
-import static com.comandante.game.board.GameBlock.BorderType.TOP_LEFT;
-import static com.comandante.game.board.GameBlock.BorderType.TOP_RIGHT;
+import static com.comandante.game.board.GameBlockBorderType.BOTTOM;
+import static com.comandante.game.board.GameBlockBorderType.BOTTOM_LEFT;
+import static com.comandante.game.board.GameBlockBorderType.BOTTOM_RIGHT;
+import static com.comandante.game.board.GameBlockBorderType.LEFT;
+import static com.comandante.game.board.GameBlockBorderType.NO_BORDER;
+import static com.comandante.game.board.GameBlockBorderType.RIGHT;
+import static com.comandante.game.board.GameBlockBorderType.TOP;
+import static com.comandante.game.board.GameBlockBorderType.TOP_LEFT;
+import static com.comandante.game.board.GameBlockBorderType.TOP_RIGHT;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.BOTTOM_OF;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.LEFT_OF;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.RIGHT_OF;
@@ -282,7 +281,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         GameBoardCellEntity[] attackBlocks = new GameBoardCellEntity[gameBoardData.getCellEntities().length];
         GameBlock gameBlock = GameBlock.randomNormalBlock();
         for (int i = 0; i < attackBlocks.length; i++) {
-            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(GameBlock.Type.GREEN));
+            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(GameBlockType.GREEN));
         }
         return attackBlocks;
     }
@@ -294,8 +293,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public void paintComponent(Graphics g) {
         g.drawImage(background, 0, 0, null);
         for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
-            GameBlock.Type type = ce.getType();
-            if (type.equals(GameBlock.Type.EMPTY)) {
+            GameBlockType type = ce.getType();
+            if (type.equals(GameBlockType.EMPTY)) {
                 gameBlockRenderer.render(gameBoardData.getCellEntities(), new BlockTypeBorder(type), ce, g);
             } else {
                 Optional<GameBlock> gameBlock = ce.getGameBlock();
@@ -479,7 +478,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-    private Map<GameBlock.Type, List<BlockGroup>> buildGroupsByType() {
+    private Map<GameBlockType, List<BlockGroup>> buildGroupsByType() {
         List<BlockGroup> matchingGroups = Lists.newArrayList();
         List<GameBoardCellEntity[]> lisOfRowsFromBottom = gameBoardData.getListOfRowsFromBottom();
         for (GameBoardCellEntity[] next : lisOfRowsFromBottom) {
@@ -501,9 +500,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 }
             }
         }
-        Map<GameBlock.Type, List<BlockGroup>> groupsByType = new HashMap<>();
+        Map<GameBlockType, List<BlockGroup>> groupsByType = new HashMap<>();
         for (BlockGroup group : matchingGroups) {
-            GameBlock.Type type = group.getRawGroup()[0][0].getType();
+            GameBlockType type = group.getRawGroup()[0][0].getType();
             groupsByType.computeIfAbsent(type, k -> Lists.newArrayList());
             groupsByType.get(type).add(group);
         }
@@ -512,8 +511,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
     private List<BlockGroup> buildAllGroups() {
         List<BlockGroup> allGroups = Lists.newArrayList();
-        Map<GameBlock.Type, List<BlockGroup>> blockGroups = buildGroupsByType();
-        for (Map.Entry<GameBlock.Type, List<BlockGroup>> entry : blockGroups.entrySet()) {
+        Map<GameBlockType, List<BlockGroup>> blockGroups = buildGroupsByType();
+        for (Map.Entry<GameBlockType, List<BlockGroup>> entry : blockGroups.entrySet()) {
             allGroups.addAll(entry.getValue());
         }
         return allGroups;
@@ -567,7 +566,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         final int maxY = blockGroup.getY();
         for (int x = 1; x <= maxX; x++) {
             for (int y = 1; y <= maxY; y++) {
-                GameBlock.BorderType type = null;
+                GameBlockBorderType type = null;
                 GameBlock byXandY = blockGroup.getByXandY(x, y);
                 if (x < maxY && x < maxX) {
                     type = NO_BORDER;

@@ -3,99 +3,90 @@ package com.comandante.game.board;
 import com.comandante.game.assetmanagement.BlockTypeBorder;
 import com.comandante.game.assetmanagement.DestructInvoker;
 import com.comandante.game.assetmanagement.RenderInvoker;
-import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class GameBlock {
 
     private final static Random RANDOM = new Random();
-    private final static List<Type> NORMAL_VALUES = Collections.unmodifiableList(Arrays.asList(Type.getNormalRandomPool()));
+    private final static List<GameBlockType> NORMAL_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getNormalRandomPool()));
     private final static int NORMAL_VALUES_SIZE = NORMAL_VALUES.size();
 
-    private final static List<Type> RANDOM_MAGIC_VALUES = Collections.unmodifiableList(Arrays.asList(Type.getRandomMagicPool()));
+    private final static List<GameBlockType> RANDOM_MAGIC_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getRandomMagicPool()));
     private final static int RANDOM_VALUE_SIZE = RANDOM_MAGIC_VALUES.size();
 
-    private final static List<Type> RANDOM_COUNTDOWN_VALUES = Collections.unmodifiableList(Arrays.asList(Type.getRandomCountDownPool()));
+    private final static List<GameBlockType> RANDOM_COUNTDOWN_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getRandomCountDownPool()));
     private final static int RANDOM_COUNTDOWN_SIZE = RANDOM_COUNTDOWN_VALUES.size();
 
     private List<UUID> rounds = Lists.newArrayList();
-    public static int MAX_COUNTDOWN_ROUNDS = 5;
+    private static int MAX_COUNTDOWN_ROUNDS = 5;
 
-    private final Type type;
+    private final GameBlockType type;
     private final UUID identifier;
     private boolean resting = false;
-    private Optional<BorderType> borderType;
+    private Optional<GameBlockBorderType> borderType;
     private final Optional<InvocationRound<BufferedImage, Void>> invocationRound;
     private Optional<InvocationRound<BufferedImage, Void>> destructionRound;
 
     private boolean markForDeletion = false;
     private boolean readyForDeletion = false;
 
-    public GameBlock(Type type, UUID identifier, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
+    public GameBlock(GameBlockType type, UUID identifier, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
         this.identifier = identifier;
         this.invocationRound = Optional.of(invocationRenderRounds);
     }
 
-    public GameBlock(Type type, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
+    public GameBlock(GameBlockType type, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
         this.identifier = UUID.randomUUID();
         this.invocationRound = Optional.of(invocationRenderRounds);
     }
 
-    public GameBlock(Type type) {
+    public GameBlock(GameBlockType type) {
         this.type = type;
         this.identifier = UUID.randomUUID();
         this.invocationRound = Optional.empty();
     }
 
-    public GameBlock(Type type, UUID uuid) {
+    public GameBlock(GameBlockType type, UUID uuid) {
         this.type = type;
         this.identifier = uuid;
         this.invocationRound = Optional.empty();
     }
 
     public static GameBlock randomNormalBlock() {
-        Type randomType = NORMAL_VALUES.get(RANDOM.nextInt(NORMAL_VALUES_SIZE));
+        GameBlockType randomType = NORMAL_VALUES.get(RANDOM.nextInt(NORMAL_VALUES_SIZE));
         return new GameBlock(randomType);
     }
 
     public static GameBlock randomMagicBlock(GameBlockRenderer gameBlockRenderer) {
-        Type randomType = RANDOM_MAGIC_VALUES.get(RANDOM.nextInt(RANDOM_VALUE_SIZE));
+        GameBlockType randomType = RANDOM_MAGIC_VALUES.get(RANDOM.nextInt(RANDOM_VALUE_SIZE));
         return blockOfType(randomType, UUID.randomUUID(), gameBlockRenderer);
     }
 
     public static GameBlock diamondBlock(GameBlockRenderer gameBlockRenderer) {
-        return blockOfType(Type.DIAMOND, UUID.randomUUID(), gameBlockRenderer);
+        return blockOfType(GameBlockType.DIAMOND, UUID.randomUUID(), gameBlockRenderer);
     }
 
     public static GameBlock randomCountDownBlock(GameBlockRenderer gameBlockRenderer) {
-        Type randomType = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
+        GameBlockType randomType = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
         return blockOfType(randomType, UUID.randomUUID(), gameBlockRenderer);
     }
 
-    public static GameBlock basicBlockOfType(Type type, GameBlockRenderer gameBlockRenderer) {
+    public static GameBlock basicBlockOfType(GameBlockType type, GameBlockRenderer gameBlockRenderer) {
         return new GameBlock(type, UUID.randomUUID());
     }
 
-    public static GameBlock basicBlockOfType(Type type, UUID identifier, GameBlockRenderer gameBlockRenderer) {
-        return new GameBlock(type, identifier);
-    }
-
-    public static GameBlock blockOfType(Type type, UUID identifier, GameBlockRenderer gameBlockRenderer) {
+    public static GameBlock blockOfType(GameBlockType type, UUID identifier, GameBlockRenderer gameBlockRenderer) {
         InvocationRound<BufferedImage, Void> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(type)), true);
         return new GameBlock(type, identifier, bufferedImageInvocationRound);
     }
@@ -108,11 +99,11 @@ public class GameBlock {
         return resting;
     }
 
-    public Optional<BorderType> getBorderType() {
+    public Optional<GameBlockBorderType> getBorderType() {
         return borderType;
     }
 
-    public void setBorderType(Optional<BorderType> borderType) {
+    public void setBorderType(Optional<GameBlockBorderType> borderType) {
         this.borderType = borderType;
     }
 
@@ -137,7 +128,7 @@ public class GameBlock {
         this.markForDeletion = markForDeletion;
     }
 
-    public Type getType() {
+    public GameBlockType getType() {
         return type;
     }
 
@@ -149,7 +140,7 @@ public class GameBlock {
         if (borderType == null) {
             return new BlockTypeBorder(getType());
         }
-        return new BlockTypeBorder(getType(), borderType.orElse(BorderType.NO_BORDER));
+        return new BlockTypeBorder(getType(), borderType.orElse(GameBlockBorderType.NO_BORDER));
     }
 
     public Optional<BufferedImage> getImageToRender() {
@@ -176,116 +167,4 @@ public class GameBlock {
         return MAX_COUNTDOWN_ROUNDS - getRoundCount();
     }
 
-    public enum BorderType {
-        TOP,
-        TOP_LEFT,
-        LEFT,
-        BOTTOM_LEFT,
-        TOP_RIGHT,
-        RIGHT,
-        BOTTOM_RIGHT,
-        BOTTOM,
-        TOP_BOTTOM,
-        TOP_LEFT_BOTTOM,
-        TOP_RIGHT_BOTTOM,
-        TOP_LEFT_RIGHT,
-        NO_BORDER
-    }
-
-    public enum Type {
-        BLUE,
-        CYAN,
-        GOLD,
-        GREEN,
-        MAGENTA,
-        ORANGE,
-        PURPLE,
-        RED,
-        YELLOW,
-        DIAMOND,
-
-        COUNTDOWN_BLUE(Optional.empty(), Optional.of(BLUE)),
-        COUNTDOWN_CYAN(Optional.empty(), Optional.of(CYAN)),
-        COUNTDOWN_GOLD(Optional.empty(), Optional.of(GOLD)),
-        COUNTDOWN_GREEN(Optional.empty(), Optional.of(GREEN)),
-        COUNTDOWN_MAGENTA(Optional.empty(), Optional.of(MAGENTA)),
-        COUNTDOWN_ORANGE(Optional.empty(), Optional.of(ORANGE)),
-        COUNTDOWN_PURPLE(Optional.empty(), Optional.of(PURPLE)),
-        COUNTDOWN_RED(Optional.empty(), Optional.of(RED)),
-        COUNTDOWN_YELLOW(Optional.empty(), Optional.of(YELLOW)),
-
-        MAGIC_BLUE(Optional.of(BLUE)),
-        MAGIC_CYAN(Optional.of(CYAN)),
-        MAGIC_GOLD(Optional.of(GOLD)),
-        MAGIC_GREEN(Optional.of(GREEN)),
-        MAGIC_MAGENTA(Optional.of(MAGENTA)),
-        MAGIC_ORANGE(Optional.of(ORANGE)),
-        MAGIC_PURPLE(Optional.of(PURPLE)),
-        MAGIC_RED(Optional.of(RED)),
-        MAGIC_YELLOW(Optional.of(YELLOW)),
-        EMPTY;
-
-        private Optional<Type> magicRelated;
-        private Optional<Type> countDownRelated;
-
-
-        Type(Optional<Type> magicRelated, Optional<Type> countDownRelated) {
-            this.magicRelated = magicRelated;
-            this.countDownRelated = countDownRelated;
-        }
-
-        Type(Optional<Type> magicRelated) {
-            this.magicRelated = magicRelated;
-            this.countDownRelated = Optional.empty();
-        }
-
-        Type() {
-            this.magicRelated = Optional.empty();
-            this.countDownRelated = Optional.empty();
-        }
-
-        public boolean isMagic() {
-            return magicRelated.isPresent();
-        }
-
-        public Optional<Type> getRelated() {
-            return magicRelated;
-        }
-
-        public Optional<Type> getCountDownRelated() {
-            return countDownRelated;
-        }
-
-        public static Type[] getNormalRandomPool() {
-            Set<Type> resolvedTypes = Sets.newHashSet();
-            for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
-                resolvedTypes.add(next.getKey().getType());
-            }
-            List<Type> collect = resolvedTypes.stream().filter(type -> !type.isMagic() && !type.getCountDownRelated().isPresent()).collect(Collectors.toList());
-            collect.remove(EMPTY);
-            collect.remove(DIAMOND);
-            return collect.toArray(new Type[0]);
-        }
-
-        public static Type[] getRandomMagicPool() {
-            Set<Type> resolvedTypes = Sets.newHashSet();
-            for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
-                resolvedTypes.add(next.getKey().getType());
-            }
-
-            List<Type> collect = resolvedTypes.stream().filter(type -> type.isMagic()).collect(Collectors.toList());
-            return collect.toArray(new Type[0]);
-        }
-
-        public static Type[] getRandomCountDownPool() {
-            Set<Type> resolvedTypes = Sets.newHashSet();
-            for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
-                resolvedTypes.add(next.getKey().getType());
-            }
-
-            List<Type> collect = resolvedTypes.stream().filter(type -> type.getCountDownRelated().isPresent()).collect(Collectors.toList());
-            return collect.toArray(new Type[0]);
-        }
-
-    }
 }

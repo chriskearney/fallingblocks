@@ -1,9 +1,6 @@
 package com.comandante.game.board.logic;
 
-import com.comandante.game.board.GameBlock;
-import com.comandante.game.board.GameBoard;
-import com.comandante.game.board.GameBoardCellEntity;
-import com.comandante.game.board.GameBoardCoords;
+import com.comandante.game.board.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -22,21 +19,21 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
     public void processDiamondBlocks(GameBoard gameBoard) {
         List<GameBoardCellEntity> diamondCellEntities = gameBoard.getGameBoardData().getCellsFromBottom().stream()
                 .filter(GameBoardCellEntity::isOccupied)
-                .filter(gameBoardCellEntity -> gameBoardCellEntity.getType().equals(GameBlock.Type.DIAMOND))
+                .filter(gameBoardCellEntity -> gameBoardCellEntity.getType().equals(GameBlockType.DIAMOND))
                 .collect(Collectors.toList());
 
         for (GameBoardCellEntity cellEntity : diamondCellEntities) {
             Optional<GameBoardCellEntity> cellEntityIfOccupied = gameBoard.getGameBoardData().getCellEntityIfOccupied(GameBoardCoords.MoveDirection.DOWN, cellEntity);
             if (cellEntityIfOccupied.isPresent() && cellEntityIfOccupied.get().isOccupied()) {
                 cellEntityIfOccupied.get().getGameBlock().get().setMarkForDeletion(true);
-                GameBlock.Type type = cellEntityIfOccupied.get().getGameBlock().get().getType();
+                GameBlockType type = cellEntityIfOccupied.get().getGameBlock().get().getType();
                 if (type.isMagic()) {
                     type = type.getRelated().get();
                 }
                 List<GameBoardCellEntity> cellsFromBottom = gameBoard.getGameBoardData().getCellsFromBottom();
                 for (GameBoardCellEntity ce : cellsFromBottom) {
                     if (ce.getGameBlock().isPresent()) {
-                        GameBlock.Type foundType;
+                        GameBlockType foundType;
                         if (ce.getGameBlock().get().getType().isMagic()) {
                             foundType = ce.getGameBlock().get().getType().getRelated().get();
                         } else {
@@ -71,7 +68,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
     public Optional<ScoringDetails> destroyCellEntitiesThatAreMarkedForDeletion(GameBoard gameBoard) {
         int destroyed = 0;
         Map<UUID, Integer> blocksDestroyedByGroup = Maps.newHashMap();
-        Map<GameBlock.Type, Integer> blocksNotInAGroupDestroyedByType = Maps.newHashMap();
+        Map<GameBlockType, Integer> blocksNotInAGroupDestroyedByType = Maps.newHashMap();
         List<GameBoardCellEntity> cellEntitiesReadyForDeletion = getCellEntitiesReadyForDeletion(gameBoard);
         for (GameBoardCellEntity cellEntityReadyForDeletion : cellEntitiesReadyForDeletion) {
             destroyed++;
@@ -80,7 +77,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
                 blocksDestroyedByGroup.putIfAbsent(permaGroupForBlock.get(), 0);
                 blocksDestroyedByGroup.put(permaGroupForBlock.get(), blocksDestroyedByGroup.get(permaGroupForBlock.get()) + 1);
             } else {
-                GameBlock.Type gameBlockType = cellEntityReadyForDeletion.getGameBlock().get().getType();
+                GameBlockType gameBlockType = cellEntityReadyForDeletion.getGameBlock().get().getType();
                 if (gameBlockType.getRelated().isPresent()) {
                     gameBlockType = gameBlockType.getRelated().get();
                 }
@@ -112,7 +109,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         }
 
         int typeScoreTotal = 0;
-        for (Map.Entry<GameBlock.Type, Integer> next : blocksNotInAGroupDestroyedByType.entrySet()) {
+        for (Map.Entry<GameBlockType, Integer> next : blocksNotInAGroupDestroyedByType.entrySet()) {
             if (next.getValue() <= 1) {
                 continue;
             }
@@ -151,7 +148,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         return gameBoardCellEntities;
     }
 
-    private boolean processMagic(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
+    private boolean processMagic(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlockType targetType) {
         boolean wasMagic = false;
         List<GameBoardCellEntity> likeNeighbors = destroyLikeNeighbors(gameBoard, gameBoardCellEntity, targetType);
         if (!likeNeighbors.isEmpty()) {
@@ -174,7 +171,7 @@ public class StandardMagicGameBlockProcessor implements MagicGameBlockProcessor 
         return magicCellEntities;
     }
 
-    private List<GameBoardCellEntity> destroyLikeNeighbors(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
+    private List<GameBoardCellEntity> destroyLikeNeighbors(GameBoard gameBoard, GameBoardCellEntity gameBoardCellEntity, GameBlockType targetType) {
         List<GameBoardCellEntity> destroyedNeighbors = new ArrayList<>();
         if ((gameBoardCellEntity.getType().equals(targetType) || (gameBoardCellEntity.getType().getRelated().isPresent() && gameBoardCellEntity.getType().getRelated().get().equals(targetType)))) {
             List<GameBoardCellEntity> occupiedNeighbors = gameBoard.getGameBoardData().getOccupiedNeighborsOfType(gameBoardCellEntity, targetType);

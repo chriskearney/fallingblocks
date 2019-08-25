@@ -1,6 +1,6 @@
 package com.comandante.game.assetmanagement;
 
-import com.comandante.game.board.GameBlock;
+import com.comandante.game.board.GameBlockBorderType;
 import com.google.common.collect.Lists;
 
 import java.awt.image.BufferedImage;
@@ -82,7 +82,7 @@ public class PixelArtTileset implements TileSet {
     }
 
     @Override
-    public BufferedImage get(GameBlock.BorderType borderType) {
+    public BufferedImage get(GameBlockBorderType borderType) {
         switch (borderType) {
             case TOP:
                 return getTopBordered();

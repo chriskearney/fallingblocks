@@ -43,11 +43,11 @@ public class GameBoardCellEntity {
         return gameBlockOptional;
     }
 
-    public GameBlock.Type getType() {
+    public GameBlockType getType() {
         if (gameBlockOptional.isPresent()) {
             return gameBlockOptional.get().getType();
         }
-        return GameBlock.Type.EMPTY;
+        return GameBlockType.EMPTY;
     }
 
     public void setRectangle(Rectangle rectangle) {

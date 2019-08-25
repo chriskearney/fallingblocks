@@ -1,7 +1,7 @@
 package com.comandante.game.board.logic;
 
 import com.comandante.game.assetmanagement.BlockTypeBorder;
-import com.comandante.game.board.GameBlock;
+import com.comandante.game.board.GameBlockType;
 import com.comandante.game.board.GameBoardCellEntity;
 
 import java.awt.Graphics;
@@ -13,5 +13,5 @@ public interface GameBlockRenderer {
 
     void render(GameBoardCellEntity[][] cellEntities, BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g);
 
-    java.util.List<BufferedImage> getImage(GameBlock.Type type);
+    java.util.List<BufferedImage> getImage(GameBlockType type);
 }
