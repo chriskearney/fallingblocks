@@ -171,11 +171,11 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
         {
             Optional<BufferedImage> ifExists = getIfExists(tileSetName, "numbers.png");
             if (ifExists.isPresent()) {
-                BufferedImage one = ifExists.get().getSubimage(0, 0, 8, 8);
-                BufferedImage two = ifExists.get().getSubimage(8, 0, 8, 8);
+                BufferedImage five = ifExists.get().getSubimage(0, 0, 8, 8);
+                BufferedImage four = ifExists.get().getSubimage(8, 0, 8, 8);
                 BufferedImage three = ifExists.get().getSubimage(16, 0, 8, 8);
-                BufferedImage four = ifExists.get().getSubimage(24, 0, 8, 8);
-                BufferedImage five = ifExists.get().getSubimage(32, 0, 8, 8);
+                BufferedImage two = ifExists.get().getSubimage(24, 0, 8, 8);
+                BufferedImage one = ifExists.get().getSubimage(32, 0, 8, 8);
                 numbers.put(1, one);
                 numbers.put(2, two);
                 numbers.put(3, three);
@@ -223,9 +223,9 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             if (gameBoardCellEntity.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
                 int currentCountDownInteger = gameBoardCellEntity.getGameBlock().get().getCurrentCountDownInteger();
                 if (currentCountDownInteger == 0) {
-                    GameBlock gameBlock = GameBlock.blockOfType(gameBoardCellEntity.getType().getCountDownRelated().get(), this);
+                    GameBlock gameBlock = GameBlock.basicBlockOfType(gameBoardCellEntity.getType().getCountDownRelated().get(), this);
                     cellEntities[gameBoardCellEntity.getGameBoardCoords().i][gameBoardCellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords(), gameBlock);;
-                    gameBoardCellEntity = new GameBoardCellEntity(gameBlock);
+                    //gameBoardCellEntity = new GameBoardCellEntity(gameBlock);
                 } else {
                     numberToRender = Optional.ofNullable(numbers.get(currentCountDownInteger));
                 }

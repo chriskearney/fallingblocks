@@ -44,6 +44,12 @@ public class GameBlock {
     private boolean markForDeletion = false;
     private boolean readyForDeletion = false;
 
+    public GameBlock(Type type, UUID identifier, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
+        this.type = type;
+        this.identifier = identifier;
+        this.invocationRound = Optional.of(invocationRenderRounds);
+    }
+
     public GameBlock(Type type, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
         this.identifier = UUID.randomUUID();
@@ -69,22 +75,31 @@ public class GameBlock {
 
     public static GameBlock randomMagicBlock(GameBlockRenderer gameBlockRenderer) {
         Type randomType = RANDOM_MAGIC_VALUES.get(RANDOM.nextInt(RANDOM_VALUE_SIZE));
-        return blockOfType(randomType, gameBlockRenderer);
+        return blockOfType(randomType, UUID.randomUUID(), gameBlockRenderer);
     }
 
     public static GameBlock diamondBlock(GameBlockRenderer gameBlockRenderer) {
-        return blockOfType(Type.DIAMOND, gameBlockRenderer);
+        return blockOfType(Type.DIAMOND, UUID.randomUUID(), gameBlockRenderer);
     }
 
     public static GameBlock randomCountDownBlock(GameBlockRenderer gameBlockRenderer) {
         Type randomType = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
-        return blockOfType(randomType, gameBlockRenderer);
+        return blockOfType(randomType, UUID.randomUUID(), gameBlockRenderer);
     }
 
-    public static GameBlock blockOfType(Type type, GameBlockRenderer gameBlockRenderer) {
-        InvocationRound<BufferedImage, Void> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(type)), true);
-        return new GameBlock(type, bufferedImageInvocationRound);
+    public static GameBlock basicBlockOfType(Type type, GameBlockRenderer gameBlockRenderer) {
+        return new GameBlock(type, UUID.randomUUID());
     }
+
+    public static GameBlock basicBlockOfType(Type type, UUID identifier, GameBlockRenderer gameBlockRenderer) {
+        return new GameBlock(type, identifier);
+    }
+
+    public static GameBlock blockOfType(Type type, UUID identifier, GameBlockRenderer gameBlockRenderer) {
+        InvocationRound<BufferedImage, Void> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(type)), true);
+        return new GameBlock(type, identifier, bufferedImageInvocationRound);
+    }
+
     public void setResting(boolean resting) {
         this.resting = resting;
     }

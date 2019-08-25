@@ -84,7 +84,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
         this.opponent = new BasicRandomAttackingOpponent();
-        this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
+        this.processAllDropsInvocationRound = new InvocationRound<>(4, new InvocationRound.Invoker<Void, ActionEvent>() {
 
             private UUID roundUuid;
             private Map<UUID, List<MagicGameBlockProcessor.ScoringDetails>> roundScoringList = Maps.newHashMap();
