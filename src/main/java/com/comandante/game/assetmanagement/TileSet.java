@@ -11,17 +11,7 @@ public interface TileSet {
 
     List<BufferedImage> getMagicBlockFrames();
 
-    List<BufferedImage> getDiamondBlockFrames();
-
-    List<BufferedImage> getCountDownBlockOne();
-
-    List<BufferedImage> getCountDownBlockTwo();
-
-    List<BufferedImage> getCountDownBlockThree();
-
-    List<BufferedImage> getCountDownBlockFour();
-
-    List<BufferedImage> getCountDownBlockFive();
+    List<BufferedImage> getCountDownFrames();
 
     BufferedImage get(GameBlock.BorderType borderType);
 }

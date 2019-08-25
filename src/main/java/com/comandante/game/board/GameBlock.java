@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GameBlock {
@@ -163,6 +164,17 @@ public class GameBlock {
         RED,
         YELLOW,
         DIAMOND,
+
+        COUNTDOWN_BLUE(Optional.empty(), Optional.of(BLUE)),
+        COUNTDOWN_CYAN(Optional.empty(), Optional.of(CYAN)),
+        COUNTDOWN_GOLD(Optional.empty(), Optional.of(GOLD)),
+        COUNTDOWN_GREEN(Optional.empty(), Optional.of(GREEN)),
+        COUNTDOWN_MAGENTA(Optional.empty(), Optional.of(MAGENTA)),
+        COUNTDOWN_ORANGE(Optional.empty(), Optional.of(ORANGE)),
+        COUNTDOWN_PURPLE(Optional.empty(), Optional.of(PURPLE)),
+        COUNTDOWN_RED(Optional.empty(), Optional.of(RED)),
+        COUNTDOWN_YELLOW(Optional.empty(), Optional.of(YELLOW)),
+
         MAGIC_BLUE(Optional.of(BLUE)),
         MAGIC_CYAN(Optional.of(CYAN)),
         MAGIC_GOLD(Optional.of(GOLD)),
@@ -175,13 +187,22 @@ public class GameBlock {
         EMPTY;
 
         private Optional<Type> magicRelated;
+        private Optional<Type> countDownRelated;
+
+
+        Type(Optional<Type> magicRelated, Optional<Type> countDownRelated) {
+            this.magicRelated = magicRelated;
+            this.countDownRelated = countDownRelated;
+        }
 
         Type(Optional<Type> magicRelated) {
             this.magicRelated = magicRelated;
+            this.countDownRelated = Optional.empty();
         }
 
         Type() {
             this.magicRelated = Optional.empty();
+            this.countDownRelated = Optional.empty();
         }
 
         public boolean isMagic() {
@@ -192,12 +213,16 @@ public class GameBlock {
             return magicRelated;
         }
 
+        public Optional<Type> getCountDownRelated() {
+            return countDownRelated;
+        }
+
         public static Type[] getNormalRandomPool() {
             Set<Type> resolvedTypes = Sets.newHashSet();
             for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
                 resolvedTypes.add(next.getKey().getType());
             }
-            List<Type> collect = resolvedTypes.stream().filter(type -> !type.isMagic()).collect(Collectors.toList());
+            List<Type> collect = resolvedTypes.stream().filter(type -> !type.isMagic() && !type.getCountDownRelated().isPresent()).collect(Collectors.toList());
             collect.remove(EMPTY);
             collect.remove(DIAMOND);
             return collect.toArray(new Type[0]);

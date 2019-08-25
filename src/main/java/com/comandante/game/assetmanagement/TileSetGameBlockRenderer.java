@@ -35,6 +35,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage blueTileSetImg = ifExists.get();
                 PixelArtTileset blueTileSet = new PixelArtTileset(blueTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE), blueTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_BLUE), blueTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.BLUE, borderType), Collections.singletonList(blueTileSet.get(borderType)));
@@ -50,6 +51,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage cyanTileSetImg = ifExists.get();
                 PixelArtTileset cyanTileSet = new PixelArtTileset(cyanTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.CYAN), cyanTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_CYAN), cyanTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.CYAN, borderType), Collections.singletonList(cyanTileSet.get(borderType)));
@@ -65,6 +67,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage goldTileSetImg = ifExists.get();
                 PixelArtTileset goldTileSet = new PixelArtTileset(goldTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.GOLD), goldTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_GOLD), goldTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.GOLD, borderType), Collections.singletonList(goldTileSet.get(borderType)));
@@ -79,6 +82,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage magentaTileSetImg = ifExists.get();
                 PixelArtTileset magentaTileSet = new PixelArtTileset(magentaTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGENTA), magentaTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_MAGENTA), magentaTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.MAGENTA, borderType), Collections.singletonList(magentaTileSet.get(borderType)));
@@ -93,6 +97,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage orangeTileSetImg = ifExists.get();
                 PixelArtTileset orangeTileSet = new PixelArtTileset(orangeTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.ORANGE), orangeTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_ORANGE), orangeTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.ORANGE, borderType), Collections.singletonList(orangeTileSet.get(borderType)));
@@ -107,6 +112,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage purpleTileSetImg = ifExists.get();
                 PixelArtTileset purpleTileSet = new PixelArtTileset(purpleTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.PURPLE), purpleTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_PURPLE), purpleTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.PURPLE, borderType), Collections.singletonList(purpleTileSet.get(borderType)));
@@ -123,6 +129,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage redTileSetImg = ifExists.get();
                 PixelArtTileset redTileSet = new PixelArtTileset(redTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED), redTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_RED), redTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.RED, borderType), Collections.singletonList(redTileSet.get(borderType)));
@@ -137,6 +144,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage yellowTileSetImg = ifExists.get();
                 PixelArtTileset yellowTileSet = new PixelArtTileset(yellowTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW), yellowTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_YELLOW), yellowTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.YELLOW, borderType), Collections.singletonList(yellowTileSet.get(borderType)));
@@ -151,6 +159,7 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
                 BufferedImage greenTileSetImg = ifExists.get();
                 PixelArtTileset greenTileSet = new PixelArtTileset(greenTileSetImg);
                 imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN), greenTileSet.getStandardBlockFrames());
+                imagesNew.put(new BlockTypeBorder(GameBlock.Type.COUNTDOWN_GREEN), greenTileSet.getCountDownFrames());
                 GameBlock.BorderType[] borderTypes = GameBlock.BorderType.values();
                 for (GameBlock.BorderType borderType : borderTypes) {
                     imagesNew.put(new BlockTypeBorder(GameBlock.Type.GREEN, borderType), Collections.singletonList(greenTileSet.get(borderType)));
@@ -169,16 +178,8 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             BufferedImage frame6 = diamondTileSetImage.getSubimage(40, 0, 8, 8);
             BufferedImage frame7 = diamondTileSetImage.getSubimage(48, 0, 8, 8);
             BufferedImage frame8 = diamondTileSetImage.getSubimage(56, 0, 8, 8);
-//            BufferedImage frame9 = diamondTileSetImage.getSubimage(64, 0, 8, 8);
-
             imagesNew.put(new BlockTypeBorder(GameBlock.Type.DIAMOND), Lists.newArrayList(frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8));
         }
-//
-//        Graphics2D g2d = emptyBlackImage.createGraphics();
-//        g2d.setColor(Color.black);
-//        g2d.fillRect(0, 0, 8, 8);
-//        g2d.dispose();
-//        imagesNew.put(new BlockTypeBorder(GameBlock.Type.EMPTY), Collections.singletonList(GameBlockRenderer.emptyBlackImage));
 
     }
 
