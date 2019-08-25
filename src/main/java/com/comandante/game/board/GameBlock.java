@@ -183,6 +183,7 @@ public class GameBlock {
         if (countDownRound.isPresent()) {
             return countDownRound.get().invoker(currentRound);
         }
+
         if (!invocationRound.isPresent()) {
             return Optional.empty();
         }

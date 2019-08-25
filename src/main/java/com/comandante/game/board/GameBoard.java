@@ -120,7 +120,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
-                            GameBoard.this.setCurrentRoundOnCountDownBlocks(roundUuid);
                             processCountDownBlocksReadyForConversion();
                             flushRoundScoring();
                             gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
@@ -130,6 +129,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     calculatePermaGroups();
                 }
                 gameBoardData.evaluateRestingStatus();
+                GameBoard.this.setCurrentRoundOnCountDownBlocks(roundUuid);
                 Optional<MagicGameBlockProcessor.ScoringDetails> scoringDetails = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
                 if (scoringDetails.isPresent()) {
                     if (roundScoringList.containsKey(roundUuid)) {

@@ -27,10 +27,6 @@ public class RenderInvoker implements InvocationRound.Invoker<BufferedImage, Voi
         return Optional.of(image);
     }
 
-    public Optional<BufferedImage> invoke() {
-        return invoke(null);
-    }
-
     @Override
     public int numberRoundsComplete() {
         return numberRoundsComplete;
