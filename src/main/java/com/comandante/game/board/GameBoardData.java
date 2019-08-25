@@ -191,8 +191,13 @@ public class GameBoardData {
                 return true;
             } else {
                 // set the existing cell to the incoming attack block
-                if (attackRow[i].getGameBlock().isPresent()) {
-                    cellEntities[i][0] = new GameBoardCellEntity(existingGameCellEntity.getId(), existingGameCellEntity.getGameBoardCoords(), attackRow[i].getGameBlock().get());
+
+                try {
+                    if (attackRow[i].getGameBlock().isPresent()) {
+                        cellEntities[i][0] = new GameBoardCellEntity(existingGameCellEntity.getId(), existingGameCellEntity.getGameBoardCoords(), attackRow[i].getGameBlock().get());
+                    }
+                } catch (Exception e) {
+                    System.out.printf("hi");
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.comandante.game.board;
 
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.BlockTypeBorder;
+import com.comandante.game.assetmanagement.CountDownBlockInvoker;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
 import com.comandante.game.board.logic.AttackProcessor;
@@ -24,10 +25,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+import static com.comandante.game.board.GameBlock.RANDOM;
+import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_SIZE;
+import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_VALUES;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM_LEFT;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM_RIGHT;
@@ -115,7 +120,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
-                            GameBoard.this.addRoundToCountdownBlocks(roundUuid);
+                            GameBoard.this.setCurrentRoundOnCountDownBlocks(roundUuid);
+                            processCountDownBlocksReadyForConversion();
                             flushRoundScoring();
                             gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
                             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
@@ -124,8 +130,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     calculatePermaGroups();
                 }
                 gameBoardData.evaluateRestingStatus();
-
-
                 Optional<MagicGameBlockProcessor.ScoringDetails> scoringDetails = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
                 if (scoringDetails.isPresent()) {
                     if (roundScoringList.containsKey(roundUuid)) {
@@ -137,6 +141,21 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 }
 
                 return Optional.empty();
+            }
+
+            private void processCountDownBlocksReadyForConversion() {
+                List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+                for (GameBoardCellEntity cellEntity : cellsFromBottom) {
+                    if (cellEntity.getGameBlock().isPresent()) {
+                        Optional<GameBlock> gameBlock = cellEntity.getGameBlock();
+                        if (gameBlock.get().getType().getCountDownRelated().isPresent()) {
+                            if (gameBlock.get().isReadyForCountDownConversion()) {
+                                GameBlock newGb = GameBlock.basicBlockOfType(cellEntity.getType().getCountDownRelated().get(), gameBlockRenderer);
+                                gameBoardData.getCellEntities()[cellEntity.getGameBoardCoords().i][cellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords(), newGb);
+                            }
+                        }
+                    }
+                }
             }
 
             private void flushRoundScoring() {
@@ -174,12 +193,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         requestFocus();
     }
 
-    public void addRoundToCountdownBlocks(UUID round) {
+    public void setCurrentRoundOnCountDownBlocks(UUID round) {
         List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
         for (GameBoardCellEntity ce: cellsFromBottom) {
             if (ce.getGameBlock().isPresent()) {
                 if (ce.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
-                    ce.getGameBlock().get().addRound(round);
+                    ce.getGameBlock().get().setCurrentRound(round);
                 }
             }
         }

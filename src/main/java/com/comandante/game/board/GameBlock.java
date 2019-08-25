@@ -1,6 +1,8 @@
 package com.comandante.game.board;
 
 import com.comandante.game.assetmanagement.BlockTypeBorder;
+import com.comandante.game.assetmanagement.
+        CountDownBlockInvoker;
 import com.comandante.game.assetmanagement.DestructInvoker;
 import com.comandante.game.assetmanagement.RenderInvoker;
 import com.comandante.game.board.logic.GameBlockRenderer;
@@ -16,15 +18,15 @@ import java.util.UUID;
 
 public class GameBlock {
 
-    private final static Random RANDOM = new Random();
+    public final static Random RANDOM = new Random();
     private final static List<GameBlockType> NORMAL_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getNormalRandomPool()));
     private final static int NORMAL_VALUES_SIZE = NORMAL_VALUES.size();
 
     private final static List<GameBlockType> RANDOM_MAGIC_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getRandomMagicPool()));
     private final static int RANDOM_VALUE_SIZE = RANDOM_MAGIC_VALUES.size();
 
-    private final static List<GameBlockType> RANDOM_COUNTDOWN_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getRandomCountDownPool()));
-    private final static int RANDOM_COUNTDOWN_SIZE = RANDOM_COUNTDOWN_VALUES.size();
+    public final static List<GameBlockType> RANDOM_COUNTDOWN_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getRandomCountDownPool()));
+    public final static int RANDOM_COUNTDOWN_SIZE = RANDOM_COUNTDOWN_VALUES.size();
 
     private List<UUID> rounds = Lists.newArrayList();
     private static int MAX_COUNTDOWN_ROUNDS = 5;
@@ -38,6 +40,18 @@ public class GameBlock {
 
     private boolean markForDeletion = false;
     private boolean readyForDeletion = false;
+
+    public boolean isReadyForCountDownConversion() {
+        return readyForCountDownConversion;
+    }
+
+    private boolean readyForCountDownConversion = false;
+    private Optional<InvocationRound<BufferedImage, UUID>> countDownRound = Optional.empty();
+    private UUID currentRound;
+
+    public void setCurrentRound(UUID currentRound) {
+        this.currentRound = currentRound;
+    }
 
     public GameBlock(GameBlockType type, UUID identifier, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
@@ -77,9 +91,15 @@ public class GameBlock {
         return blockOfType(GameBlockType.DIAMOND, UUID.randomUUID(), gameBlockRenderer);
     }
 
-    public static GameBlock randomCountDownBlock(GameBlockRenderer gameBlockRenderer) {
+    public static GameBlock randomCountDownBlock() {
         GameBlockType randomType = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
-        return blockOfType(randomType, UUID.randomUUID(), gameBlockRenderer);
+        return newCountDownBlockOfType(randomType);
+    }
+
+    public static GameBlock newCountDownBlockOfType(GameBlockType type) {
+        GameBlock gameBlock = new GameBlock(type);
+        gameBlock.setStartCountDown();
+        return gameBlock;
     }
 
     public static GameBlock basicBlockOfType(GameBlockType type, GameBlockRenderer gameBlockRenderer) {
@@ -128,6 +148,17 @@ public class GameBlock {
         this.markForDeletion = markForDeletion;
     }
 
+    public void setStartCountDown() {
+        Runnable postDeleteCode = () -> setReadyForCountDownConversion(true);
+        this.countDownRound = Optional.of(new InvocationRound<BufferedImage, UUID>(3, new CountDownBlockInvoker(getBlockTypeBorder()), true));
+        this.countDownRound.get().setInvokeRoundCompleteHandler(Optional.of(postDeleteCode));
+    }
+
+    public void setReadyForCountDownConversion(boolean readyForCountDownConversion) {
+        System.out.println("hi");
+        this.readyForCountDownConversion = readyForCountDownConversion;
+    }
+
     public GameBlockType getType() {
         return type;
     }
@@ -149,14 +180,13 @@ public class GameBlock {
                 return destructionRound.get().invoker(null);
             }
         }
+        if (countDownRound.isPresent()) {
+            return countDownRound.get().invoker(currentRound);
+        }
         if (!invocationRound.isPresent()) {
             return Optional.empty();
         }
         return invocationRound.get().invoker(null);
-    }
-
-    public void addRound(UUID round) {
-        rounds.add(round);
     }
 
     public int getRoundCount() {

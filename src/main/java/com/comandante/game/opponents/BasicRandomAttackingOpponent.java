@@ -1,6 +1,7 @@
 package com.comandante.game.opponents;
 
 import com.comandante.game.board.GameBlock;
+import com.comandante.game.board.GameBlockType;
 import com.comandante.game.board.GameBoard;
 import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardCoords;
@@ -8,6 +9,10 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.comandante.game.board.GameBlock.RANDOM;
+import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_SIZE;
+import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_VALUES;
 
 
 public class BasicRandomAttackingOpponent implements Opponent {
@@ -31,36 +36,36 @@ public class BasicRandomAttackingOpponent implements Opponent {
     private List<GameBoardCellEntity[]> getCenterAttack1(GameBoard gameBoard) {
         List<GameBoardCellEntity[]> gameBoardCellEntitiesRows = Lists.newArrayList();
 
-        GameBlock gameBlockA = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-        GameBlock gameBlockB = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
+        GameBlockType countDownBlockTypeA = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
+        GameBlockType countDownBlockTypeB = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
 
         {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
-            gameBoardCellEntities[0] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[0] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[5] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[9] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[9] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeB));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
 
         {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
-            gameBoardCellEntities[0] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[0] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[5] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[9] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[9] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeB));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
 
@@ -71,25 +76,21 @@ public class BasicRandomAttackingOpponent implements Opponent {
     private List<GameBoardCellEntity[]> getCenterAttack2(GameBoard gameBoard) {
         List<GameBoardCellEntity[]> gameBoardCellEntitiesRows = Lists.newArrayList();
 
-
-        GameBlock gameBlockA = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-
-        GameBlock gameBlockB = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-
-        GameBlock gameBlockC = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-
+        GameBlockType countDownBlockTypeA = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
+        GameBlockType countDownBlockTypeB = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
+        GameBlockType countDownBlockTypeC = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
 
         {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
             gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeB));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockC.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
@@ -98,13 +99,13 @@ public class BasicRandomAttackingOpponent implements Opponent {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
             gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeB));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockC.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
@@ -113,13 +114,13 @@ public class BasicRandomAttackingOpponent implements Opponent {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
             gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeB));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockC.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
@@ -130,26 +131,22 @@ public class BasicRandomAttackingOpponent implements Opponent {
     private List<GameBoardCellEntity[]> getCenterAttack3(GameBoard gameBoard) {
         List<GameBoardCellEntity[]> gameBoardCellEntitiesRows = Lists.newArrayList();
 
-
-        GameBlock gameBlockA = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-
-        GameBlock gameBlockB = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-
-        GameBlock gameBlockC = GameBlock.randomCountDownBlock(gameBoard.getGameBlockRenderer());
-
+        GameBlockType countDownBlockTypeA = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
+        GameBlockType countDownBlockTypeB = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
+        GameBlockType countDownBlockTypeC = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
 
         {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
             gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[1] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
-            gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
+            gameBoardCellEntities[1] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
+            gameBoardCellEntities[3] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[5] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[8] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[9] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[9] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeB));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
 
@@ -157,13 +154,13 @@ public class BasicRandomAttackingOpponent implements Opponent {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
             gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockC.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }
@@ -172,13 +169,13 @@ public class BasicRandomAttackingOpponent implements Opponent {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
             gameBoardCellEntities[0] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockA.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[3] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[4] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockB.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[5] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[6] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[7] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
-            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.blockOfType(gameBlockC.getType(), UUID.randomUUID(), gameBoard.getGameBlockRenderer()));
+            gameBoardCellEntities[8] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeC));
             gameBoardCellEntities[9] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntitiesRows.add(gameBoardCellEntities);
         }

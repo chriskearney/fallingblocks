@@ -21,7 +21,7 @@ import static com.comandante.game.board.GameBoardData.BLOCK_SIZE;
 public class TileSetGameBlockRenderer implements GameBlockRenderer {
 
     public final static Map<BlockTypeBorder, java.util.List<BufferedImage>> imagesNew = new HashMap<>();
-    private final static Map<Integer, BufferedImage> numbers = Maps.newHashMap();
+    public final static Map<Integer, BufferedImage> numbers = Maps.newHashMap();
 
     private final String tileSetName;
 
@@ -214,20 +214,23 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
     public void render(GameBoardCellEntity[][] cellEntities, BlockTypeBorder blockTypeBorder, GameBoardCellEntity gameBoardCellEntity, Graphics g) {
         GameBoardCoords currentCoords = gameBoardCellEntity.getGameBoardCoords();
 
-        Optional<BufferedImage> numberToRender = Optional.empty();
+//        Optional<BufferedImage> numberToRender = Optional.empty();
         Optional<BufferedImage> imageToRender = Optional.empty();
         if (gameBoardCellEntity.getGameBlock().isPresent()) {
-            imageToRender = gameBoardCellEntity.getGameBlock().get().getImageToRender();
             if (gameBoardCellEntity.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
-                int currentCountDownInteger = gameBoardCellEntity.getGameBlock().get().getCurrentCountDownInteger();
-                if (currentCountDownInteger == 0) {
-                    GameBlock gameBlock = GameBlock.basicBlockOfType(gameBoardCellEntity.getType().getCountDownRelated().get(), this);
-                    cellEntities[gameBoardCellEntity.getGameBoardCoords().i][gameBoardCellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords(), gameBlock);;
-                    //gameBoardCellEntity = new GameBoardCellEntity(gameBlock);
-                } else {
-                    numberToRender = Optional.ofNullable(numbers.get(currentCountDownInteger));
-                }
+                System.out.println("countdown");
             }
+            imageToRender = gameBoardCellEntity.getGameBlock().get().getImageToRender();
+//            if (gameBoardCellEntity.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
+//                int currentCountDownInteger = gameBoardCellEntity.getGameBlock().get().getCurrentCountDownInteger();
+//                if (currentCountDownInteger == 0) {
+//                    GameBlock gameBlock = GameBlock.basicBlockOfType(gameBoardCellEntity.getType().getCountDownRelated().get(), this);
+//                    cellEntities[gameBoardCellEntity.getGameBoardCoords().i][gameBoardCellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords(), gameBlock);;
+//                    //gameBoardCellEntity = new GameBoardCellEntity(gameBlock);
+//                } else {
+//                    numberToRender = Optional.ofNullable(numbers.get(currentCountDownInteger));
+//                }
+//            }
         }
 
         if (!imageToRender.isPresent()) {
@@ -246,9 +249,9 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
             g.clearRect(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         } else {
             g.drawImage(imageToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
-            if (numberToRender.isPresent()) {
-                g.drawImage(numberToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
-            }
+//            if (numberToRender.isPresent()) {
+//                g.drawImage(numberToRender.get(), currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+//            }
             gameBoardCellEntity.setRectangle(new Rectangle(currentCoords.i * BLOCK_SIZE, currentCoords.j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE));
         }
     }
