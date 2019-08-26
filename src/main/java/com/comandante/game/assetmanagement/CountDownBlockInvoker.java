@@ -15,14 +15,12 @@ import static com.comandante.game.assetmanagement.TileSetGameBlockRenderer.image
 public class CountDownBlockInvoker implements InvocationRound.Invoker<BufferedImage, UUID> {
 
 
-    private final BlockTypeBorder blockTypeBorder;
     private final List<BufferedImage> bufferedImages;
     private List<UUID> rounds = Lists.newArrayList();
     private int currentImage = 0;
     public static int MAX_ROUNDS_OF_COUNTDOWN = 5;
 
     public CountDownBlockInvoker(BlockTypeBorder blockTypeBorder) {
-        this.blockTypeBorder = blockTypeBorder;
         this.bufferedImages = imagesNew.get(blockTypeBorder);
     }
 

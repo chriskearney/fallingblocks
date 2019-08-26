@@ -31,24 +31,10 @@ public class Main extends JFrame {
         musicManager.playMusic();
         setTitle("PixelPuzzler");
         setResizable(false);
-        AttackProcessor attackProcessor = new AttackProcessor() {
-            @Override
-            public void attack(GameBoard gameBoard) {
-
-            }
-        };
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), new StandardMagicGameBlockProcessor(), textBoard, musicManager);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
-
-//        Application application = Application.getApplication();
-//        int[][] rawBoard = new int[27][32];
-//        TextBoard welcomeScreenTextBoard = new TextBoard(rawBoard, tileSetBlockRenderProcessor);
-//        WelcomeScreenPanel welcomeScreenPanel = new WelcomeScreenPanel(welcomeScreenTextBoard, gameBoard.getGameBoardData().getPreferredSize());
-//        getContentPane().add(welcomeScreenPanel);
-
-        // center the frame
         setLocationRelativeTo(null);
         pack();
         setVisible(true);

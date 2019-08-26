@@ -91,11 +91,6 @@ public class GameBlock {
         return blockOfType(GameBlockType.DIAMOND, UUID.randomUUID(), gameBlockRenderer);
     }
 
-    public static GameBlock randomCountDownBlock() {
-        GameBlockType randomType = RANDOM_COUNTDOWN_VALUES.get(RANDOM.nextInt(RANDOM_COUNTDOWN_SIZE));
-        return newCountDownBlockOfType(randomType);
-    }
-
     public static GameBlock newCountDownBlockOfType(GameBlockType type) {
         GameBlock gameBlock = new GameBlock(type);
         gameBlock.setStartCountDown();
@@ -190,13 +185,4 @@ public class GameBlock {
         }
         return invocationRound.get().invoker(null);
     }
-
-    public int getRoundCount() {
-        return rounds.size();
-    }
-
-    public int getCurrentCountDownInteger() {
-        return MAX_COUNTDOWN_ROUNDS - getRoundCount();
-    }
-
 }

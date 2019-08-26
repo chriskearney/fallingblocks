@@ -52,9 +52,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final Timer timer;
     private final GameBoardData gameBoardData;
     private final GameBlockRenderer gameBlockRenderer;
-    private final GameBlockPairFactory gameBlockPairFactory;
     private final MagicGameBlockProcessor magicGameBlockProcessor;
-    private final AttackProcessor attackProcessor;
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
     private final MusicManager musicManager;
@@ -75,15 +73,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public GameBoard(GameBoardData gameBoardData,
                      GameBlockRenderer gameBlockRenderer,
                      GameBlockPairFactory gameBlockPairFactory,
-                     AttackProcessor attackProcessor,
                      MagicGameBlockProcessor magicGameBlockProcessor,
                      TextBoard textBoard,
                      MusicManager musicManager) throws IOException {
         this.gameBoardData = gameBoardData;
         this.gameBlockRenderer = gameBlockRenderer;
-        this.gameBlockPairFactory = gameBlockPairFactory;
         this.magicGameBlockProcessor = magicGameBlockProcessor;
-        this.attackProcessor = attackProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
