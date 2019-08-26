@@ -1,11 +1,11 @@
 package com.comandante.game.board;
 
 import com.comandante.game.assetmanagement.BlockTypeBorder;
-import com.comandante.game.assetmanagement.
-        CountDownBlockInvoker;
-import com.comandante.game.assetmanagement.DestructInvoker;
-import com.comandante.game.assetmanagement.RenderInvoker;
+import com.comandante.game.board.logic.invoker.CountDownBlockInvoker;
+import com.comandante.game.board.logic.invoker.DestructInvoker;
+import com.comandante.game.board.logic.invoker.RenderInvoker;
 import com.comandante.game.board.logic.GameBlockRenderer;
+import com.comandante.game.board.logic.invoker.InvokerHarness;
 import com.google.common.collect.Lists;
 
 import java.awt.image.BufferedImage;
@@ -28,15 +28,12 @@ public class GameBlock {
     public final static List<GameBlockType> RANDOM_COUNTDOWN_VALUES = Collections.unmodifiableList(Arrays.asList(GameBlockType.getRandomCountDownPool()));
     public final static int RANDOM_COUNTDOWN_SIZE = RANDOM_COUNTDOWN_VALUES.size();
 
-    private List<UUID> rounds = Lists.newArrayList();
-    private static int MAX_COUNTDOWN_ROUNDS = 5;
-
     private final GameBlockType type;
     private final UUID identifier;
     private boolean resting = false;
     private Optional<GameBlockBorderType> borderType;
-    private final Optional<InvocationRound<BufferedImage, Void>> invocationRound;
-    private Optional<InvocationRound<BufferedImage, Void>> destructionRound;
+    private final Optional<InvokerHarness<BufferedImage, Void>> invocationRound;
+    private Optional<InvokerHarness<BufferedImage, Void>> destructionRound;
 
     private boolean markForDeletion = false;
     private boolean readyForDeletion = false;
@@ -46,20 +43,20 @@ public class GameBlock {
     }
 
     private boolean readyForCountDownConversion = false;
-    private Optional<InvocationRound<BufferedImage, UUID>> countDownRound = Optional.empty();
+    private Optional<InvokerHarness<BufferedImage, UUID>> countDownRound = Optional.empty();
     private UUID currentRound;
 
     public void setCurrentRound(UUID currentRound) {
         this.currentRound = currentRound;
     }
 
-    public GameBlock(GameBlockType type, UUID identifier, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
+    public GameBlock(GameBlockType type, UUID identifier, InvokerHarness<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
         this.identifier = identifier;
         this.invocationRound = Optional.of(invocationRenderRounds);
     }
 
-    public GameBlock(GameBlockType type, InvocationRound<BufferedImage, Void> invocationRenderRounds) {
+    public GameBlock(GameBlockType type, InvokerHarness<BufferedImage, Void> invocationRenderRounds) {
         this.type = type;
         this.identifier = UUID.randomUUID();
         this.invocationRound = Optional.of(invocationRenderRounds);
@@ -102,8 +99,8 @@ public class GameBlock {
     }
 
     public static GameBlock blockOfType(GameBlockType type, UUID identifier, GameBlockRenderer gameBlockRenderer) {
-        InvocationRound<BufferedImage, Void> bufferedImageInvocationRound = new InvocationRound<>(3, new RenderInvoker(gameBlockRenderer.getImage(type)), true);
-        return new GameBlock(type, identifier, bufferedImageInvocationRound);
+        InvokerHarness<BufferedImage, Void> bufferedImageInvokerHarness = new InvokerHarness<>(3, new RenderInvoker(gameBlockRenderer.getImage(type)), true);
+        return new GameBlock(type, identifier, bufferedImageInvokerHarness);
     }
 
     public void setResting(boolean resting) {
@@ -137,7 +134,7 @@ public class GameBlock {
     public void setMarkForDeletion(boolean markForDeletion) {
         if (markForDeletion) {
             Runnable postDeleteCode = () -> setReadyForDeletion(true);
-            this.destructionRound = Optional.of(new InvocationRound<BufferedImage, Void>(3, new DestructInvoker(getBlockTypeBorder()), true));
+            this.destructionRound = Optional.of(new InvokerHarness<BufferedImage, Void>(3, new DestructInvoker(getBlockTypeBorder()), true));
             this.destructionRound.get().setInvokeRoundCompleteHandler(Optional.of(postDeleteCode));
         }
         this.markForDeletion = markForDeletion;
@@ -145,9 +142,9 @@ public class GameBlock {
 
     public void setStartCountDown() {
         Runnable postDeleteCode = () -> setReadyForCountDownConversion(true);
-        InvocationRound<BufferedImage, UUID> bufferedImageUUIDInvocationRound = new InvocationRound<>(3, new CountDownBlockInvoker(getBlockTypeBorder()), true);
-        bufferedImageUUIDInvocationRound.setRunNow();
-        this.countDownRound = Optional.of(bufferedImageUUIDInvocationRound);
+        InvokerHarness<BufferedImage, UUID> bufferedImageUUIDInvokerHarness = new InvokerHarness<>(3, new CountDownBlockInvoker(getBlockTypeBorder()), true);
+        bufferedImageUUIDInvokerHarness.setRunNow();
+        this.countDownRound = Optional.of(bufferedImageUUIDInvokerHarness);
         this.countDownRound.get().setInvokeRoundCompleteHandler(Optional.of(postDeleteCode));
     }
 

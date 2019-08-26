@@ -2,15 +2,14 @@ package com.comandante.game.board;
 
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.BlockTypeBorder;
-import com.comandante.game.assetmanagement.CountDownBlockInvoker;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
-import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.BasicPermaGroupManager;
 import com.comandante.game.board.logic.GameBlockPairFactory;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.comandante.game.board.logic.MagicGameBlockProcessor;
 import com.comandante.game.board.logic.PermaGroupManager;
+import com.comandante.game.board.logic.invoker.InvokerHarness;
 import com.comandante.game.opponents.BasicRandomAttackingOpponent;
 import com.comandante.game.opponents.Opponent;
 import com.comandante.game.textboard.TextBoard;
@@ -25,14 +24,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-import static com.comandante.game.board.GameBlock.RANDOM;
-import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_SIZE;
-import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_VALUES;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM_LEFT;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM_RIGHT;
@@ -57,7 +52,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final PermaGroupManager permaGroupManager;
     private final MusicManager musicManager;
 
-    private final InvocationRound<Void, ActionEvent> processAllDropsInvocationRound;
+    private final InvokerHarness<Void, ActionEvent> processAllDropsInvokerHarness;
     private final Opponent opponent;
 
     private Integer score = 0;
@@ -83,7 +78,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
         this.opponent = new BasicRandomAttackingOpponent();
-        this.processAllDropsInvocationRound = new InvocationRound<>(4, new InvocationRound.Invoker<Void, ActionEvent>() {
+        this.processAllDropsInvokerHarness = new InvokerHarness<>(4, new InvokerHarness.Invoker<Void, ActionEvent>() {
 
             private UUID roundUuid;
             private Map<UUID, List<MagicGameBlockProcessor.ScoringDetails>> roundScoringList = Maps.newHashMap();
@@ -192,7 +187,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
         processCountDownBlocksReadyForConversion();
-        processAllDropsInvocationRound.invoker(actionEvent);
+        processAllDropsInvokerHarness.invoker(actionEvent);
         repaint();
     }
 
@@ -329,7 +324,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
 
         if (!gameBoardData.isBlockPairActive() || areAnyBlocksMarkedForDeletion()) {
-            System.out.println("YOU NO MOVE FOOL! 1" + System.currentTimeMillis());
             return;
         }
 
@@ -337,13 +331,11 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         Optional<GameBoardCellEntity> blockBEntityOpt = gameBoardData.getBlockBEntity();
 
         if (!blockAEntityOpt.isPresent() || !blockBEntityOpt.isPresent()) {
-            System.out.println("YOU NO MOVE FOOL! 2" + System.currentTimeMillis());
             return;
         }
 
         if (blockAEntityOpt.get().getGameBlock().isPresent() && blockBEntityOpt.get().getGameBlock().isPresent()) {
             if (blockAEntityOpt.get().getGameBlock().get().isResting() && blockBEntityOpt.get().getGameBlock().get().isResting()) {
-                System.out.println("SOMEHOW THEY ARE ALL RESTING" + System.currentTimeMillis());
                 return;
             }
         }

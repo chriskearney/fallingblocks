@@ -1,6 +1,6 @@
-package com.comandante.game.assetmanagement;
+package com.comandante.game.board.logic.invoker;
 
-import com.comandante.game.board.InvocationRound;
+import com.comandante.game.assetmanagement.BlockTypeBorder;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.google.common.math.IntMath;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static com.comandante.game.assetmanagement.TileSetGameBlockRenderer.imagesNew;
 
-public class DestructInvoker implements InvocationRound.Invoker<BufferedImage, Void> {
+public class DestructInvoker implements InvokerHarness.Invoker<BufferedImage, Void> {
 
     private final BlockTypeBorder blockTypeBorder;
     private int invokeCount = 0;

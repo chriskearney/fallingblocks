@@ -1,12 +1,10 @@
-package com.comandante.game.assetmanagement;
-
-import com.comandante.game.board.InvocationRound;
+package com.comandante.game.board.logic.invoker;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 
-public class RenderInvoker implements InvocationRound.Invoker<BufferedImage, Void> {
+public class RenderInvoker implements InvokerHarness.Invoker<BufferedImage, Void> {
 
     private final List<BufferedImage> bufferedImages;
     private int currentImage = 0;

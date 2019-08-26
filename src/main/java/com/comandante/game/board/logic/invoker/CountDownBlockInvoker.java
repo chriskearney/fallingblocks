@@ -1,9 +1,9 @@
-package com.comandante.game.assetmanagement;
+package com.comandante.game.board.logic.invoker;
 
-import com.comandante.game.board.InvocationRound;
+import com.comandante.game.assetmanagement.BlockTypeBorder;
+import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.google.common.collect.Lists;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static com.comandante.game.assetmanagement.TileSetGameBlockRenderer.imagesNew;
 
-public class CountDownBlockInvoker implements InvocationRound.Invoker<BufferedImage, UUID> {
+public class CountDownBlockInvoker implements InvokerHarness.Invoker<BufferedImage, UUID> {
 
 
     private final List<BufferedImage> bufferedImages;

@@ -1,8 +1,8 @@
-package com.comandante.game.board;
+package com.comandante.game.board.logic.invoker;
 
 import java.util.Optional;
 
-public class InvocationRound<T, R> {
+public class InvokerHarness<T, R> {
 
     private final Invoker<T, R> invoker;
     private boolean useLastReturn = false;
@@ -17,12 +17,12 @@ public class InvocationRound<T, R> {
     private int numberOfInvocationsPerRound;
     private int currentRoundInvocationCount = 0;
 
-    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T, R> invoker) {
+    public InvokerHarness(int numberOfInvocationsPerRound, Invoker<T, R> invoker) {
         this.invoker = invoker;
         this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
     }
 
-    public InvocationRound(int numberOfInvocationsPerRound, Invoker<T, R> invoker, boolean useLastReturn) {
+    public InvokerHarness(int numberOfInvocationsPerRound, Invoker<T, R> invoker, boolean useLastReturn) {
         this.useLastReturn = useLastReturn;
         this.numberOfInvocationsPerRound = numberOfInvocationsPerRound;
         this.invoker = invoker;
