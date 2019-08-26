@@ -35,6 +35,7 @@ public class InvocationRound<T, R> {
     public Optional<T> invoker(R r) {
         if (invoker.maxRounds() > 0 && invoker.numberRoundsComplete() > invoker.maxRounds() && invokeRoundCompleteHandler.isPresent()) {
             invokeRoundCompleteHandler.get().run();
+            return Optional.empty();
         }
         if (processRoundStatus()) {
             Optional<T> invoke = invoker.invoke(r);
@@ -43,6 +44,7 @@ public class InvocationRound<T, R> {
             }
             return invoke;
         }
+
         return Optional.ofNullable(lastReturn);
     }
 
@@ -53,6 +55,10 @@ public class InvocationRound<T, R> {
         }
         currentRoundInvocationCount = 0;
         return true;
+    }
+
+    public void setRunNow() {
+        currentRoundInvocationCount = numberOfInvocationsPerRound;
     }
 
     public interface Invoker<T, R> {

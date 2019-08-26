@@ -58,7 +58,6 @@ public class Main extends JFrame {
         try {
             Main main = new Main();
         } catch (Error e) {
-            System.out.println("BLERGH");
             e.printStackTrace();
         }
     }

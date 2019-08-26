@@ -150,12 +150,13 @@ public class GameBlock {
 
     public void setStartCountDown() {
         Runnable postDeleteCode = () -> setReadyForCountDownConversion(true);
-        this.countDownRound = Optional.of(new InvocationRound<BufferedImage, UUID>(3, new CountDownBlockInvoker(getBlockTypeBorder()), true));
+        InvocationRound<BufferedImage, UUID> bufferedImageUUIDInvocationRound = new InvocationRound<>(3, new CountDownBlockInvoker(getBlockTypeBorder()), true);
+        bufferedImageUUIDInvocationRound.setRunNow();
+        this.countDownRound = Optional.of(bufferedImageUUIDInvocationRound);
         this.countDownRound.get().setInvokeRoundCompleteHandler(Optional.of(postDeleteCode));
     }
 
     public void setReadyForCountDownConversion(boolean readyForCountDownConversion) {
-        System.out.println("hi");
         this.readyForCountDownConversion = readyForCountDownConversion;
     }
 

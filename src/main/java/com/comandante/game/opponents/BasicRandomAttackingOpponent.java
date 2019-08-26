@@ -41,6 +41,7 @@ public class BasicRandomAttackingOpponent implements Opponent {
 
         {
             GameBoardCellEntity[] gameBoardCellEntities = new GameBoardCellEntity[gameBoard.getGameBoardData().getCellEntities().length];
+
             gameBoardCellEntities[0] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));
             gameBoardCellEntities[1] = new GameBoardCellEntity(-1, new GameBoardCoords(0, 0));
             gameBoardCellEntities[2] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(countDownBlockTypeA));

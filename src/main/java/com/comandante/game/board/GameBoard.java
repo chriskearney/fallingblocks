@@ -120,7 +120,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
-                            processCountDownBlocksReadyForConversion();
                             flushRoundScoring();
                             gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
                             textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
@@ -141,21 +140,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 }
 
                 return Optional.empty();
-            }
-
-            private void processCountDownBlocksReadyForConversion() {
-                List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
-                for (GameBoardCellEntity cellEntity : cellsFromBottom) {
-                    if (cellEntity.getGameBlock().isPresent()) {
-                        Optional<GameBlock> gameBlock = cellEntity.getGameBlock();
-                        if (gameBlock.get().getType().getCountDownRelated().isPresent()) {
-                            if (gameBlock.get().isReadyForCountDownConversion()) {
-                                GameBlock newGb = GameBlock.basicBlockOfType(cellEntity.getType().getCountDownRelated().get(), gameBlockRenderer);
-                                gameBoardData.getCellEntities()[cellEntity.getGameBoardCoords().i][cellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords(), newGb);
-                            }
-                        }
-                    }
-                }
             }
 
             private void flushRoundScoring() {
@@ -193,41 +177,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         requestFocus();
     }
 
-    public void setCurrentRoundOnCountDownBlocks(UUID round) {
-        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
-        for (GameBoardCellEntity ce: cellsFromBottom) {
-            if (ce.getGameBlock().isPresent()) {
-                if (ce.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
-                    ce.getGameBlock().get().setCurrentRound(round);
-                }
-            }
-        }
-    }
-
-    public PermaGroupManager getPermaGroupManager() {
-        return permaGroupManager;
-    }
-
-    public GameBoardData getGameBoardData() {
-        return gameBoardData;
-    }
-
-    public void alterScore(MagicGameBlockProcessor.ScoringDetails scoringDetails) {
-        score += scoringDetails.getScore();
-        textBoard.getTextBoardContents().setScore(score);
-        this.textBoard.getTextBoardContents().addNewPointsToBattleLog(scoringDetails);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        textBoard.actionPerformed(actionEvent);
-        if (paused || isGameOver) {
-            return;
-        }
-        processAllDropsInvocationRound.invoker(actionEvent);
-        repaint();
-    }
-
     private boolean loopAndProcessAllMagic() {
         boolean returnMagic = false;
         boolean wasThereMagic;
@@ -240,6 +189,58 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         return returnMagic;
     }
 
+    private void processCountDownBlocksReadyForConversion() {
+        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+        for (GameBoardCellEntity cellEntity : cellsFromBottom) {
+            if (cellEntity.getGameBlock().isPresent()) {
+                Optional<GameBlock> gameBlock = cellEntity.getGameBlock();
+                if (gameBlock.get().getType().getCountDownRelated().isPresent()) {
+                    if (gameBlock.get().isReadyForCountDownConversion()) {
+                        GameBlock newGb = GameBlock.basicBlockOfType(cellEntity.getType().getCountDownRelated().get(), gameBlockRenderer);
+                        gameBoardData.getCellEntities()[cellEntity.getGameBoardCoords().i][cellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords(), newGb);
+                    }
+                }
+            }
+        }
+    }
+
+    public void setCurrentRoundOnCountDownBlocks(UUID round) {
+        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+        for (GameBoardCellEntity ce: cellsFromBottom) {
+            if (ce.getGameBlock().isPresent()) {
+                if (ce.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
+                    ce.getGameBlock().get().setCurrentRound(round);
+                }
+            }
+        }
+    }
+
+    public void alterScore(MagicGameBlockProcessor.ScoringDetails scoringDetails) {
+        score += scoringDetails.getScore();
+        textBoard.getTextBoardContents().setScore(score);
+        this.textBoard.getTextBoardContents().addNewPointsToBattleLog(scoringDetails);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        textBoard.actionPerformed(actionEvent);
+        if (paused || isGameOver) {
+            return;
+        }
+        processCountDownBlocksReadyForConversion();
+        processAllDropsInvocationRound.invoker(actionEvent);
+        repaint();
+    }
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
@@ -619,19 +620,18 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
 
-    }
-
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
-
-    }
 
     public GameBlockRenderer getGameBlockRenderer() {
         return gameBlockRenderer;
     }
 
+    public PermaGroupManager getPermaGroupManager() {
+        return permaGroupManager;
+    }
+
+    public GameBoardData getGameBoardData() {
+        return gameBoardData;
+    }
 
 }

@@ -32,19 +32,17 @@ public class CountDownBlockInvoker implements InvocationRound.Invoker<BufferedIm
             rounds.add(uuid);
         }
 
+        int currentCountDownInteger = getCurrentCountDownInteger();
         if (currentImage >= bufferedImages.size()) {
             currentImage = 0;
         }
 
-        int currentCountDownInteger = getCurrentCountDownInteger();
         if (currentCountDownInteger <= 0) {
             return Optional.empty();
         }
         BufferedImage image = bufferedImages.get(currentImage);
         BufferedImage overlay = TileSetGameBlockRenderer.numbers.get(currentCountDownInteger);
-        if (overlay == null) {
-            System.out.println("hi");
-        }
+
         currentImage++;
         return Optional.of(combineImages(image, overlay));
     }
@@ -56,11 +54,11 @@ public class CountDownBlockInvoker implements InvocationRound.Invoker<BufferedIm
 
     @Override
     public int maxRounds() {
-        return 4;
+        return MAX_ROUNDS_OF_COUNTDOWN;
     }
 
     public int getCurrentCountDownInteger() {
-        return MAX_ROUNDS_OF_COUNTDOWN - rounds.size();
+        return (MAX_ROUNDS_OF_COUNTDOWN + 1) - rounds.size();
     }
 
     private BufferedImage combineImages(BufferedImage image, BufferedImage overlay) {

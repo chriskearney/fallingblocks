@@ -200,9 +200,6 @@ public class TileSetGameBlockRenderer implements GameBlockRenderer {
     private static Optional<BufferedImage> getIfExists(String tileSetName, String fileName) {
         try {
             BufferedImage read = ImageIO.read(TileSetGameBlockRenderer.class.getResourceAsStream("/tilesets/" + tileSetName + "/" + fileName));
-            if (read != null) {
-                System.out.println(read.getType());
-            }
             return Optional.of(read);
         } catch (Exception e) {
 
