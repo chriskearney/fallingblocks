@@ -101,7 +101,6 @@ public enum GameBlockType {
         for (Map.Entry<BlockTypeBorder, List<BufferedImage>> next : TileSetGameBlockRenderer.imagesNew.entrySet()) {
             resolvedTypes.add(next.getKey().getType());
         }
-
         List<GameBlockType> collect = resolvedTypes.stream().filter(type -> type.getCountDownRelated().isPresent()).collect(Collectors.toList());
         return collect.toArray(new GameBlockType[0]);
     }

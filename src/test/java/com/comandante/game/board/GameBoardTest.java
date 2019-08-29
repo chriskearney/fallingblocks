@@ -2,7 +2,6 @@ package com.comandante.game.board;
 
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
-import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
 import com.comandante.game.textboard.TextBoard;
@@ -29,12 +28,6 @@ public class GameBoardTest {
         String gameBoardDataJson = TestUtilities.readGameBoardState("TESTCASE_1.json");
         GameBoardDataSerialization gameBoardDataSerialization = new GameBoardDataSerialization();
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
-        AttackProcessor attackProcessor = new AttackProcessor() {
-            @Override
-            public void attack(GameBoard gameBoard) {
-
-            }
-        };
         GameBoard gameBoard = new GameBoard(gameBoardData, new TileSetGameBlockRenderer("8bit"), new StandardGameBlockPairFactory(null), new StandardMagicGameBlockProcessor(), textBoard, null);
         gameBoard.calculatePermaGroups();
         List<BlockGroup> permaGroups = gameBoard.getPermaGroupManager().getPermaGroups();
@@ -61,12 +54,6 @@ public class GameBoardTest {
         GameBoardData gameBoardData = gameBoardDataSerialization.deserialize(gameBoardDataJson);
         Sequencer sequencer = MidiSystem.getSequencer();
         sequencer.open();
-        AttackProcessor attackProcessor = new AttackProcessor() {
-            @Override
-            public void attack(GameBoard gameBoard) {
-
-            }
-        };
         GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor),  new StandardMagicGameBlockProcessor(), textBoard, new MusicManager(sequencer));
         gameBoard.togglePause();
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);

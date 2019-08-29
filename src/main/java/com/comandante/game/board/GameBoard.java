@@ -27,6 +27,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM;
 import static com.comandante.game.board.GameBlockBorderType.BOTTOM_LEFT;
@@ -77,7 +78,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
-        this.opponent = new BasicRandomAttackingOpponent();
+
         this.processAllDropsInvokerHarness = new InvokerHarness<>(4, new InvokerHarness.Invoker<Void, ActionEvent>() {
 
             private UUID roundUuid;
@@ -105,8 +106,8 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     }
                     if (gameBoardData.allBlocksResting()) {
                         if (Math.random() < 0.1) {
-                            List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
-                            gameBoardData.addRowsToInsertionQueue(attack);
+//                            List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
+//                            gameBoardData.addRowsToInsertionQueue(attack);
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
@@ -134,18 +135,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
             private void flushRoundScoring() {
                 MagicGameBlockProcessor.ScoringDetails scoringDetails = new MagicGameBlockProcessor.ScoringDetails();
-                for (Map.Entry<UUID, List<MagicGameBlockProcessor.ScoringDetails>> next : roundScoringList.entrySet()) {
-                    for (MagicGameBlockProcessor.ScoringDetails details : next.getValue()) {
+                for (Map.Entry<UUID, List<MagicGameBlockProcessor.ScoringDetails>> ScoringDetailRecords : roundScoringList.entrySet()) {
+                    for (MagicGameBlockProcessor.ScoringDetails details : ScoringDetailRecords.getValue()) {
                         scoringDetails.base += details.base;
                         scoringDetails.bonus += details.bonus;
                     }
-                    if (next.getValue().size() > 1) {
-                        scoringDetails.chainReactionScore = next.getValue().size() * 300;
+                    if (ScoringDetailRecords.getValue().size() > 1) {
+                        int numberOfScoringDetailsInAChain = ScoringDetailRecords.getValue().size();
+                        scoringDetails.chainReactionScore = ((scoringDetails.base + scoringDetails.bonus) * numberOfScoringDetailsInAChain);
                     }
                     if (scoringDetails.getScore() > 0) {
                         alterScore(scoringDetails);
                     }
-                    roundScoringList.remove(next.getKey());
+                    roundScoringList.remove(ScoringDetailRecords.getKey());
                 }
             }
 
@@ -159,6 +161,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         addKeyListener(this);
         setOpaque(false);
         this.timer.start();
+        this.opponent = new BasicRandomAttackingOpponent(gameBoardData);
     }
 
     public void addNotify() {
@@ -215,7 +218,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 resetGame();
                 break;
             case KeyEvent.VK_U:
-                List<GameBoardCellEntity[]> attack = opponent.getAttack(this);
+                List<GameBoardCellEntity[]> attack = opponent.getAttack(ThreadLocalRandom.current().nextInt(4, 1500));
                 gameBoardData.addRowsToInsertionQueue(attack);
                 break;
             case KeyEvent.VK_P:

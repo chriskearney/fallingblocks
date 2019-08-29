@@ -1,6 +1,5 @@
 package com.comandante.game.board.logic;
 
-import com.comandante.game.assetmanagement.TileSet;
 import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBlockPair;
 import com.comandante.game.board.GameBoard;
