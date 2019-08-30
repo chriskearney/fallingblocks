@@ -3,9 +3,13 @@ package com.comandante;
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoard;
+import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardData;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
+import com.comandante.game.board.logic.invoker.EvaluateAttackInvoker;
+import com.comandante.game.board.logic.invoker.InvokerHarness;
+import com.comandante.game.opponents.BasicRandomAttackingOpponent;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
 
@@ -15,6 +19,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 public class Main extends JFrame {
@@ -31,7 +36,12 @@ public class Main extends JFrame {
         setTitle("PixelPuzzler");
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), new StandardMagicGameBlockProcessor(), textBoard, musicManager);
+
+        BasicRandomAttackingOpponent basicRandomAttackingOpponent = new BasicRandomAttackingOpponent(gameBoardData);
+
+        InvokerHarness<List<GameBoardCellEntity[]>, Void> opponentHarness = new InvokerHarness<>(5, new EvaluateAttackInvoker(basicRandomAttackingOpponent), false);
+
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), new StandardMagicGameBlockProcessor(), textBoard, musicManager, opponentHarness);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
         setLocationRelativeTo(null);

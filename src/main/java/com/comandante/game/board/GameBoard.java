@@ -54,7 +54,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final MusicManager musicManager;
 
     private final InvokerHarness<Void, ActionEvent> processAllDropsInvokerHarness;
-    private final Opponent opponent;
+    private final InvokerHarness<List<GameBoardCellEntity[]>, Void> opponentHarness;
 
     private Integer score = 0;
     private boolean paused = false;
@@ -71,14 +71,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                      GameBlockPairFactory gameBlockPairFactory,
                      MagicGameBlockProcessor magicGameBlockProcessor,
                      TextBoard textBoard,
-                     MusicManager musicManager) throws IOException {
+                     MusicManager musicManager,
+                     InvokerHarness<List<GameBoardCellEntity[]>, Void> opponentHarness) throws IOException {
         this.gameBoardData = gameBoardData;
         this.gameBlockRenderer = gameBlockRenderer;
         this.magicGameBlockProcessor = magicGameBlockProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
-
+        this.opponentHarness = opponentHarness;
         this.processAllDropsInvokerHarness = new InvokerHarness<>(4, new InvokerHarness.Invoker<Void, ActionEvent>() {
 
             private UUID roundUuid;
@@ -105,9 +106,9 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         gameBoardData.evaluateRestingStatus();
                     }
                     if (gameBoardData.allBlocksResting()) {
-                        if (Math.random() < 0.1) {
-//                            List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
-//                            gameBoardData.addRowsToInsertionQueue(attack);
+                        Optional<List<GameBoardCellEntity[]>> attack = opponentHarness.invoker(null);
+                        if (attack.isPresent()) {
+                            gameBoardData.addRowsToInsertionQueue(attack.get());
                         } else {
                             // Track time between insert blockpair to calculate chaining
                             roundUuid = UUID.randomUUID();
@@ -161,7 +162,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         addKeyListener(this);
         setOpaque(false);
         this.timer.start();
-        this.opponent = new BasicRandomAttackingOpponent(gameBoardData);
     }
 
     public void addNotify() {
@@ -218,8 +218,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 resetGame();
                 break;
             case KeyEvent.VK_U:
-                List<GameBoardCellEntity[]> attack = opponent.getAttack(ThreadLocalRandom.current().nextInt(4, 1500));
-                gameBoardData.addRowsToInsertionQueue(attack);
                 break;
             case KeyEvent.VK_P:
                 togglePause();

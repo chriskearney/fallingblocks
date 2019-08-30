@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import static com.comandante.game.board.GameBlock.RANDOM;
 import static com.comandante.game.board.GameBlock.RANDOM_COUNTDOWN_SIZE;
@@ -20,22 +21,71 @@ public class BasicRandomAttackingOpponent implements Opponent {
     private final GameBoardData gameBoardData;
     private final Random random = new Random();
 
+    private long startTime;
+    private static final int ONE_MINUTE = 1 * 60 * 1000;
+    private static final int TWO_MINUTE = 2 * 60 * 1000;
+    private static final int THREE_MINUTES = 3 * 60 * 1000;
+    private static final int FOUR_MINUTES = 4 * 60 * 1000;
+    private static final int FIVE_MINUTES = 5 * 60 * 1000;
+
+
     public BasicRandomAttackingOpponent(GameBoardData gameBoardData) {
         this.gameBoardData = gameBoardData;
         this.baseAttack = Lists.newArrayList(getBaseAttacks());
+        start();
+    }
+
+    public void start() {
+        startTime = System.currentTimeMillis();
     }
 
     @Override
-    public List<GameBoardCellEntity[]> getAttack(int amt) {
-        System.out.println("ATTACK SIZE: " + amt);
-        List<GameBoardCellEntity[]> randomBaseAttack = getRandomBaseAttack();
-        AttackSizeDetails attackSizeDetailForAmt = getAttackSizeDetailForAmt(amt);
-        List<GameBoardCellEntity[]> gameBoardCellEntities = alterAttackBasedOnDetails(attackSizeDetailForAmt, randomBaseAttack);
-        return gameBoardCellEntities;
+    public List<GameBoardCellEntity[]> getAttack() {
+        long now = System.currentTimeMillis();
+        long elapsed = now - startTime;
+
+        if (elapsed <= ONE_MINUTE) {
+            if (percentChance(0.30)) {
+                return generateAttack(getRandomNumberInRange(5, 50));
+            }
+        } else if (elapsed <= TWO_MINUTE) {
+            if (percentChance(0.39)) {
+                return generateAttack(getRandomNumberInRange(75, 140));
+            }
+
+        } else if (elapsed <= THREE_MINUTES) {
+            if (percentChance(0.56)) {
+                return generateAttack(getRandomNumberInRange(140, 240));
+            }
+
+        } else if (elapsed <= FOUR_MINUTES) {
+            if (percentChance(0.63)) {
+                return generateAttack(getRandomNumberInRange(300, 600));
+            }
+        } else if (elapsed <= FIVE_MINUTES) {
+            if (percentChance(0.78)) {
+                return generateAttack(getRandomNumberInRange(600, 800));
+            }
+        } else {
+            if (percentChance(0.88)) {
+                return generateAttack(getRandomNumberInRange(600, 1200));
+            }
+        }
+        return Lists.newArrayList();
     }
 
-    public List<GameBoardCellEntity[]> getRandomBaseAttack()
-    {
+    @Override
+    public void takeAttack(int amt) {
+
+    }
+
+    private List<GameBoardCellEntity[]> generateAttack(int amt) {
+        List<GameBoardCellEntity[]> randomBaseAttack = getRandomBaseAttack();
+        AttackSizeDetails attackSizeDetailForAmt = getAttackSizeDetailForAmt(amt);
+        return alterAttackBasedOnDetails(attackSizeDetailForAmt, randomBaseAttack);
+    }
+
+    public List<GameBoardCellEntity[]> getRandomBaseAttack() {
         return baseAttack.get(random.nextInt(baseAttack.size()));
     }
 
@@ -92,7 +142,6 @@ public class BasicRandomAttackingOpponent implements Opponent {
         {
             /*
                         BASE ATTACK 1
-
             */
             List<GameBoardCellEntity[]> baseAttack = Lists.newArrayList();
 
@@ -138,7 +187,6 @@ public class BasicRandomAttackingOpponent implements Opponent {
         {
             /*
                         BASE ATTACK 2
-
             */
             List<GameBoardCellEntity[]> baseAttack = Lists.newArrayList();
 
@@ -171,5 +219,19 @@ public class BasicRandomAttackingOpponent implements Opponent {
     private static class AttackSizeDetails {
         int rowsWide;
         int rowsHigh;
+    }
+
+    public static Boolean percentChance(double chance) {
+        return Math.random() <= chance;
+    }
+
+    private static int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 }
