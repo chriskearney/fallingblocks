@@ -6,6 +6,7 @@ import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardData;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -100,10 +101,29 @@ public class BasicRandomAttackingOpponent implements Opponent {
         }
 
         while (finalAttackAlteredBasedOnDetails.size() < attackSizeDetails.rowsHigh) {
-            finalAttackAlteredBasedOnDetails.addAll(alteredRowBaseAttack);
+            finalAttackAlteredBasedOnDetails.addAll(copyOf(alteredRowBaseAttack));
         }
 
         return finalAttackAlteredBasedOnDetails;
+    }
+
+    private List<GameBoardCellEntity[]> copyOf(List<GameBoardCellEntity[]> orig) {
+        List<GameBoardCellEntity[]> copy = Lists.newArrayList();
+        for (GameBoardCellEntity[] gameBoardCellEntities: orig) {
+            GameBoardCellEntity[] copiedRow = new GameBoardCellEntity[orig.get(0).length];
+            int pos = 0;
+            for (GameBoardCellEntity ge: gameBoardCellEntities) {
+                if (ge.getGameBlock().isPresent()) {
+                    copiedRow[pos] = new GameBoardCellEntity(GameBlock.newCountDownBlockOfType(ge.getGameBlock().get().getType()));
+                } else {
+                    copiedRow[pos] = ge;
+                }
+                pos++;
+            }
+            copy.add(copiedRow);
+        }
+
+        return copy;
     }
 
     private AttackSizeDetails getAttackSizeDetailForAmt(int amt) {
