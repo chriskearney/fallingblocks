@@ -185,7 +185,7 @@ public class GameBoardData {
     public boolean insertRowOfBlocksAndDetectGameOver(GameBoardCellEntity[] attackRow) {
         for (int i = 0; i < attackRow.length; i++) {
             GameBoardCellEntity existingGameCellEntity = cellEntities[i][0];
-            if (existingGameCellEntity.isOccupied()) {
+            if (attackRow[i].getGameBlock().isPresent() && existingGameCellEntity.isOccupied()) {
                 //game over
                 return true;
             } else {
