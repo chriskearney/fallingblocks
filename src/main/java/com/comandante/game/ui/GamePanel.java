@@ -57,7 +57,6 @@ public class GamePanel extends JPanel {
                         Optional<UUID> permaGroupForBlock = gameBoard.getPermaGroupManager().getPermaGroupForBlock(gameBlock);
                         permaGroupForBlock.ifPresent(uuid -> System.out.print(" blockGroup: " + uuid));
                     }
-                    System.out.println();
                 });
                // repaint();
             }

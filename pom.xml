@@ -23,6 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -39,31 +40,43 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>sh.tak.appbundler</groupId>
-                <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <configuration>
-                    <mainClass>com.comandante.Main</mainClass>
-                    <!--<dictionaryFile>YourCustomInfo.plist</dictionaryFile>-->
-                    <iconFile>/packaging/PixelPuzzler.icns</iconFile>
-                    <jrePath>src/main/resources/packaging/small_jre-11.0.4</jrePath>
-<!--                    <jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk</jrePath>-->
-                    <generateDiskImageFile>true</generateDiskImageFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <build>
+                <plugins>
+                        <plugin>
+                            <groupId>sh.tak.appbundler</groupId>
+                            <artifactId>appbundle-maven-plugin</artifactId>
+                            <version>1.2.0</version>
+                            <configuration>
+                                <mainClass>com.comandante.Main</mainClass>
+                                <!--<dictionaryFile>YourCustomInfo.plist</dictionaryFile>-->
+                                <iconFile>/packaging/PixelPuzzler.icns</iconFile>
+                                <jrePath>src/main/resources/packaging/small_jre-11.0.4</jrePath>
+                                <!--                    <jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk</jrePath>-->
+                                <generateDiskImageFile>true</generateDiskImageFile>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>bundle</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>

@@ -3,10 +3,13 @@ package com.comandante;
 import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoard;
+import com.comandante.game.board.GameBoardCellEntity;
 import com.comandante.game.board.GameBoardData;
-import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.StandardGameBlockPairFactory;
 import com.comandante.game.board.logic.StandardMagicGameBlockProcessor;
+import com.comandante.game.board.logic.invoker.EvaluateAttackInvoker;
+import com.comandante.game.board.logic.invoker.InvokerHarness;
+import com.comandante.game.opponents.BasicRandomAttackingOpponent;
 import com.comandante.game.textboard.TextBoard;
 import com.comandante.game.ui.GamePanel;
 
@@ -16,6 +19,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 public class Main extends JFrame {
@@ -24,31 +28,22 @@ public class Main extends JFrame {
     public Main() throws IOException, InvalidMidiDataException, MidiUnavailableException {
         configurateOperatingSpecificBehavior();
         TileSetGameBlockRenderer tileSetBlockRenderProcessor = new TileSetGameBlockRenderer("diamond");
-        TextBoard textBoard = new TextBoard(new int[27][32], tileSetBlockRenderProcessor);
+        TextBoard textBoard = new TextBoard(new int[33][37], tileSetBlockRenderProcessor);
         GameBoardData gameBoardData = new GameBoardData(new int[10][20]);
         MusicManager musicManager = new MusicManager(MidiSystem.getSequencer());
         musicManager.loadMusic();
         musicManager.playMusic();
         setTitle("PixelPuzzler");
         setResizable(false);
-        AttackProcessor attackProcessor = new AttackProcessor() {
-            @Override
-            public void attack(GameBoard gameBoard) {
-
-            }
-        };
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), attackProcessor, new StandardMagicGameBlockProcessor(), textBoard, musicManager);
+
+        BasicRandomAttackingOpponent basicRandomAttackingOpponent = new BasicRandomAttackingOpponent(gameBoardData);
+
+        InvokerHarness<List<GameBoardCellEntity[]>, Void> opponentHarness = new InvokerHarness<>(5, new EvaluateAttackInvoker(basicRandomAttackingOpponent), false);
+
+        GameBoard gameBoard = new GameBoard(gameBoardData, tileSetBlockRenderProcessor, new StandardGameBlockPairFactory(tileSetBlockRenderProcessor), new StandardMagicGameBlockProcessor(), textBoard, musicManager, opponentHarness);
         GamePanel gamePanel = new GamePanel(gameBoard, textBoard);
         getContentPane().add(gamePanel);
-
-//        Application application = Application.getApplication();
-//        int[][] rawBoard = new int[27][32];
-//        TextBoard welcomeScreenTextBoard = new TextBoard(rawBoard, tileSetBlockRenderProcessor);
-//        WelcomeScreenPanel welcomeScreenPanel = new WelcomeScreenPanel(welcomeScreenTextBoard, gameBoard.getGameBoardData().getPreferredSize());
-//        getContentPane().add(welcomeScreenPanel);
-
-        // center the frame
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
@@ -58,7 +53,6 @@ public class Main extends JFrame {
         try {
             Main main = new Main();
         } catch (Error e) {
-            System.out.println("BLERGH");
             e.printStackTrace();
         }
     }

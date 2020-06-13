@@ -1,6 +1,5 @@
 package com.comandante.game.board.logic;
 
-import com.comandante.game.assetmanagement.TileSet;
 import com.comandante.game.board.GameBlock;
 import com.comandante.game.board.GameBlockPair;
 import com.comandante.game.board.GameBoard;
@@ -38,7 +37,7 @@ public class StandardGameBlockPairFactory implements GameBlockPairFactory {
             blockA = GameBlock.randomMagicBlock(gameBlockRenderer);
         }
 
-        if (Math.random() < .02) {
+        if (Math.random() < .03) {
             blockA = GameBlock.diamondBlock(gameBlockRenderer);
         }
 

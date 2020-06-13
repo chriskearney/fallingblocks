@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface Opponent {
 
-    List<GameBoardCellEntity[]> getAttack(GameBoard gameBoard);
+    List<GameBoardCellEntity[]> getAttack();
+
+    void takeAttack(int amt);
 
 }

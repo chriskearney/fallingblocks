@@ -1,29 +1,30 @@
 package com.comandante.game.assetmanagement;
 
-import com.comandante.game.board.GameBlock;
+import com.comandante.game.board.GameBlockBorderType;
+import com.comandante.game.board.GameBlockType;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class BlockTypeBorder {
-    private final GameBlock.Type type;
-    private final Optional<GameBlock.BorderType> borderType;
+    private final GameBlockType type;
+    private final Optional<GameBlockBorderType> borderType;
 
-    public BlockTypeBorder(GameBlock.Type type, GameBlock.BorderType borderType) {
+    public BlockTypeBorder(GameBlockType type, GameBlockBorderType borderType) {
         this.type = type;
         this.borderType = Optional.ofNullable(borderType);
     }
 
-    public BlockTypeBorder(GameBlock.Type type) {
+    public BlockTypeBorder(GameBlockType type) {
         this(type, null);
     }
 
 
-    public GameBlock.Type getType() {
+    public GameBlockType getType() {
         return type;
     }
 
-    public Optional<GameBlock.BorderType> getBorderType() {
+    public Optional<GameBlockBorderType> getBorderType() {
         return borderType;
     }
 

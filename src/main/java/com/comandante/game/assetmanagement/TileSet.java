@@ -1,6 +1,6 @@
 package com.comandante.game.assetmanagement;
 
-import com.comandante.game.board.GameBlock;
+import com.comandante.game.board.GameBlockBorderType;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -11,17 +11,7 @@ public interface TileSet {
 
     List<BufferedImage> getMagicBlockFrames();
 
-    List<BufferedImage> getDiamondBlockFrames();
+    List<BufferedImage> getCountDownFrames();
 
-    List<BufferedImage> getCountDownBlockOne();
-
-    List<BufferedImage> getCountDownBlockTwo();
-
-    List<BufferedImage> getCountDownBlockThree();
-
-    List<BufferedImage> getCountDownBlockFour();
-
-    List<BufferedImage> getCountDownBlockFive();
-
-    BufferedImage get(GameBlock.BorderType borderType);
+    BufferedImage get(GameBlockBorderType borderType);
 }

@@ -1,6 +1,6 @@
 package com.comandante.game.assetmanagement;
 
-import com.comandante.game.board.GameBlock;
+import com.comandante.game.board.GameBlockBorderType;
 import com.google.common.collect.Lists;
 
 import java.awt.image.BufferedImage;
@@ -31,33 +31,10 @@ public class PixelArtTileset implements TileSet {
     }
 
     @Override
-    public List<BufferedImage> getDiamondBlockFrames() {
-        return Collections.singletonList(spriteSheet.getSubimage(40, 0, 8, 8));
-    }
-
-    @Override
-    public List<BufferedImage> getCountDownBlockOne() {
-        return null;
-    }
-
-    @Override
-    public List<BufferedImage> getCountDownBlockTwo() {
-        return null;
-    }
-
-    @Override
-    public List<BufferedImage> getCountDownBlockThree() {
-        return null;
-    }
-
-    @Override
-    public List<BufferedImage> getCountDownBlockFour() {
-        return null;
-    }
-
-    @Override
-    public List<BufferedImage> getCountDownBlockFive() {
-        return null;
+    public List<BufferedImage> getCountDownFrames() {
+        BufferedImage countDownA = spriteSheet.getSubimage(24, 24, 8, 8);
+        BufferedImage countDownB = spriteSheet.getSubimage(32, 24, 8, 8);
+        return Lists.newArrayList(countDownA, countDownB);
     }
 
     public BufferedImage getTopAndLeftBordered() {
@@ -105,7 +82,7 @@ public class PixelArtTileset implements TileSet {
     }
 
     @Override
-    public BufferedImage get(GameBlock.BorderType borderType) {
+    public BufferedImage get(GameBlockBorderType borderType) {
         switch (borderType) {
             case TOP:
                 return getTopBordered();
@@ -145,7 +122,6 @@ public class PixelArtTileset implements TileSet {
     private BufferedImage getTopLeftRightBordered() {
         return rotateClockwise90(getTopLeftBottomBordered());
     }
-
 
     public static BufferedImage rotateClockwise90(BufferedImage src) {
         int w = src.getWidth();

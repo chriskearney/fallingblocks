@@ -4,16 +4,17 @@ import com.comandante.game.MusicManager;
 import com.comandante.game.assetmanagement.BlockTypeBorder;
 import com.comandante.game.assetmanagement.TileSetGameBlockRenderer;
 import com.comandante.game.board.GameBoardCoords.MoveDirection;
-import com.comandante.game.board.logic.AttackProcessor;
 import com.comandante.game.board.logic.BasicPermaGroupManager;
 import com.comandante.game.board.logic.GameBlockPairFactory;
 import com.comandante.game.board.logic.GameBlockRenderer;
 import com.comandante.game.board.logic.MagicGameBlockProcessor;
 import com.comandante.game.board.logic.PermaGroupManager;
+import com.comandante.game.board.logic.invoker.InvokerHarness;
 import com.comandante.game.opponents.BasicRandomAttackingOpponent;
 import com.comandante.game.opponents.Opponent;
 import com.comandante.game.textboard.TextBoard;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -24,21 +25,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
-import static com.comandante.game.board.GameBlock.BorderType.BOTTOM;
-import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_LEFT;
-import static com.comandante.game.board.GameBlock.BorderType.BOTTOM_RIGHT;
-import static com.comandante.game.board.GameBlock.BorderType.LEFT;
-import static com.comandante.game.board.GameBlock.BorderType.NO_BORDER;
-import static com.comandante.game.board.GameBlock.BorderType.RIGHT;
-import static com.comandante.game.board.GameBlock.BorderType.TOP;
-import static com.comandante.game.board.GameBlock.BorderType.TOP_LEFT;
-import static com.comandante.game.board.GameBlock.BorderType.TOP_RIGHT;
+import static com.comandante.game.board.GameBlockBorderType.BOTTOM;
+import static com.comandante.game.board.GameBlockBorderType.BOTTOM_LEFT;
+import static com.comandante.game.board.GameBlockBorderType.BOTTOM_RIGHT;
+import static com.comandante.game.board.GameBlockBorderType.LEFT;
+import static com.comandante.game.board.GameBlockBorderType.NO_BORDER;
+import static com.comandante.game.board.GameBlockBorderType.RIGHT;
+import static com.comandante.game.board.GameBlockBorderType.TOP;
+import static com.comandante.game.board.GameBlockBorderType.TOP_LEFT;
+import static com.comandante.game.board.GameBlockBorderType.TOP_RIGHT;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.BOTTOM_OF;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.LEFT_OF;
 import static com.comandante.game.board.GameBlockPair.BlockBOrientation.RIGHT_OF;
@@ -49,18 +48,15 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     private final Timer timer;
     private final GameBoardData gameBoardData;
     private final GameBlockRenderer gameBlockRenderer;
-    private final GameBlockPairFactory gameBlockPairFactory;
     private final MagicGameBlockProcessor magicGameBlockProcessor;
-    private final AttackProcessor attackProcessor;
     private final TextBoard textBoard;
     private final PermaGroupManager permaGroupManager;
     private final MusicManager musicManager;
 
-    private final InvocationRound<Void, ActionEvent> processAllDropsInvocationRound;
-    private final Opponent opponent;
+    private final InvokerHarness<Void, ActionEvent> processAllDropsInvokerHarness;
+    private final InvokerHarness<List<GameBoardCellEntity[]>, Void> opponentHarness;
 
     private Integer score = 0;
-    private Integer largestScore = 0;
     private boolean paused = false;
     private boolean isGameOver = false;
 
@@ -73,22 +69,25 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
     public GameBoard(GameBoardData gameBoardData,
                      GameBlockRenderer gameBlockRenderer,
                      GameBlockPairFactory gameBlockPairFactory,
-                     AttackProcessor attackProcessor,
                      MagicGameBlockProcessor magicGameBlockProcessor,
                      TextBoard textBoard,
-                     MusicManager musicManager) throws IOException {
+                     MusicManager musicManager,
+                     InvokerHarness<List<GameBoardCellEntity[]>, Void> opponentHarness) throws IOException {
         this.gameBoardData = gameBoardData;
         this.gameBlockRenderer = gameBlockRenderer;
-        this.gameBlockPairFactory = gameBlockPairFactory;
         this.magicGameBlockProcessor = magicGameBlockProcessor;
-        this.attackProcessor = attackProcessor;
         this.textBoard = textBoard;
         this.permaGroupManager = new BasicPermaGroupManager();
         this.musicManager = musicManager;
-        this.opponent = new BasicRandomAttackingOpponent();
-        this.processAllDropsInvocationRound = new InvocationRound<>(3, new InvocationRound.Invoker<Void, ActionEvent>() {
+        this.opponentHarness = opponentHarness;
+        this.processAllDropsInvokerHarness = new InvokerHarness<>(4, new InvokerHarness.Invoker<Void, ActionEvent>() {
+
+            private UUID roundUuid;
+            private Map<UUID, List<MagicGameBlockProcessor.ScoringDetails>> roundScoringList = Maps.newHashMap();
+
             @Override
             public Optional<Void> invoke(ActionEvent actionEvent) {
+                gameBoardData.processAllDrops();
                 isGameOver = gameBoardData.processInsertionQueueAndDetectGameOver();
                 if (isGameOver) {
                     try {
@@ -107,19 +106,50 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                         gameBoardData.evaluateRestingStatus();
                     }
                     if (gameBoardData.allBlocksResting()) {
-                        gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
-                        textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
+                        Optional<List<GameBoardCellEntity[]>> attack = opponentHarness.invoker(null);
+                        if (attack.isPresent()) {
+                            gameBoardData.addRowsToInsertionQueue(attack.get());
+                        } else {
+                            // Track time between insert blockpair to calculate chaining
+                            roundUuid = UUID.randomUUID();
+                            flushRoundScoring();
+                            gameBoardData.insertNewBlockPair(gameBlockPairFactory.createBlockPair(GameBoard.this));
+                            textBoard.setNextBlockPair(gameBlockPairFactory.getNextPair());
+                        }
                     }
                     calculatePermaGroups();
-                    if (Math.random() < 0.01) {
-                        List<GameBoardCellEntity[]> attack = opponent.getAttack(GameBoard.this);
-                        gameBoardData.addRowsToInsertionQueue(attack);
-                    }
                 }
                 gameBoardData.evaluateRestingStatus();
-                int destroyed = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
-                alterScore(destroyed);
+                GameBoard.this.setCurrentRoundOnCountDownBlocks(roundUuid);
+                Optional<MagicGameBlockProcessor.ScoringDetails> scoringDetails = magicGameBlockProcessor.destroyCellEntitiesThatAreMarkedForDeletion(GameBoard.this);
+                if (scoringDetails.isPresent()) {
+                    if (roundScoringList.containsKey(roundUuid)) {
+                        roundScoringList.get(roundUuid).add(scoringDetails.get());
+                    } else {
+                        roundScoringList.put(roundUuid, Lists.newArrayList());
+                        roundScoringList.get(roundUuid).add(scoringDetails.get());
+                    }
+                }
+
                 return Optional.empty();
+            }
+
+            private void flushRoundScoring() {
+                MagicGameBlockProcessor.ScoringDetails scoringDetails = new MagicGameBlockProcessor.ScoringDetails();
+                for (Map.Entry<UUID, List<MagicGameBlockProcessor.ScoringDetails>> ScoringDetailRecords : roundScoringList.entrySet()) {
+                    for (MagicGameBlockProcessor.ScoringDetails details : ScoringDetailRecords.getValue()) {
+                        scoringDetails.base += details.base;
+                        scoringDetails.bonus += details.bonus;
+                    }
+                    if (ScoringDetailRecords.getValue().size() > 1) {
+                        int numberOfScoringDetailsInAChain = ScoringDetailRecords.getValue().size();
+                        scoringDetails.chainReactionScore = ((scoringDetails.base + scoringDetails.bonus) * numberOfScoringDetailsInAChain);
+                    }
+                    if (scoringDetails.getScore() > 0) {
+                        alterScore(scoringDetails);
+                    }
+                    roundScoringList.remove(ScoringDetailRecords.getKey());
+                }
             }
 
             @Override
@@ -127,10 +157,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 return 0;
             }
         });
+
         this.timer = new Timer(50, this);
         addKeyListener(this);
         setOpaque(false);
-        alterScore(0);
         this.timer.start();
     }
 
@@ -139,23 +169,18 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         requestFocus();
     }
 
-    public PermaGroupManager getPermaGroupManager() {
-        return permaGroupManager;
+    public Dimension getPreferredSize() {
+        return gameBoardData.getPreferredSize();
     }
 
-    public GameBoardData getGameBoardData() {
-        return gameBoardData;
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
     }
 
-    public void alterScore(int amount) {
-        if (amount > largestScore) {
-            largestScore = amount;
-        }
-        score += amount;
-        this.textBoard.getTextBoardContents().setScore(score);
-        if (amount > 0) {
-            this.textBoard.getTextBoardContents().addNewPointsToBattleLog(amount);
-        }
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
     }
 
     @Override
@@ -164,22 +189,10 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         if (paused || isGameOver) {
             return;
         }
-        processAllDropsInvocationRound.invoker(actionEvent);
+        processCountDownBlocksReadyForConversion();
+        processAllDropsInvokerHarness.invoker(actionEvent);
         repaint();
     }
-
-    private boolean loopAndProcessAllMagic() {
-        boolean returnMagic = false;
-        boolean wasThereMagic;
-        do {
-            calculatePermaGroups();
-            returnMagic = true;
-            wasThereMagic = magicGameBlockProcessor.process(this);
-            // gameBoardData.processAllDrops();
-        } while (wasThereMagic);
-        return returnMagic;
-    }
-
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
@@ -205,7 +218,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                 resetGame();
                 break;
             case KeyEvent.VK_U:
-                gameBoardData.insertRowOfBlocksAndDetectGameOver(getRandomAttackBlocks());
                 break;
             case KeyEvent.VK_P:
                 togglePause();
@@ -217,6 +229,45 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
                     e.printStackTrace();
                 }
         }
+    }
+
+    public void paintComponent(Graphics g) {
+        g.drawImage(background, 0, 0, null);
+        for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
+            GameBlockType type = ce.getType();
+            if (type.equals(GameBlockType.EMPTY)) {
+                gameBlockRenderer.render(gameBoardData.getCellEntities(), new BlockTypeBorder(type), ce, g);
+            } else {
+                Optional<GameBlock> gameBlock = ce.getGameBlock();
+                gameBlockRenderer.render(gameBoardData.getCellEntities(), gameBlock.get().getBlockTypeBorder(), ce, g);
+            }
+        }
+    }
+
+    private Runnable rePainter() {
+        return this::repaint;
+    }
+
+    private boolean areAnyBlocksMarkedForDeletion() {
+        return getGameBoardData().getCellsFromBottom().stream()
+                .anyMatch(gameBoardCellEntity -> {
+                    if (gameBoardCellEntity.getGameBlock().isPresent()) {
+                        return gameBoardCellEntity.getGameBlock().get().isMarkForDeletion() || gameBoardCellEntity.getGameBlock().get().isReadyForDeletion();
+                    }
+                    return false;
+                });
+    }
+
+    private boolean loopAndProcessAllMagic() {
+        boolean returnMagic = false;
+        boolean wasThereMagic;
+        do {
+            calculatePermaGroups();
+            returnMagic = true;
+            wasThereMagic = magicGameBlockProcessor.process(this);
+            // gameBoardData.processAllDrops();
+        } while (wasThereMagic);
+        return returnMagic;
     }
 
     private void resetGame() {
@@ -235,36 +286,37 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         repaint();
     }
 
-    private GameBoardCellEntity[] getRandomAttackBlocks() {
-        GameBoardCellEntity[] attackBlocks = new GameBoardCellEntity[gameBoardData.getCellEntities().length];
-        GameBlock gameBlock = GameBlock.randomNormalBlock();
-        for (int i = 0; i < attackBlocks.length; i++) {
-            attackBlocks[i] = new GameBoardCellEntity(new GameBlock(GameBlock.Type.GREEN));
-        }
-        return attackBlocks;
-    }
-
-    public Dimension getPreferredSize() {
-        return gameBoardData.getPreferredSize();
-    }
-
-    public void paintComponent(Graphics g) {
-        g.drawImage(background, 0, 0, null);
-        for (GameBoardCellEntity ce : gameBoardData.getCellsFromBottom()) {
-            GameBlock.Type type = ce.getType();
-            if (type.equals(GameBlock.Type.EMPTY)) {
-                gameBlockRenderer.render(new BlockTypeBorder(type), ce, g);
-            } else {
-                Optional<GameBlock> gameBlock = ce.getGameBlock();
-                gameBlockRenderer.render(gameBlock.get().getBlockTypeBorder(), ce, g);
+    private void processCountDownBlocksReadyForConversion() {
+        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+        for (GameBoardCellEntity cellEntity : cellsFromBottom) {
+            if (cellEntity.getGameBlock().isPresent()) {
+                Optional<GameBlock> gameBlock = cellEntity.getGameBlock();
+                if (gameBlock.get().getType().getCountDownRelated().isPresent()) {
+                    if (gameBlock.get().isReadyForCountDownConversion()) {
+                        GameBlock newGb = GameBlock.basicBlockOfType(cellEntity.getType().getCountDownRelated().get(), gameBlockRenderer);
+                        gameBoardData.getCellEntities()[cellEntity.getGameBoardCoords().i][cellEntity.getGameBoardCoords().j] = new GameBoardCellEntity(cellEntity.getId(), cellEntity.getGameBoardCoords(), newGb);
+                    }
+                }
             }
         }
     }
 
-    private Runnable rePainter() {
-        return this::repaint;
+    public void setCurrentRoundOnCountDownBlocks(UUID round) {
+        List<GameBoardCellEntity> cellsFromBottom = gameBoardData.getCellsFromBottom();
+        for (GameBoardCellEntity ce : cellsFromBottom) {
+            if (ce.getGameBlock().isPresent()) {
+                if (ce.getGameBlock().get().getType().getCountDownRelated().isPresent()) {
+                    ce.getGameBlock().get().setCurrentRound(round);
+                }
+            }
+        }
     }
 
+    public void alterScore(MagicGameBlockProcessor.ScoringDetails scoringDetails) {
+        score += scoringDetails.getScore();
+        textBoard.getTextBoardContents().setScore(score);
+        this.textBoard.getTextBoardContents().addNewPointsToBattleLog(scoringDetails);
+    }
 
     public void moveActiveBlockPair(GameBoardCoords.MoveDirection direction) {
 
@@ -272,7 +324,7 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
             return;
         }
 
-        if (!gameBoardData.isBlockPairActive()) {
+        if (!gameBoardData.isBlockPairActive() || areAnyBlocksMarkedForDeletion()) {
             return;
         }
 
@@ -281,6 +333,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
         if (!blockAEntityOpt.isPresent() || !blockBEntityOpt.isPresent()) {
             return;
+        }
+
+        if (blockAEntityOpt.get().getGameBlock().isPresent() && blockBEntityOpt.get().getGameBlock().isPresent()) {
+            if (blockAEntityOpt.get().getGameBlock().get().isResting() && blockBEntityOpt.get().getGameBlock().get().isResting()) {
+                return;
+            }
         }
 
         GameBoardCellEntity blockAEntity = blockAEntityOpt.get();
@@ -348,32 +406,6 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-
-    public List<List<GameBoardCellEntity>> getGroupsOfLikeBlocksFromRow(GameBoardCellEntity[] row) {
-        List<List<GameBoardCellEntity>> listOfGroups = Lists.newArrayList();
-        for (GameBoardCellEntity cellEntity : row) {
-            if (!cellEntity.isOccupied()) {
-                continue;
-            }
-            List<GameBoardCellEntity> group = Lists.newArrayList();
-            GameBoardCellEntity nextEntityToCheck = cellEntity;
-            boolean isLikeNeighbor = true;
-            do {
-                group.add(nextEntityToCheck);
-                Optional<GameBoardCellEntity> cellEntityIfOccupiedSameType = gameBoardData.getCellEntityIfOccupiedSameType(MoveDirection.RIGHT, nextEntityToCheck);
-                if (!cellEntityIfOccupiedSameType.isPresent()) {
-                    isLikeNeighbor = false;
-                } else {
-                    nextEntityToCheck = cellEntityIfOccupiedSameType.get();
-                }
-                if (group.size() > 1) {
-                    listOfGroups.add(Lists.newArrayList(group));
-                }
-            } while (isLikeNeighbor);
-        }
-        return listOfGroups;
-    }
-
     public void rotate() {
 
         if (paused || isGameOver) {
@@ -382,6 +414,19 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
 
         if (!gameBoardData.isBlockPairActive()) {
             return;
+        }
+
+        Optional<GameBoardCellEntity> blockAEntityOpt = gameBoardData.getBlockAEntity();
+        Optional<GameBoardCellEntity> blockBEntityOpt = gameBoardData.getBlockBEntity();
+
+        if (!blockAEntityOpt.isPresent() || !blockBEntityOpt.isPresent()) {
+            return;
+        }
+
+        if (blockAEntityOpt.get().getGameBlock().isPresent() && blockBEntityOpt.get().getGameBlock().isPresent()) {
+            if (blockAEntityOpt.get().getGameBlock().get().isResting() && blockBEntityOpt.get().getGameBlock().get().isResting()) {
+                return;
+            }
         }
 
         Optional<GameBlockPair.BlockBOrientation> blockBOrientation = gameBoardData.getBlockBOrientation();
@@ -393,58 +438,22 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         Optional<GameBoardCellEntity> blockBEntity = gameBoardData.getBlockBEntity();
         if (blockBEntity.isPresent()) {
             if (orientation.equals(BOTTOM_OF)) {
-                gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.UP, gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.LEFT, blockBEntity.get(), rePainter()).get(), rePainter());
+                Optional<GameBoardCellEntity> gameBoardCellEntity = gameBoardData.moveCellEntityContents(MoveDirection.LEFT, blockBEntity.get(), rePainter());
+                gameBoardCellEntity.ifPresent(boardCellEntity -> gameBoardData.moveCellEntityContents(MoveDirection.UP, boardCellEntity, rePainter()));
             }
             if (orientation.equals(GameBlockPair.BlockBOrientation.LEFT_OF)) {
-                gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.RIGHT, gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.UP, blockBEntity.get(), rePainter()).get(), rePainter());
+                Optional<GameBoardCellEntity> gameBoardCellEntity = gameBoardData.moveCellEntityContents(MoveDirection.UP, blockBEntity.get(), rePainter());
+                gameBoardCellEntity.ifPresent(boardCellEntity -> gameBoardData.moveCellEntityContents(MoveDirection.RIGHT, boardCellEntity, rePainter()));
             }
             if (orientation.equals(GameBlockPair.BlockBOrientation.TOP_OF)) {
-                gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.DOWN, gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.RIGHT, blockBEntity.get(), rePainter()).get(), rePainter());
+                Optional<GameBoardCellEntity> gameBoardCellEntity = gameBoardData.moveCellEntityContents(MoveDirection.RIGHT, blockBEntity.get(), rePainter());
+                gameBoardCellEntity.ifPresent(boardCellEntity -> gameBoardData.moveCellEntityContents(MoveDirection.DOWN, boardCellEntity, rePainter()));
             }
             if (orientation.equals(GameBlockPair.BlockBOrientation.RIGHT_OF)) {
-                gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.LEFT, gameBoardData.moveCellEntityContents(GameBoardCoords.MoveDirection.DOWN, blockBEntity.get(), rePainter()).get(), rePainter());
+                Optional<GameBoardCellEntity> gameBoardCellEntity = gameBoardData.moveCellEntityContents(MoveDirection.DOWN, blockBEntity.get(), rePainter());
+                gameBoardCellEntity.ifPresent(boardCellEntity -> gameBoardData.moveCellEntityContents(MoveDirection.LEFT, boardCellEntity, rePainter()));
             }
         }
-    }
-
-    private Map<GameBlock.Type, List<BlockGroup>> buildGroupsByType() {
-        List<BlockGroup> matchingGroups = Lists.newArrayList();
-        List<GameBoardCellEntity[]> lisOfRowsFromBottom = gameBoardData.getListOfRowsFromBottom();
-        for (GameBoardCellEntity[] next : lisOfRowsFromBottom) {
-            List<List<GameBoardCellEntity>> groupsOfLikeBlocksFromRow = getGroupsOfLikeBlocksFromRow(next);
-            for (List<GameBoardCellEntity> rowGroup : groupsOfLikeBlocksFromRow) {
-                BlockGroup blockGroup = new BlockGroup();
-                boolean areMatchingRows = true;
-                List<GameBoardCellEntity> processingRow = rowGroup;
-                do {
-                    blockGroup.addRow(processingRow.toArray(new GameBoardCellEntity[0]));
-                    Optional<GameBoardCellEntity[]> matchingRowAboveIfExists = gameBoardData.getMatchingRowAboveIfExists(processingRow.toArray(new GameBoardCellEntity[0]));
-                    areMatchingRows = matchingRowAboveIfExists.isPresent();
-                    if (areMatchingRows) {
-                        processingRow = Arrays.asList(matchingRowAboveIfExists.get());
-                    }
-                } while (areMatchingRows);
-                if (blockGroup.size() > 1) {
-                    matchingGroups.add(blockGroup);
-                }
-            }
-        }
-        Map<GameBlock.Type, List<BlockGroup>> groupsByType = new HashMap<>();
-        for (BlockGroup group : matchingGroups) {
-            GameBlock.Type type = group.getRawGroup()[0][0].getType();
-            groupsByType.computeIfAbsent(type, k -> Lists.newArrayList());
-            groupsByType.get(type).add(group);
-        }
-        return groupsByType;
-    }
-
-    private List<BlockGroup> buildAllGroups() {
-        List<BlockGroup> allGroups = Lists.newArrayList();
-        Map<GameBlock.Type, List<BlockGroup>> blockGroups = buildGroupsByType();
-        for (Map.Entry<GameBlock.Type, List<BlockGroup>> entry : blockGroups.entrySet()) {
-            allGroups.addAll(entry.getValue());
-        }
-        return allGroups;
     }
 
     public void calculatePermaGroups() {
@@ -489,13 +498,12 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-
     private void deriveBorderTypes(BlockGroup blockGroup) {
         final int maxX = blockGroup.getX();
         final int maxY = blockGroup.getY();
         for (int x = 1; x <= maxX; x++) {
             for (int y = 1; y <= maxY; y++) {
-                GameBlock.BorderType type = null;
+                GameBlockBorderType type = null;
                 GameBlock byXandY = blockGroup.getByXandY(x, y);
                 if (x < maxY && x < maxX) {
                     type = NO_BORDER;
@@ -529,14 +537,77 @@ public class GameBoard extends JComponent implements ActionListener, KeyListener
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
-
+    public List<List<GameBoardCellEntity>> getGroupsOfLikeBlocksFromRow(GameBoardCellEntity[] row) {
+        List<List<GameBoardCellEntity>> listOfGroups = Lists.newArrayList();
+        for (GameBoardCellEntity cellEntity : row) {
+            if (!cellEntity.isOccupied()) {
+                continue;
+            }
+            List<GameBoardCellEntity> group = Lists.newArrayList();
+            GameBoardCellEntity nextEntityToCheck = cellEntity;
+            boolean isLikeNeighbor = true;
+            do {
+                group.add(nextEntityToCheck);
+                Optional<GameBoardCellEntity> cellEntityIfOccupiedSameType = gameBoardData.getCellEntityIfOccupiedSameType(MoveDirection.RIGHT, nextEntityToCheck);
+                if (!cellEntityIfOccupiedSameType.isPresent()) {
+                    isLikeNeighbor = false;
+                } else {
+                    nextEntityToCheck = cellEntityIfOccupiedSameType.get();
+                }
+                if (group.size() > 1) {
+                    listOfGroups.add(Lists.newArrayList(group));
+                }
+            } while (isLikeNeighbor);
+        }
+        return listOfGroups;
     }
 
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
+    private List<BlockGroup> buildAllGroups() {
+        List<BlockGroup> allGroups = Lists.newArrayList();
+        Map<GameBlockType, List<BlockGroup>> blockGroups = buildGroupsByType();
+        for (Map.Entry<GameBlockType, List<BlockGroup>> entry : blockGroups.entrySet()) {
+            allGroups.addAll(entry.getValue());
+        }
+        return allGroups;
+    }
 
+    private Map<GameBlockType, List<BlockGroup>> buildGroupsByType() {
+        List<BlockGroup> matchingGroups = Lists.newArrayList();
+        List<GameBoardCellEntity[]> lisOfRowsFromBottom = gameBoardData.getListOfRowsFromBottom();
+        for (GameBoardCellEntity[] next : lisOfRowsFromBottom) {
+            List<List<GameBoardCellEntity>> groupsOfLikeBlocksFromRow = getGroupsOfLikeBlocksFromRow(next);
+            for (List<GameBoardCellEntity> rowGroup : groupsOfLikeBlocksFromRow) {
+                BlockGroup blockGroup = new BlockGroup();
+                boolean areMatchingRows = true;
+                List<GameBoardCellEntity> processingRow = rowGroup;
+                do {
+                    blockGroup.addRow(processingRow.toArray(new GameBoardCellEntity[0]));
+                    Optional<GameBoardCellEntity[]> matchingRowAboveIfExists = gameBoardData.getMatchingRowAboveIfExists(processingRow.toArray(new GameBoardCellEntity[0]));
+                    areMatchingRows = matchingRowAboveIfExists.isPresent();
+                    if (areMatchingRows) {
+                        processingRow = Arrays.asList(matchingRowAboveIfExists.get());
+                    }
+                } while (areMatchingRows);
+                if (blockGroup.size() > 1) {
+                    matchingGroups.add(blockGroup);
+                }
+            }
+        }
+        Map<GameBlockType, List<BlockGroup>> groupsByType = new HashMap<>();
+        for (BlockGroup group : matchingGroups) {
+            GameBlockType type = group.getRawGroup()[0][0].getType();
+            groupsByType.computeIfAbsent(type, k -> Lists.newArrayList());
+            groupsByType.get(type).add(group);
+        }
+        return groupsByType;
+    }
+
+    public PermaGroupManager getPermaGroupManager() {
+        return permaGroupManager;
+    }
+
+    public GameBoardData getGameBoardData() {
+        return gameBoardData;
     }
 
 }

@@ -24,12 +24,12 @@ public class GameBoardDataSerializationTest {
         UUID block2x1 = UUID.randomUUID();
         UUID block3x1 = UUID.randomUUID();
         UUID block4x1 = UUID.randomUUID();
-        gameBoardCellEntity[4] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block1x1));
-        gameBoardCellEntity[5] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block2x1));
-        gameBoardCellEntity[6] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block3x1));
-        gameBoardCellEntity[7] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block4x1));
-        gameBoardCellEntity[8] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.BLUE));
-        gameBoardCellEntity[9] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.BLUE));
+        gameBoardCellEntity[4] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block1x1));
+        gameBoardCellEntity[5] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block2x1));
+        gameBoardCellEntity[6] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block3x1));
+        gameBoardCellEntity[7] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block4x1));
+        gameBoardCellEntity[8] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.BLUE));
+        gameBoardCellEntity[9] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.BLUE));
 
         GameBoardCellEntity gameBoardCellEntityRowStepAbove[] = new GameBoardCellEntity[10];
         gameBoardCellEntityRowStepAbove[0] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
@@ -43,14 +43,14 @@ public class GameBoardDataSerializationTest {
         UUID block4x2 = UUID.randomUUID();
 
 
-        GameBlock gameBlock1x2 = new GameBlock(GameBlock.Type.GREEN, block1x2);
+        GameBlock gameBlock1x2 = new GameBlock(GameBlockType.GREEN, block1x2);
 
         gameBoardCellEntityRowStepAbove[4] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), gameBlock1x2);
-        gameBoardCellEntityRowStepAbove[5] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block2x2));
-        gameBoardCellEntityRowStepAbove[6] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block3x2));
-        gameBoardCellEntityRowStepAbove[7] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN, block4x2));
-        gameBoardCellEntityRowStepAbove[8] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.BLUE));
-        gameBoardCellEntityRowStepAbove[9] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.BLUE));
+        gameBoardCellEntityRowStepAbove[5] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block2x2));
+        gameBoardCellEntityRowStepAbove[6] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block3x2));
+        gameBoardCellEntityRowStepAbove[7] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN, block4x2));
+        gameBoardCellEntityRowStepAbove[8] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.BLUE));
+        gameBoardCellEntityRowStepAbove[9] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.BLUE));
 
         GameBoardCellEntity gameBoardCellEntityRowStepAbove2[] = new GameBoardCellEntity[10];
         gameBoardCellEntityRowStepAbove2[0] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
@@ -58,8 +58,8 @@ public class GameBoardDataSerializationTest {
         gameBoardCellEntityRowStepAbove2[2] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
         gameBoardCellEntityRowStepAbove2[3] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
         gameBoardCellEntityRowStepAbove2[4] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
-        gameBoardCellEntityRowStepAbove2[5] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN));
-        gameBoardCellEntityRowStepAbove2[6] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlock.Type.GREEN));
+        gameBoardCellEntityRowStepAbove2[5] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN));
+        gameBoardCellEntityRowStepAbove2[6] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0), new GameBlock(GameBlockType.GREEN));
         gameBoardCellEntityRowStepAbove2[7] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
         gameBoardCellEntityRowStepAbove2[8] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));
         gameBoardCellEntityRowStepAbove2[9] = new GameBoardCellEntity(0, new GameBoardCoords(0, 0));

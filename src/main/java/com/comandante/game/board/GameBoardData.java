@@ -16,7 +16,7 @@ import static com.comandante.game.board.GameBoardUtil.subtractCoords;
 
 
 public class GameBoardData {
-    public final static int BLOCK_SIZE = 32;
+    public final static int BLOCK_SIZE = 36;
     private GameBoardCellEntity[][] cellEntities;
     private Optional<GameBlockPair> blockPairActive = Optional.empty();
     private final ArrayBlockingQueue<InsertionQueueItem> insertionQueue = new ArrayBlockingQueue<>(500);
@@ -42,7 +42,6 @@ public class GameBoardData {
     }
 
     public boolean processInsertionQueueAndDetectGameOver() {
-        processAllDrops();
         Optional<InsertionQueueItem> insertionQueueItemOptional = Optional.ofNullable(insertionQueue.poll());
         if (!insertionQueueItemOptional.isPresent()) {
             return false;
@@ -148,8 +147,8 @@ public class GameBoardData {
         blockPairActive = Optional.of(gameBlockPair);
     }
 
-    public void addRowsToInsertionQueue(List<GameBoardCellEntity []> row) {
-        for (GameBoardCellEntity[] ge: row) {
+    public void addRowsToInsertionQueue(List<GameBoardCellEntity[]> row) {
+        for (GameBoardCellEntity[] ge : row) {
             try {
                 insertionQueue.put(new InsertionQueueItem(false, Collections.singletonList(ge)));
             } catch (InterruptedException e) {
@@ -186,13 +185,18 @@ public class GameBoardData {
     public boolean insertRowOfBlocksAndDetectGameOver(GameBoardCellEntity[] attackRow) {
         for (int i = 0; i < attackRow.length; i++) {
             GameBoardCellEntity existingGameCellEntity = cellEntities[i][0];
-            if (existingGameCellEntity.isOccupied()) {
+            if (attackRow[i].getGameBlock().isPresent() && existingGameCellEntity.isOccupied()) {
                 //game over
                 return true;
             } else {
                 // set the existing cell to the incoming attack block
-                if (attackRow[i].getGameBlock().isPresent()) {
-                    cellEntities[i][0] = new GameBoardCellEntity(existingGameCellEntity.getId(), existingGameCellEntity.getGameBoardCoords(), attackRow[i].getGameBlock().get());
+
+                try {
+                    if (attackRow[i].getGameBlock().isPresent()) {
+                        cellEntities[i][0] = new GameBoardCellEntity(existingGameCellEntity.getId(), existingGameCellEntity.getGameBoardCoords(), attackRow[i].getGameBlock().get());
+                    }
+                } catch (Exception e) {
+                    System.out.printf("hi");
                 }
             }
         }
@@ -311,7 +315,7 @@ public class GameBoardData {
         return foundCoords;
     }
 
-    public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoardCellEntity gameBoardCellEntity, GameBlock.Type targetType) {
+    public List<GameBoardCellEntity> getOccupiedNeighborsOfType(GameBoardCellEntity gameBoardCellEntity, GameBlockType targetType) {
         List<GameBoardCellEntity> neighbors = new ArrayList<>();
         Optional<GameBoardCellEntity> upCell = getCellEntityIfOccupied(GameBoardCoords.MoveDirection.UP, gameBoardCellEntity);
         Optional<GameBoardCellEntity> downCell = getCellEntityIfOccupied(GameBoardCoords.MoveDirection.DOWN, gameBoardCellEntity);
@@ -323,7 +327,7 @@ public class GameBoardData {
         rightCell.ifPresent(neighbors::add);
         return neighbors.stream().filter(ce -> {
             if (ce.getType().getRelated().isPresent()) {
-                GameBlock.Type relatedType = ce.getType().getRelated().get();
+                GameBlockType relatedType = ce.getType().getRelated().get();
                 if (relatedType.equals(targetType)) {
                     return true;
                 }
@@ -357,20 +361,25 @@ public class GameBoardData {
     }
 
     public Optional<GameBoardCellEntity> moveCellEntityContents(GameBoardCoords.MoveDirection moveDirection, GameBoardCellEntity gameBoardCellEntity, Runnable postRun) {
-        int i = gameBoardCellEntity.getGameBoardCoords().i;
-        int j = gameBoardCellEntity.getGameBoardCoords().j;
-        Optional<GameBoardCellEntity> cellEntityOptional = getCellEntity(new GameBoardCoords(i + moveDirection.getDirectionApplyCoords().i, j + moveDirection.getDirectionApplyCoords().j));
-        if (!cellEntityOptional.isPresent() || cellEntityOptional.get().isOccupied()) {
+        try {
+            int i = gameBoardCellEntity.getGameBoardCoords().i;
+            int j = gameBoardCellEntity.getGameBoardCoords().j;
+            Optional<GameBoardCellEntity> cellEntityOptional = getCellEntity(new GameBoardCoords(i + moveDirection.getDirectionApplyCoords().i, j + moveDirection.getDirectionApplyCoords().j));
+            if (!cellEntityOptional.isPresent() || cellEntityOptional.get().isOccupied()) {
+                return Optional.empty();
+            }
+            getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new GameBoardCellEntity(cellEntityOptional.get().getId(), cellEntityOptional.get().getGameBoardCoords(), gameBoardCellEntity.getGameBlock().orElse(null));
+            getCellEntities()[i][j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords());
+            if (blockPairActive.isPresent()) {
+                blockPairActive.get().getBlockA().setResting(false);
+                blockPairActive.get().getBlockB().setResting(false);
+            }
+            postRun.run();
+            return Optional.ofNullable(getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j]);
+        } catch (Exception e) {
+            System.out.println("Out of gameboard move attempted");
             return Optional.empty();
         }
-        getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j] = new GameBoardCellEntity(cellEntityOptional.get().getId(), cellEntityOptional.get().getGameBoardCoords(), gameBoardCellEntity.getGameBlock().orElse(null));
-        getCellEntities()[i][j] = new GameBoardCellEntity(gameBoardCellEntity.getId(), gameBoardCellEntity.getGameBoardCoords());
-        if (blockPairActive.isPresent()) {
-            blockPairActive.get().getBlockA().setResting(false);
-            blockPairActive.get().getBlockB().setResting(false);
-        }
-        postRun.run();
-        return Optional.ofNullable(getCellEntities()[i + moveDirection.getDirectionApplyCoords().i][j + moveDirection.getDirectionApplyCoords().j]);
     }
 
     public static class InsertionQueueItem {
